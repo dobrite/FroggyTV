@@ -89,6 +89,19 @@ class HomeScreen(displayio.Group):
         playsprite_group = displayio.Group(scale = 1)
         playsprite_group.append(self.playsprite)
 
+        # Draws the pointer icon
+        pointer = displayio.OnDiskBitmap("/Icons/pointer.bmp")
+        pointer_area = displayio.TileGrid(pointer, pixel_shader=pointer.pixel_shader)
+        pointer_group = displayio.Group()
+        pointer_group.append(pointer_area)
+        
+        # Pointer positions
+        pointer_index = 0
+        pointer_positions = [[1,5],[1,25],[5,43]]
+        pointer_group.x = pointer_positions[0][pointer_index]
+        pointer_group.y = pointer_positions[1][pointer_index]
+        self.append(pointer_group)
+        
         # icon positions
         playsprite_group.x = 55
         playsprite_group.y = 35
@@ -133,24 +146,17 @@ class GateScreen(displayio.Group):
 
 class Screens():
     def __init__(self, state):
-        self.currentscreen = 0 # Initializes on home screen
         self.screens = [HomeScreen(state),
                         GateScreen("A", state),
                         GateScreen("B", state), 
                         GateScreen("C", state), 
                         GateScreen("D", state)]
 
-    def next_screen(self):
-        if self.currentscreen == len(self.screens) - 1:
-            self.currentscreen = 0 # Resets index to 0
-        else:
-            self.currentscreen += 1 # Increments index by 1
+    def get_focused_screen(self, state):
+        return self.screens[state.get_focused()]
 
-    def get_current(self):
-        return self.screens[self.currentscreen]
-
-    def show_current(self):
-        display.show(self.get_current())
+    def show_current(self, state):
+        display.show(self.get_focused_screen(state))
 
    
 

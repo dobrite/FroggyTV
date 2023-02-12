@@ -15,7 +15,7 @@ from state import State
 #~~~~~~~~~~ Initializing ~~~~~~~~~~~#
 
 state = State()
-screens = Screens(state)
+screen_list = Screens(state)
 encoder = Encoder()
 
 #------------------------------- Hardware Setup ------------------------------------#
@@ -50,19 +50,12 @@ OUTPUT_LIST = [
 
 #~~~~~~~~~ Main Loop ~~~~~~~~~#
 
-screens.show_current()
+screen_list.show_current(state)
 
 while True:
     
     now = time.monotonic()
 
-    # Button Logic
-    if not pagebutton.value and pagebutton_state is None: 
-        pagebutton_state = "pressed"
-
-    if pagebutton.value and pagebutton_state is "pressed":
-        screens.next_screen()
-        pagebutton_state = None
 
     # Play Button Logic
     if not playbutton.value and playbutton_state is None: 
@@ -71,15 +64,21 @@ while True:
     if playbutton.value and playbutton_state is "pressed":
         # print("Boop")
         state.toggle_play()
-        # print(state.get_play())
-        screens.get_current().update_play_button(state.get_play())
+        screen_list.screens[0].update_play_button(state.get_play())
         playbutton_state = None
 
-    encoder.update(state.get_bpm())
-    screens.get_current().update_bpm(state.get_bpm())
-    OUTPUT_LIST[0].set_rate(state.get_bpm().bpm)
+    # Button Logic
+    if not pagebutton.value and pagebutton_state is None: 
+        pagebutton_state = "pressed"
 
-    # print(state.get_bpm().bpm)
+    if pagebutton.value and pagebutton_state is "pressed":
+        state.next_screen()
+        pagebutton_state = None
+
+    #encoder.update(state.get_bpm())
+    #screens.get_focused_screen(state).update_bpm(state.get_bpm())
+    #OUTPUT_LIST[0].set_rate(state.get_bpm().bpm)
+
     
     # Runs Outputs
     if state.get_play():
@@ -87,4 +86,4 @@ while True:
             out.toggle(now)
 
     # Displays Screens
-    screens.show_current()
+    screen_list.show_current(state)
