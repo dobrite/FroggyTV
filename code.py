@@ -77,7 +77,8 @@ while True:
 
     encoder.update(state.get_bpm())
     screens.get_current().update_bpm(state.get_bpm())
-    
+    OUTPUT_LIST[0].set_rate(state.get_bpm().bpm)
+
     # print(state.get_bpm().bpm)
     
     # Runs Outputs
