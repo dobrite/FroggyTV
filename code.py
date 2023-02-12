@@ -14,9 +14,9 @@ from state import State
 
 #~~~~~~~~~~ Initializing ~~~~~~~~~~~#
 
-screens = Screens()
-encoder = Encoder()
 state = State()
+screens = Screens(state)
+encoder = Encoder()
 
 #------------------------------- Hardware Setup ------------------------------------#
 
@@ -69,16 +69,16 @@ while True:
         playbutton_state = "pressed"
 
     if playbutton.value and playbutton_state is "pressed":
-        print("Boop")
+        # print("Boop")
         state.toggle_play()
-        print(state.get_play())
+        # print(state.get_play())
         screens.get_current().update_play_button(state.get_play())
         playbutton_state = None
 
-    #encoder.update(
-    #    screens.get_current().get_current_element()
-    #)
-    #screens.get_current().update_div_text()
+    encoder.update(state.get_bpm())
+    screens.get_current().update_bpm(state.get_bpm())
+    
+    # print(state.get_bpm().bpm)
     
     # Runs Outputs
     if state.get_play():

@@ -4,6 +4,7 @@ from adafruit_bitmap_font import bitmap_font
 import adafruit_displayio_ssd1306
 import busio
 import board
+
 #------------------------------- Screen Setup ------------------------------------#
 
 displayio.release_displays()
@@ -43,9 +44,8 @@ smolfont = bitmap_font.load_font("/Fonts/FrogPrincess-7.pcf")
 biggefont = bitmap_font.load_font("/Fonts/FrogPrincess-10.pcf")
 
 class HomeScreen(displayio.Group):
-    def __init__(self):
+    def __init__(self, state):
         super().__init__()
-        self.bpm = 120
         self.sync = "INT"
         self.div = 1
         self.current_element = 0
@@ -53,11 +53,11 @@ class HomeScreen(displayio.Group):
         self.elements = [self.home_div_element]
 
         # Initial BPM text
-        BPMText = f"{self.bpm}"
-        BPMtext_area = label.Label(
+        BPMText = f"{state.get_bpm().bpm}"
+        self.BPMtext_area = label.Label(
             biggefont, text=BPMText, color=0xFFFFFF, x=20, y=35 // 2 - 1
         )
-        self.append(BPMtext_area)
+        self.append(self.BPMtext_area)
 
         # Creates Label "BPM" in smaller font
         BPMLabeltext_area = label.Label(
@@ -96,11 +96,10 @@ class HomeScreen(displayio.Group):
 
     def update_play_button(self, playing):
         self.playsprite[0] = PLAY_ICON if playing else PAUSE_ICON
-        print(playing)
+        #print(playing)
 
-    def update_div_text(self):
-        # self.Divtext_area.text = self.home_div_element.report()
-        self.Divtext_area.text = "mworp"
+    def update_bpm(self, state):
+        self.BPMtext_area.text = f"{state.bpm}"
 
     def get_current_element(self):
         return self.elements[self.current_element]        
@@ -111,7 +110,7 @@ class GateScreen(displayio.Group):
     DIV_X = 105
     DIV_Y = 30
 
-    def __init__(self, text):
+    def __init__(self, text, state):
         super().__init__()
         self.div = 1
         
@@ -133,9 +132,13 @@ class GateScreen(displayio.Group):
 
 
 class Screens():
-    def __init__(self):
+    def __init__(self, state):
         self.currentscreen = 0 # Initializes on home screen
-        self.screens = [HomeScreen(), GateScreen("A"), GateScreen("B"), GateScreen("C"), GateScreen("D")]
+        self.screens = [HomeScreen(state),
+                        GateScreen("A", state),
+                        GateScreen("B", state), 
+                        GateScreen("C", state), 
+                        GateScreen("D", state)]
 
     def next_screen(self):
         if self.currentscreen == len(self.screens) - 1:
