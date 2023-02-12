@@ -21,6 +21,8 @@ WIDTH = 128
 HEIGHT = 64  # Change to 64 if needed
 BORDER = 0
 
+PLAY_ICON = 0
+PAUSE_ICON = 1
 
 display = adafruit_displayio_ssd1306.SSD1306(display_bus, width=WIDTH, height=HEIGHT)
 
@@ -92,9 +94,9 @@ class HomeScreen(displayio.Group):
         playsprite_group.y = 35
         self.append(playsprite_group)
 
-    def update_play_button(self, index):
-        self.playsprite[0] = index
-        print(index)
+    def update_play_button(self, playing):
+        self.playsprite[0] = PLAY_ICON if playing else PAUSE_ICON
+        print(playing)
 
     def update_div_text(self):
         # self.Divtext_area.text = self.home_div_element.report()

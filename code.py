@@ -10,11 +10,13 @@ import random
 from output import Output
 from Screens import Screens, HomeScreen
 from hardware import Encoder
+from state import State
 
 #~~~~~~~~~~ Initializing ~~~~~~~~~~~#
 
 screens = Screens()
 encoder = Encoder()
+state = State()
 
 #------------------------------- Hardware Setup ------------------------------------#
 
@@ -36,9 +38,6 @@ playbutton.direction = Direction.INPUT
 playbutton.pull = Pull.UP
 playbutton_state = None
 
-# Play variable init
-play = True
-play_index = 0
 
 #~~~~~~~~~ Output Setup ~~~~~~~~~#
 OUTPUT_LIST = [
@@ -71,12 +70,9 @@ while True:
 
     if playbutton.value and playbutton_state is "pressed":
         print("Boop")
-        if play == True:
-            play = False
-            screens.get_current().update_play_button(1)
-        else:
-            play = True
-            screens.get_current().update_play_button(0)
+        state.toggle_play()
+        print(state.get_play())
+        screens.get_current().update_play_button(state.get_play())
         playbutton_state = None
 
     #encoder.update(
@@ -85,7 +81,7 @@ while True:
     #screens.get_current().update_div_text()
     
     # Runs Outputs
-    if play:
+    if state.get_play():
         for out in OUTPUT_LIST:
             out.toggle(now)
 
