@@ -98,8 +98,8 @@ class HomeScreen(displayio.Group):
         # Pointer positions
         pointer_index = 0
         pointer_positions = [[1,5],[1,25],[5,43]]
-        pointer_group.x = pointer_positions[0][pointer_index]
-        pointer_group.y = pointer_positions[1][pointer_index]
+        pointer_group.x = pointer_positions[pointer_index][0]
+        pointer_group.y = pointer_positions[pointer_index][1]
         self.append(pointer_group)
         
         # icon positions
