@@ -4,12 +4,11 @@
 
 import board
 import time
-from digitalio import DigitalInOut, Direction, Pull
 import rotaryio
 import random
 from output import Output
 from Screens import Screens, HomeScreen
-from hardware import Encoder
+from hardware import Encoder, Button
 from state import State
 
 #~~~~~~~~~~ Initializing ~~~~~~~~~~~#
@@ -17,26 +16,13 @@ from state import State
 state = State()
 screen_list = Screens(state)
 encoder = Encoder()
+playbutton = Button(board.GP11).make_pin_reader()
+pagebutton = Button(board.GP12).make_pin_reader()
+encoderbutton = Button(board.GP13).make_pin_reader()
 
 #------------------------------- Hardware Setup ------------------------------------#
 
-# Setup Encoder Button
-encoderbutton = DigitalInOut(board.GP13)
-encoderbutton.direction = Direction.INPUT
-encoderbutton.pull = Pull.UP
-encoderbutton_state = None
 
-# Setup Page Button
-pagebutton = DigitalInOut(board.GP12)
-pagebutton.direction = Direction.INPUT
-pagebutton.pull = Pull.UP
-pagebutton_state = None
-
-# Setup start/stop Button (button3)
-playbutton = DigitalInOut(board.GP11)
-playbutton.direction = Direction.INPUT
-playbutton.pull = Pull.UP
-playbutton_state = None
 
 
 #~~~~~~~~~ Output Setup ~~~~~~~~~#
@@ -56,24 +42,16 @@ while True:
     
     now = time.monotonic()
 
+    playbutton.update()
+    pagebutton.update()
+    encoderbutton.update()
 
-    # Play Button Logic
-    if not playbutton.value and playbutton_state is None: 
-        playbutton_state = "pressed"
-
-    if playbutton.value and playbutton_state is "pressed":
-        # print("Boop")
+    if playbutton.rose:
         state.toggle_play()
         screen_list.screens[0].update_play_button(state.get_play())
-        playbutton_state = None
 
-    # Button Logic
-    if not pagebutton.value and pagebutton_state is None: 
-        pagebutton_state = "pressed"
-
-    if pagebutton.value and pagebutton_state is "pressed":
+    if pagebutton.rose:
         state.next_screen()
-        pagebutton_state = None
 
     #encoder.update(state.get_bpm())
     #screens.get_focused_screen(state).update_bpm(state.get_bpm())

@@ -1,5 +1,7 @@
 import board
 from rotaryio import IncrementalEncoder
+from digitalio import DigitalInOut, Direction, Pull
+from adafruit_debouncer import Debouncer
 
 class Encoder():
     def __init__(self):
@@ -22,3 +24,14 @@ class Encoder():
 
     def _moving_backwards(self):
         return self.last_position is None or self.position < self.last_position
+
+
+class Button():
+    def __init__(self, pin):
+        self.button = DigitalInOut(pin)
+        self.button.direction = Direction.INPUT
+        self.button.pull = Pull.UP
+        self.state = None
+
+    def make_pin_reader(self):
+        return Debouncer(lambda: self.button.value)
