@@ -8,13 +8,14 @@ from digitalio import DigitalInOut, Direction, Pull
 import rotaryio
 import random
 from output import Output
-from Screens import Screens
+from Screens import Screens, HomeScreen
 from hardware import Encoder
 
 #~~~~~~~~~~ Initializing ~~~~~~~~~~~#
 
 screens = Screens()
 encoder = Encoder()
+homescreen = HomeScreen()
 
 #------------------------------- Hardware Setup ------------------------------------#
 
@@ -36,6 +37,10 @@ playbutton.direction = Direction.INPUT
 playbutton.pull = Pull.UP
 playbutton_state = None
 
+# Play variable init
+play = True
+play_index = 0
+
 #~~~~~~~~~ Output Setup ~~~~~~~~~#
 OUTPUT_LIST = [
     Output(0.5, 0.5, board.LED),
@@ -47,6 +52,7 @@ OUTPUT_LIST = [
 
 #~~~~~~~~~ Main Loop ~~~~~~~~~#
 
+screens.show_current()
 
 while True:
     
@@ -60,14 +66,28 @@ while True:
         screens.next_screen()
         pagebutton_state = None
 
-    encoder.update(
-        screens.get_current().get_current_element()
-    )
-    screens.get_current().update_div_text()
+    # Play Button Logic
+    if not playbutton.value and playbutton_state is None: 
+        playbutton_state = "pressed"
+
+    if playbutton.value and playbutton_state is "pressed":
+        print("Boop")
+        if play == True:
+            play = False
+            homescreen.update_play_button(1)
+        else:
+            play = True
+            homescreen.update_play_button(0)
+        playbutton_state = None
+
+    #encoder.update(
+    #    screens.get_current().get_current_element()
+    #)
+    #screens.get_current().update_div_text()
     
     # Runs Outputs
     for out in OUTPUT_LIST:
         out.toggle(now)
 
     # Displays Screens
-    screens.show_current()
+    # screens.show_current()
