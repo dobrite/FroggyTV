@@ -25,6 +25,8 @@ BORDER = 0
 PLAY_ICON = 0
 PAUSE_ICON = 1
 
+POINTER_POSITIONS = [[1,5],[1,25],[5,43]]
+
 display = adafruit_displayio_ssd1306.SSD1306(display_bus, width=WIDTH, height=HEIGHT)
 
 # Make the display context
@@ -92,15 +94,12 @@ class HomeScreen(displayio.Group):
         # Draws the pointer icon
         pointer = displayio.OnDiskBitmap("/Icons/pointer.bmp")
         pointer_area = displayio.TileGrid(pointer, pixel_shader=pointer.pixel_shader)
-        pointer_group = displayio.Group()
-        pointer_group.append(pointer_area)
+        self.pointer_group = displayio.Group()
+        self.pointer_group.append(pointer_area)
         
         # Pointer positions
-        pointer_index = 0
-        pointer_positions = [[1,5],[1,25],[5,43]]
-        pointer_group.x = pointer_positions[pointer_index][0]
-        pointer_group.y = pointer_positions[pointer_index][1]
-        self.append(pointer_group)
+        self.update_pointer(state)
+        self.append(self.pointer_group)
         
         # icon positions
         playsprite_group.x = 55
@@ -115,7 +114,11 @@ class HomeScreen(displayio.Group):
         self.BPMtext_area.text = f"{state.bpm}"
 
     def get_current_element(self):
-        return self.elements[self.current_element]        
+        return self.elements[self.current_element]  
+
+    def update_pointer(self, state):
+        self.pointer_group.x = POINTER_POSITIONS[state.get_focused_element()][0]
+        self.pointer_group.y = POINTER_POSITIONS[state.get_focused_element()][1]
 
 class GateScreen(displayio.Group):
     ICON_X = 5
@@ -153,7 +156,7 @@ class Screens():
                         GateScreen("D", state)]
 
     def get_focused_screen(self, state):
-        return self.screens[state.get_focused()]
+        return self.screens[state.get_focused_screen()]
 
     def show_current(self, state):
         display.show(self.get_focused_screen(state))
