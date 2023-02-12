@@ -97,9 +97,8 @@ class HomeScreen(displayio.Group):
         print(index)
 
     def update_div_text(self):
-        self.Divtext_area.text = self.home_div_element.report()
-    
-
+        # self.Divtext_area.text = self.home_div_element.report()
+        self.Divtext_area.text = "mworp"
 
     def get_current_element(self):
         return self.elements[self.current_element]        

@@ -15,7 +15,6 @@ from hardware import Encoder
 
 screens = Screens()
 encoder = Encoder()
-homescreen = HomeScreen()
 
 #------------------------------- Hardware Setup ------------------------------------#
 
@@ -74,10 +73,10 @@ while True:
         print("Boop")
         if play == True:
             play = False
-            homescreen.update_play_button(1)
+            screens.get_current().update_play_button(1)
         else:
             play = True
-            homescreen.update_play_button(0)
+            screens.get_current().update_play_button(0)
         playbutton_state = None
 
     #encoder.update(
@@ -86,8 +85,9 @@ while True:
     #screens.get_current().update_div_text()
     
     # Runs Outputs
-    for out in OUTPUT_LIST:
-        out.toggle(now)
+    if play:
+        for out in OUTPUT_LIST:
+            out.toggle(now)
 
     # Displays Screens
-    # screens.show_current()
+    screens.show_current()
