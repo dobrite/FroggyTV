@@ -48,7 +48,6 @@ biggefont = bitmap_font.load_font("/Fonts/FrogPrincess-10.pcf")
 class HomeScreen(displayio.Group):
     def __init__(self, state):
         super().__init__()
-        self.sync = "INT"
         self.div = 1
         self.current_element = 0
         self.home_div_element = HomeDivElement()
@@ -68,10 +67,11 @@ class HomeScreen(displayio.Group):
         self.append(BPMLabeltext_area)
 
         # Creates Label "Int" in smaller font
-        SyncLabeltext_area = label.Label(
-            smolfont, text=self.sync, color=0xFFFFFF, x=20, y=77 // 2 - 1
+        SyncText = f"{state.get_sync().sync}"
+        self.SyncLabeltext_area = label.Label(
+            smolfont, text=SyncText, color=0xFFFFFF, x=20, y=77 // 2 - 1
         )
-        self.append(SyncLabeltext_area)
+        self.append(self.SyncLabeltext_area)
 
         # Initial Division text
         DivText = "x1"
@@ -106,12 +106,10 @@ class HomeScreen(displayio.Group):
         playsprite_group.y = 35
         self.append(playsprite_group)
 
+
     def update_play_button(self, playing):
         self.playsprite[0] = PLAY_ICON if playing else PAUSE_ICON
         #print(playing)
-
-    def update_bpm(self, state):
-        self.BPMtext_area.text = f"{state.bpm}"
 
     def get_current_element(self):
         return self.elements[self.current_element]  
@@ -119,6 +117,13 @@ class HomeScreen(displayio.Group):
     def update_pointer(self, state):
         self.pointer_group.x = POINTER_POSITIONS[state.get_focused_element()][0]
         self.pointer_group.y = POINTER_POSITIONS[state.get_focused_element()][1]
+
+    def update_bpm(self, state):
+        self.BPMtext_area.text = f"{state.bpm}"
+
+    def update_sync(self, state):
+        self.SyncLabeltext_area.text = f"{state.sync}"
+
 
 class GateScreen(displayio.Group):
     ICON_X = 5
@@ -183,18 +188,6 @@ class HomeDivElement():
         self.divisions = [div16[0], div8[0], div4[0], div3[0], div2[0], mult1[0], mult2[0], mult3[0], mult4[0], mult8[0], mult16[0]]
         
         self.div_text = [div16[1], div8[1], div4[1], div3[1], div2[1], mult1[1], mult2[1], mult3[1], mult4[1], mult8[1], mult16[1]]
-    
-    def add(self):
-        self.div_index = min(self.div_index + 1, len(self.divisions) - 1)
-        print(self.div_index)
-
-    def subtract(self):
-        self.div_index = max(self.div_index - 1, 0)
-        print(self.div_index)
-
-    def report(self):
-        print(self.div_text[self.div_index])
-        return self.div_text[self.div_index]
 
 
 

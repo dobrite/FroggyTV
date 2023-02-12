@@ -51,10 +51,15 @@ while True:
         state.next_element()
         screen_list.get_focused_screen(state).update_pointer(state)
 
-    #encoder.update(state.get_bpm())
-    #screens.get_focused_screen(state).update_bpm(state.get_bpm())
-    #OUTPUT_LIST[0].set_rate(state.get_bpm().bpm)
+    if state.get_focused_element() == 0:
+        encoder.update(state.get_bpm())
+        screen_list.get_focused_screen(state).update_bpm(state.get_bpm())
+        OUTPUT_LIST[0].set_rate(state.get_bpm().bpm)
 
+    elif state.get_focused_element() == 1:
+        encoder.update(state.get_sync())
+        screen_list.get_focused_screen(state).update_sync(state.get_sync())
+    
     # Runs Outputs
     if state.get_play():
         for out in OUTPUT_LIST:

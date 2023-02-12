@@ -5,6 +5,7 @@ class State():
     def __init__(self):
         self.play = True
         self.bpm = BPM()
+        self.sync = Sync()
         self.focused_screen = 0
         self.focused_element = 0
 
@@ -13,7 +14,7 @@ class State():
 
     def get_focused_element(self):
         return self.focused_element
-        
+
     def next_screen(self):
         if self.focused_screen == SCREEN_NUMBER:
             self.focused_screen = 0 # Resets index to 0
@@ -36,6 +37,9 @@ class State():
 
     def get_bpm(self):
         return self.bpm
+    
+    def get_sync(self):
+        return self.sync
 
 
 MAX_BPM = 500
@@ -51,3 +55,15 @@ class BPM():
     def backwards(self):
         if self.bpm > MIN_BPM:
             self.bpm -= 1
+
+class Sync():
+    def __init__(self):
+        self.sync = "Int"
+
+    def forward(self):
+        self.sync = "Ext"
+        print("forwards")
+
+    def backwards(self):
+        self.sync = "Int"
+        print("borwards")
