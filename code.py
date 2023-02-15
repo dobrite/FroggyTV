@@ -30,7 +30,7 @@ OUTPUT_LIST = [
 
 # ~~~~~~~~~ Main Loop ~~~~~~~~~#
 
-screen_list.show_current(state)
+screen_list.show_current()
 
 while True:
     now = time.monotonic()
@@ -39,7 +39,7 @@ while True:
     page_button.update()
     encoder_button.update()
 
-    focused_screen = screen_list.get_focused_screen(state)
+    focused_screen = screen_list.get_focused_screen()
     focused_element = state.get_focused_element()
 
     if play_button.rose:
@@ -67,4 +67,4 @@ while True:
             out.toggle(now)
 
     # Displays Screens
-    screen_list.show_current(state)
+    screen_list.show_current()

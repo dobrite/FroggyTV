@@ -158,17 +158,18 @@ class GateScreen(displayio.Group):
 
 class Screens():
     def __init__(self, state):
+        self.state = state
         self.screens = [HomeScreen(state),
                         GateScreen("A", state),
                         GateScreen("B", state),
                         GateScreen("C", state),
                         GateScreen("D", state)]
 
-    def get_focused_screen(self, state):
-        return self.screens[state.get_focused_screen()]
+    def get_focused_screen(self):
+        return self.screens[self.state.get_focused_screen()]
 
-    def show_current(self, state):
-        display.show(self.get_focused_screen(state))
+    def show_current(self):
+        display.show(self.get_focused_screen(self.state))
 
 
 class HomeDivElement():
