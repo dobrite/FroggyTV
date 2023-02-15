@@ -61,6 +61,7 @@ splash.append(bg_sprite)
 SMOL_FONT = bitmap_font.load_font("/Fonts/FrogPrincess-7.pcf")
 BIGGE_FONT = bitmap_font.load_font("/Fonts/FrogPrincess-10.pcf")
 POINTER = displayio.OnDiskBitmap("/Icons/pointer.bmp")
+PLAY_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/playpause.bmp")
 
 
 class HomeScreen(displayio.Group):
@@ -112,10 +113,9 @@ class HomeScreen(displayio.Group):
         self.append(self.Divtext_area)
 
         # Draws play/pause
-        playsprite_sheet = displayio.OnDiskBitmap("/Icons/playpause.bmp")
         self.playsprite = displayio.TileGrid(
-            playsprite_sheet,
-            pixel_shader=playsprite_sheet.pixel_shader,
+            PLAY_SPRITE_SHEET,
+            pixel_shader=PLAY_SPRITE_SHEET.pixel_shader,
             width=1,
             height=1,
             tile_width=16,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
