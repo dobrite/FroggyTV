@@ -33,7 +33,6 @@ OUTPUT_LIST = [
 screen_list.show_current(state)
 
 while True:
-
     now = time.monotonic()
 
     playbutton.update()
