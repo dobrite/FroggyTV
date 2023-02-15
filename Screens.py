@@ -55,8 +55,8 @@ bg_sprite = displayio.TileGrid(
 splash.append(bg_sprite)
 
 # Import Fonts
-smolfont = bitmap_font.load_font("/Fonts/FrogPrincess-7.pcf")
-biggefont = bitmap_font.load_font("/Fonts/FrogPrincess-10.pcf")
+SMOL_FONT = bitmap_font.load_font("/Fonts/FrogPrincess-7.pcf")
+BIGGE_FONT = bitmap_font.load_font("/Fonts/FrogPrincess-10.pcf")
 
 
 class HomeScreen(displayio.Group):
@@ -70,7 +70,7 @@ class HomeScreen(displayio.Group):
         # Initial BPM text
         BPMText = f"{state.get_bpm().bpm}"
         self.BPMtext_area = label.Label(
-            biggefont,
+            BIGGE_FONT,
             text=BPMText,
             color=0xFFFFFF,
             x=20,
@@ -80,7 +80,7 @@ class HomeScreen(displayio.Group):
 
         # Creates Label "BPM" in smaller font
         BPMLabeltext_area = label.Label(
-            smolfont,
+            SMOL_FONT,
             text="BPM",
             color=0xFFFFFF,
             x=69,
@@ -91,7 +91,7 @@ class HomeScreen(displayio.Group):
         # Creates Label "Int" in smaller font
         SyncText = f"{state.get_sync().sync}"
         self.SyncLabeltext_area = label.Label(
-            smolfont,
+            SMOL_FONT,
             text=SyncText,
             color=0xFFFFFF,
             x=20,
@@ -102,7 +102,7 @@ class HomeScreen(displayio.Group):
         # Initial Division text
         DivText = "x1"
         self.Divtext_area = label.Label(
-            smolfont,
+            SMOL_FONT,
             text=DivText,
             color=0xFFFFFF,
             x=28,
@@ -171,7 +171,7 @@ class GateScreen(displayio.Group):
 
         # Text icon
         Labeltext_area = label.Label(
-            biggefont,
+            BIGGE_FONT,
             text=text,
             color=0xFFFFFF,
             x=GateScreen.ICON_X,
@@ -182,7 +182,7 @@ class GateScreen(displayio.Group):
         # Division text
         DivText = f"x{self.div}"
         Divtext_area = label.Label(
-            smolfont,
+            SMOL_FONT,
             text=DivText,
             color=0xFFFFFF,
             x=GateScreen.DIV_X,
