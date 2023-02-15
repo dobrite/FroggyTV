@@ -18,17 +18,15 @@ class State():
 
     def next_screen(self):
         if self.focused_screen == SCREEN_NUMBER:
-            self.focused_screen = 0  # Resets index to 0
+            self.focused_screen = 0
         else:
-            self.focused_screen += 1  # Increments index by 1
+            self.focused_screen += 1
 
     def next_element(self):
         if self.focused_element == ELEMENT_NUMBER:
-            self.focused_element = 0  # Resets index to 0
+            self.focused_element = 0
         else:
-            self.focused_element += 1  # Increments index by 1
-
-        print(self.focused_element)
+            self.focused_element += 1
 
     def get_play(self):
         return self.play
@@ -66,8 +64,6 @@ class Sync():
 
     def forward(self):
         self.sync = "Ext"
-        print("forwards")
 
     def backwards(self):
         self.sync = "Int"
-        print("borwards")

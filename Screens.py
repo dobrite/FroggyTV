@@ -112,7 +112,6 @@ class HomeScreen(displayio.Group):
 
     def update_play_button(self, playing):
         self.playsprite[0] = PLAY_ICON if playing else PAUSE_ICON
-        # print(playing)
 
     def get_current_element(self):
         return self.elements[self.current_element]
