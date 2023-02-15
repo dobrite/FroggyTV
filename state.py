@@ -43,6 +43,8 @@ class State():
 
 MAX_BPM = 500
 MIN_BPM = 5
+INT = "Int"
+EXT = "Ext"
 
 
 class BPM():
@@ -60,10 +62,10 @@ class BPM():
 
 class Sync():
     def __init__(self):
-        self.sync = "Int"
+        self.sync = INT
 
     def forward(self):
-        self.sync = "Ext"
+        self.sync = EXT
 
     def backwards(self):
-        self.sync = "Int"
+        self.sync = INT
