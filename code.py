@@ -39,6 +39,9 @@ while True:
     page_button.update()
     encoder_button.update()
 
+    focused_screen = screen_list.get_focused_screen(state)
+    focused_element = state.get_focused_element()
+
     if play_button.rose:
         state.toggle_play()
         screen_list.screens[0].update_play_button(state.get_play())
@@ -48,16 +51,15 @@ while True:
 
     if encoder_button.rose:
         state.next_element()
-        screen_list.get_focused_screen(state).update_pointer(state)
+        focused_screen.update_pointer(state)
 
-    if state.get_focused_element() == 0:
+    if focused_element == 0:
         encoder.update(state.get_bpm())
-        screen_list.get_focused_screen(state).update_bpm(state.get_bpm())
+        focused_screen.update_bpm(state.get_bpm())
         OUTPUT_LIST[0].set_rate(state.get_bpm().bpm)
-
-    elif state.get_focused_element() == 1:
+    elif focused_element == 1:
         encoder.update(state.get_sync())
-        screen_list.get_focused_screen(state).update_sync(state.get_sync())
+        focused_screen.update_sync(state.get_sync())
 
     # Runs Outputs
     if state.get_play():
