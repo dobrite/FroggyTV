@@ -11,7 +11,7 @@ from Screens import Screens, HomeScreen
 from hardware import Encoder, Button
 from state import State
 
-#~~~~~~~~~~ Initializing ~~~~~~~~~~~#
+# ~~~~~~~~~~ Initializing ~~~~~~~~~~~#
 
 state = State()
 screen_list = Screens(state)
@@ -20,7 +20,7 @@ playbutton = Button(board.GP11).make_pin_reader()
 pagebutton = Button(board.GP12).make_pin_reader()
 encoderbutton = Button(board.GP13).make_pin_reader()
 
-#~~~~~~~~~ Output Setup ~~~~~~~~~#
+# ~~~~~~~~~ Output Setup ~~~~~~~~~#
 OUTPUT_LIST = [
     Output(0.5, 0.5, board.LED),
     Output(0.7, 0.7, board.GP1),
@@ -28,12 +28,12 @@ OUTPUT_LIST = [
     Output(0.7, 0.7, board.GP3),
     Output(0.7, 0.7, board.GP4)]
 
-#~~~~~~~~~ Main Loop ~~~~~~~~~#
+# ~~~~~~~~~ Main Loop ~~~~~~~~~#
 
 screen_list.show_current(state)
 
 while True:
-    
+
     now = time.monotonic()
 
     playbutton.update()
@@ -59,7 +59,7 @@ while True:
     elif state.get_focused_element() == 1:
         encoder.update(state.get_sync())
         screen_list.get_focused_screen(state).update_sync(state.get_sync())
-    
+
     # Runs Outputs
     if state.get_play():
         for out in OUTPUT_LIST:

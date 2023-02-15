@@ -3,6 +3,7 @@ from rotaryio import IncrementalEncoder
 from digitalio import DigitalInOut, Direction, Pull
 from adafruit_debouncer import Debouncer
 
+
 class Encoder():
     def __init__(self):
         self.position = 0
