@@ -70,10 +70,9 @@ class HomeScreen(displayio.Group):
         self.div = 1
 
         # Initial BPM text
-        BPMText = f"{state.get_bpm().bpm}"
         self.BPMtext_area = label.Label(
             BIGGE_FONT,
-            text=BPMText,
+            text=f"{state.get_bpm().bpm}",
             color=WHITE,
             x=20,
             y=35 // 2 - 1
@@ -91,10 +90,9 @@ class HomeScreen(displayio.Group):
         self.append(BPMLabeltext_area)
 
         # Creates Label "Int" in smaller font
-        SyncText = f"{state.get_sync().sync}"
         self.SyncLabeltext_area = label.Label(
             SMOL_FONT,
-            text=SyncText,
+            text=f"{state.get_sync().sync}",
             color=WHITE,
             x=20,
             y=77 // 2 - 1
@@ -102,10 +100,9 @@ class HomeScreen(displayio.Group):
         self.append(self.SyncLabeltext_area)
 
         # Initial Division text
-        DivText = "x1"
         self.Divtext_area = label.Label(
             SMOL_FONT,
-            text=DivText,
+            text="x1",
             color=WHITE,
             x=28,
             y=110 // 2 - 1
@@ -180,10 +177,9 @@ class GateScreen(displayio.Group):
         self.append(Labeltext_area)
 
         # Division text
-        DivText = f"x{self.div}"
         Divtext_area = label.Label(
             SMOL_FONT,
-            text=DivText,
+            text=f"x{self.div}",
             color=WHITE,
             x=GateScreen.DIV_X,
             y=GateScreen.DIV_Y // 2 - 1
