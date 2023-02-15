@@ -25,5 +25,5 @@ class Output():
                 self.pin.value = False
 
     def set_rate(self, bpm):
-        self.on = (1/bpm)*self.div
-        self.off = (1/bpm)*self.div
+        self.on = (1 / bpm) * self.div
+        self.off = (1 / bpm) * self.div
