@@ -110,7 +110,7 @@ class HomeScreen(displayio.Group):
         self.append(self.Divtext_area)
 
         # Draws play/pause
-        self.playsprite = displayio.TileGrid(
+        self.play_sprite = displayio.TileGrid(
             PLAY_SPRITE_SHEET,
             pixel_shader=PLAY_SPRITE_SHEET.pixel_shader,
             width=1,
@@ -118,8 +118,13 @@ class HomeScreen(displayio.Group):
             tile_width=16,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
             tile_height=16
         )
-        playsprite_group = displayio.Group(scale=1)
-        playsprite_group.append(self.playsprite)
+        play_sprite_group = displayio.Group(scale=1)
+        play_sprite_group.append(self.play_sprite)
+
+        # icon positions
+        play_sprite_group.x = 55
+        play_sprite_group.y = 35
+        self.append(play_sprite_group)
 
         # Draws the pointer icon
         pointer_area = displayio.TileGrid(
@@ -133,13 +138,8 @@ class HomeScreen(displayio.Group):
         self.update_pointer(state)
         self.append(self.pointer_group)
 
-        # icon positions
-        playsprite_group.x = 55
-        playsprite_group.y = 35
-        self.append(playsprite_group)
-
     def update_play_button(self, playing):
-        self.playsprite[0] = PLAY_ICON if playing else PAUSE_ICON
+        self.play_sprite[0] = PLAY_ICON if playing else PAUSE_ICON
 
     def update_pointer(self, state):
         focused_element = state.get_focused_element()
