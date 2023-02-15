@@ -16,9 +16,9 @@ from state import State
 state = State()
 screen_list = Screens(state)
 encoder = Encoder()
-playbutton = Button(board.GP11).make_pin_reader()
-pagebutton = Button(board.GP12).make_pin_reader()
-encoderbutton = Button(board.GP13).make_pin_reader()
+play_button = Button(board.GP11).make_pin_reader()
+page_button = Button(board.GP12).make_pin_reader()
+encoder_button = Button(board.GP13).make_pin_reader()
 
 # ~~~~~~~~~ Output Setup ~~~~~~~~~#
 OUTPUT_LIST = [
@@ -35,18 +35,18 @@ screen_list.show_current(state)
 while True:
     now = time.monotonic()
 
-    playbutton.update()
-    pagebutton.update()
-    encoderbutton.update()
+    play_button.update()
+    page_button.update()
+    encoder_button.update()
 
-    if playbutton.rose:
+    if play_button.rose:
         state.toggle_play()
         screen_list.screens[0].update_play_button(state.get_play())
 
-    if pagebutton.rose:
+    if page_button.rose:
         state.next_screen()
 
-    if encoderbutton.rose:
+    if encoder_button.rose:
         state.next_element()
         screen_list.get_focused_screen(state).update_pointer(state)
 
