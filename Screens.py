@@ -57,6 +57,7 @@ splash.append(bg_sprite)
 # Import Fonts
 SMOL_FONT = bitmap_font.load_font("/Fonts/FrogPrincess-7.pcf")
 BIGGE_FONT = bitmap_font.load_font("/Fonts/FrogPrincess-10.pcf")
+POINTER = displayio.OnDiskBitmap("/Icons/pointer.bmp")
 
 
 class HomeScreen(displayio.Group):
@@ -124,10 +125,9 @@ class HomeScreen(displayio.Group):
         playsprite_group.append(self.playsprite)
 
         # Draws the pointer icon
-        pointer = displayio.OnDiskBitmap("/Icons/pointer.bmp")
         pointer_area = displayio.TileGrid(
-            pointer,
-            pixel_shader=pointer.pixel_shader
+            POINTER,
+            pixel_shader=POINTER.pixel_shader
         )
         self.pointer_group = displayio.Group()
         self.pointer_group.append(pointer_area)
