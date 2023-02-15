@@ -15,8 +15,13 @@ oled_reset = board.GP20
 # Use for SPI
 oled_cs = board.GP17
 oled_dc = board.GP16
-display_bus = displayio.FourWire(spi, command=oled_dc, chip_select=oled_cs,
-                                 reset=oled_reset, baudrate=1000000)
+display_bus = displayio.FourWire(
+    spi,
+    command=oled_dc,
+    chip_select=oled_cs,
+    reset=oled_reset,
+    baudrate=1000000
+)
 
 WIDTH = 128
 HEIGHT = 64  # Change to 64 if needed
@@ -28,7 +33,10 @@ PAUSE_ICON = 1
 POINTER_POSITIONS = [[1, 5], [1, 25], [5, 43]]
 
 display = adafruit_displayio_ssd1306.SSD1306(
-    display_bus, width=WIDTH, height=HEIGHT)
+    display_bus,
+    width=WIDTH,
+    height=HEIGHT
+)
 
 # Make the display context
 splash = displayio.Group()
@@ -39,9 +47,12 @@ color_palette = displayio.Palette(1)
 color_palette[0] = 0x000000  # Black
 
 bg_sprite = displayio.TileGrid(
-    color_bitmap, pixel_shader=color_palette, x=0, y=0)
+    color_bitmap,
+    pixel_shader=color_palette,
+    x=0,
+    y=0
+)
 splash.append(bg_sprite)
-
 
 # Import Fonts
 smolfont = bitmap_font.load_font("/Fonts/FrogPrincess-7.pcf")
@@ -59,45 +70,65 @@ class HomeScreen(displayio.Group):
         # Initial BPM text
         BPMText = f"{state.get_bpm().bpm}"
         self.BPMtext_area = label.Label(
-            biggefont, text=BPMText, color=0xFFFFFF, x=20, y=35 // 2 - 1
+            biggefont,
+            text=BPMText,
+            color=0xFFFFFF,
+            x=20,
+            y=35 // 2 - 1
         )
         self.append(self.BPMtext_area)
 
         # Creates Label "BPM" in smaller font
         BPMLabeltext_area = label.Label(
-            smolfont, text="BPM", color=0xFFFFFF, x=69, y=35 // 2 - 1
+            smolfont,
+            text="BPM",
+            color=0xFFFFFF,
+            x=69,
+            y=35 // 2 - 1
         )
         self.append(BPMLabeltext_area)
 
         # Creates Label "Int" in smaller font
         SyncText = f"{state.get_sync().sync}"
         self.SyncLabeltext_area = label.Label(
-            smolfont, text=SyncText, color=0xFFFFFF, x=20, y=77 // 2 - 1
+            smolfont,
+            text=SyncText,
+            color=0xFFFFFF,
+            x=20,
+            y=77 // 2 - 1
         )
         self.append(self.SyncLabeltext_area)
 
         # Initial Division text
         DivText = "x1"
         self.Divtext_area = label.Label(
-            smolfont, text=DivText, color=0xFFFFFF, x=28, y=110 // 2 - 1
+            smolfont,
+            text=DivText,
+            color=0xFFFFFF,
+            x=28,
+            y=110 // 2 - 1
         )
         self.append(self.Divtext_area)
 
         # Draws play/pause
         playsprite_sheet = displayio.OnDiskBitmap("/Icons/playpause.bmp")
-        self.playsprite = displayio.TileGrid(playsprite_sheet,
-                                             pixel_shader=playsprite_sheet.pixel_shader,
-                                             width=1,
-                                             height=1,
-                                             tile_width=16,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
-                                             tile_height=16)
+        self.playsprite = displayio.TileGrid(
+            playsprite_sheet,
+            pixel_shader=playsprite_sheet.pixel_shader,
+            width=1,
+            height=1,
+            tile_width=16,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
+            tile_height=16
+        )
         playsprite_group = displayio.Group(scale=1)
         playsprite_group.append(self.playsprite)
 
         # Draws the pointer icon
         pointer = displayio.OnDiskBitmap("/Icons/pointer.bmp")
         pointer_area = displayio.TileGrid(
-            pointer, pixel_shader=pointer.pixel_shader)
+            pointer,
+            pixel_shader=pointer.pixel_shader
+        )
         self.pointer_group = displayio.Group()
         self.pointer_group.append(pointer_area)
 
@@ -117,10 +148,9 @@ class HomeScreen(displayio.Group):
         return self.elements[self.current_element]
 
     def update_pointer(self, state):
-        self.pointer_group.x = POINTER_POSITIONS[state.get_focused_element(
-        )][0]
-        self.pointer_group.y = POINTER_POSITIONS[state.get_focused_element(
-        )][1]
+        focused_element = state.get_focused_element()
+        self.pointer_group.x = POINTER_POSITIONS[focused_element][0]
+        self.pointer_group.y = POINTER_POSITIONS[focused_element][1]
 
     def update_bpm(self, state):
         self.BPMtext_area.text = f"{state.bpm}"
@@ -141,29 +171,36 @@ class GateScreen(displayio.Group):
 
         # Text icon
         Labeltext_area = label.Label(
-            biggefont, text=text, color=0xFFFFFF, x=GateScreen.ICON_X, y=GateScreen.ICON_Y // 2 - 1
+            biggefont,
+            text=text,
+            color=0xFFFFFF,
+            x=GateScreen.ICON_X,
+            y=GateScreen.ICON_Y // 2 - 1
         )
         self.append(Labeltext_area)
 
         # Division text
         DivText = f"x{self.div}"
         Divtext_area = label.Label(
-            smolfont, text=DivText, color=0xFFFFFF, x=GateScreen.DIV_X, y=GateScreen.DIV_Y // 2 - 1
+            smolfont,
+            text=DivText,
+            color=0xFFFFFF,
+            x=GateScreen.DIV_X,
+            y=GateScreen.DIV_Y // 2 - 1
         )
         self.append(Divtext_area)
-
-    def set_div(self, div):
-        self.div = div
 
 
 class Screens():
     def __init__(self, state):
         self.state = state
-        self.screens = [HomeScreen(state),
-                        GateScreen("A", state),
-                        GateScreen("B", state),
-                        GateScreen("C", state),
-                        GateScreen("D", state)]
+        self.screens = [
+            HomeScreen(state),
+            GateScreen("A", state),
+            GateScreen("B", state),
+            GateScreen("C", state),
+            GateScreen("D", state)
+        ]
 
     def get_focused_screen(self):
         return self.screens[self.state.get_focused_screen()]
@@ -188,8 +225,30 @@ class HomeDivElement():
         div8 = [960, "/8"]
         div16 = [1920, "/16"]
 
-        self.divisions = [div16[0], div8[0], div4[0], div3[0], div2[0],
-                          mult1[0], mult2[0], mult3[0], mult4[0], mult8[0], mult16[0]]
+        self.divisions = [
+            div16[0],
+            div8[0],
+            div4[0],
+            div3[0],
+            div2[0],
+            mult1[0],
+            mult2[0],
+            mult3[0],
+            mult4[0],
+            mult8[0],
+            mult16[0]
+        ]
 
-        self.div_text = [div16[1], div8[1], div4[1], div3[1], div2[1],
-                         mult1[1], mult2[1], mult3[1], mult4[1], mult8[1], mult16[1]]
+        self.div_text = [
+            div16[1],
+            div8[1],
+            div4[1],
+            div3[1],
+            div2[1],
+            mult1[1],
+            mult2[1],
+            mult3[1],
+            mult4[1],
+            mult8[1],
+            mult16[1]
+        ]
