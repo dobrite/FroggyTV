@@ -32,6 +32,9 @@ PAUSE_ICON = 1
 
 POINTER_POSITIONS = [[1, 5], [1, 25], [5, 43]]
 
+BLACK = 0x000000
+WHITE = 0xFFFFFF
+
 display = adafruit_displayio_ssd1306.SSD1306(
     display_bus,
     width=WIDTH,
@@ -44,7 +47,7 @@ display.show(splash)
 
 color_bitmap = displayio.Bitmap(WIDTH, HEIGHT, 1)
 color_palette = displayio.Palette(1)
-color_palette[0] = 0x000000  # Black
+color_palette[0] = BLACK
 
 bg_sprite = displayio.TileGrid(
     color_bitmap,
@@ -73,7 +76,7 @@ class HomeScreen(displayio.Group):
         self.BPMtext_area = label.Label(
             BIGGE_FONT,
             text=BPMText,
-            color=0xFFFFFF,
+            color=WHITE,
             x=20,
             y=35 // 2 - 1
         )
@@ -83,7 +86,7 @@ class HomeScreen(displayio.Group):
         BPMLabeltext_area = label.Label(
             SMOL_FONT,
             text="BPM",
-            color=0xFFFFFF,
+            color=WHITE,
             x=69,
             y=35 // 2 - 1
         )
@@ -94,7 +97,7 @@ class HomeScreen(displayio.Group):
         self.SyncLabeltext_area = label.Label(
             SMOL_FONT,
             text=SyncText,
-            color=0xFFFFFF,
+            color=WHITE,
             x=20,
             y=77 // 2 - 1
         )
@@ -105,7 +108,7 @@ class HomeScreen(displayio.Group):
         self.Divtext_area = label.Label(
             SMOL_FONT,
             text=DivText,
-            color=0xFFFFFF,
+            color=WHITE,
             x=28,
             y=110 // 2 - 1
         )
@@ -173,7 +176,7 @@ class GateScreen(displayio.Group):
         Labeltext_area = label.Label(
             BIGGE_FONT,
             text=text,
-            color=0xFFFFFF,
+            color=WHITE,
             x=GateScreen.ICON_X,
             y=GateScreen.ICON_Y // 2 - 1
         )
@@ -184,7 +187,7 @@ class GateScreen(displayio.Group):
         Divtext_area = label.Label(
             SMOL_FONT,
             text=DivText,
-            color=0xFFFFFF,
+            color=WHITE,
             x=GateScreen.DIV_X,
             y=GateScreen.DIV_Y // 2 - 1
         )
