@@ -4,10 +4,8 @@
 
 import board
 import time
-import rotaryio
-import random
 from output import Output
-from Screens import Screens, HomeScreen
+from Screens import Screens
 from hardware import Encoder, Button
 from state import State
 
@@ -26,7 +24,8 @@ OUTPUT_LIST = [
     Output(0.7, 0.7, board.GP1),
     Output(0.7, 0.7, board.GP2),
     Output(0.7, 0.7, board.GP3),
-    Output(0.7, 0.7, board.GP4)]
+    Output(0.7, 0.7, board.GP4)
+]
 
 # ~~~~~~~~~ Main Loop ~~~~~~~~~#
 
