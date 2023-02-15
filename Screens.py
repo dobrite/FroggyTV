@@ -67,9 +67,6 @@ class HomeScreen(displayio.Group):
     def __init__(self, state):
         super().__init__()
         self.div = 1
-        self.current_element = 0
-        self.home_div_element = HomeDivElement()
-        self.elements = [self.home_div_element]
 
         # Initial BPM text
         BPMText = f"{state.get_bpm().bpm}"
@@ -212,46 +209,46 @@ class Screens():
         display.show(self.get_focused_screen(self.state))
 
 
-class HomeDivElement():
-    def __init__(self):
-        self.div_index = 5
-
-        mult1 = [120, "x1"]
-        mult2 = [60, "x2"]
-        mult3 = [40, "x3"]
-        mult4 = [15, "x4"]
-        mult8 = [7.5, "x8"]
-        mult16 = [3.75, "x16"]
-        div2 = [240, "/2"]
-        div3 = [360, "/3"]
-        div4 = [480, "/4"]
-        div8 = [960, "/8"]
-        div16 = [1920, "/16"]
-
-        self.divisions = [
-            div16[0],
-            div8[0],
-            div4[0],
-            div3[0],
-            div2[0],
-            mult1[0],
-            mult2[0],
-            mult3[0],
-            mult4[0],
-            mult8[0],
-            mult16[0]
-        ]
-
-        self.div_text = [
-            div16[1],
-            div8[1],
-            div4[1],
-            div3[1],
-            div2[1],
-            mult1[1],
-            mult2[1],
-            mult3[1],
-            mult4[1],
-            mult8[1],
-            mult16[1]
-        ]
+# class HomeDivElement():
+#     def __init__(self):
+#         self.div_index = 5
+#
+#         mult1 = [120, "x1"]
+#         mult2 = [60, "x2"]
+#         mult3 = [40, "x3"]
+#         mult4 = [15, "x4"]
+#         mult8 = [7.5, "x8"]
+#         mult16 = [3.75, "x16"]
+#         div2 = [240, "/2"]
+#         div3 = [360, "/3"]
+#         div4 = [480, "/4"]
+#         div8 = [960, "/8"]
+#         div16 = [1920, "/16"]
+#
+#         self.divisions = [
+#             div16[0],
+#             div8[0],
+#             div4[0],
+#             div3[0],
+#             div2[0],
+#             mult1[0],
+#             mult2[0],
+#             mult3[0],
+#             mult4[0],
+#             mult8[0],
+#             mult16[0]
+#         ]
+#
+#         self.div_text = [
+#             div16[1],
+#             div8[1],
+#             div4[1],
+#             div3[1],
+#             div2[1],
+#             mult1[1],
+#             mult2[1],
+#             mult3[1],
+#             mult4[1],
+#             mult8[1],
+#             mult16[1]
+#         ]
