@@ -141,9 +141,6 @@ class HomeScreen(displayio.Group):
     def update_play_button(self, playing):
         self.playsprite[0] = PLAY_ICON if playing else PAUSE_ICON
 
-    def get_current_element(self):
-        return self.elements[self.current_element]
-
     def update_pointer(self, state):
         focused_element = state.get_focused_element()
         self.pointer_group.x = POINTER_POSITIONS[focused_element][0]
