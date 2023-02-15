@@ -11,18 +11,13 @@ class Output():
         self.prev_time = -1
 
     def toggle(self, now):
-        if self.pin.value is False:
+        if not self.pin.value and now >= self.prev_time + self.off:
+            self.prev_time = now
+            self.pin.value = True
 
-            if now >= self.prev_time + self.off:
-                self.prev_time = now
-
-                self.pin.value = True
-
-        if self.pin.value is True:
-            if now >= self.prev_time + self.on:
-                self.prev_time = now
-
-                self.pin.value = False
+        if self.pin.value and now >= self.prev_time + self.on:
+            self.prev_time = now
+            self.pin.value = False
 
     def set_rate(self, bpm):
         self.on = (1 / bpm) * self.div
