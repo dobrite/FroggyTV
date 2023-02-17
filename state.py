@@ -1,32 +1,8 @@
-SCREEN_NUMBER = 5 - 1  # Number of screens in use, may be changed later
-ELEMENT_NUMBER = 3 - 1
-
-
 class State():
     def __init__(self):
         self.play = True
         self.bpm = BPM()
         self.sync = Sync()
-        self.focused_screen = 0
-        self.focused_element = 0
-
-    def get_focused_screen(self):
-        return self.focused_screen
-
-    def get_focused_element(self):
-        return self.focused_element
-
-    def next_screen(self):
-        if self.focused_screen == SCREEN_NUMBER:
-            self.focused_screen = 0
-        else:
-            self.focused_screen += 1
-
-    def next_element(self):
-        if self.focused_element == ELEMENT_NUMBER:
-            self.focused_element = 0
-        else:
-            self.focused_element += 1
 
     def get_play(self):
         return self.play

@@ -46,17 +46,17 @@ while True:
     encoder_button.update()
 
     focused_screen = screen_list.get_focused_screen()
-    focused_element = state.get_focused_element()
+    focused_element = screen_list.get_focused_element()
 
     if play_button.rose:
         state.toggle_play()
         screen_list.screens[0].update_play_button(state.get_play())
 
     if page_button.rose:
-        state.next_screen()
+        screen_list.next_screen()
 
     if encoder_button.rose:
-        state.next_element()
+        screen_list.next_element()
         focused_screen.update_pointer(focused_element)
 
     if focused_element == 0:

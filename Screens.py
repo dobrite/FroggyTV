@@ -25,6 +25,9 @@ display_bus = displayio.FourWire(
     baudrate=1000000
 )
 
+SCREEN_NUMBER = 5 - 1  # Number of screens in use, may be changed later
+ELEMENT_NUMBER = 3 - 1
+
 WIDTH = 128
 HEIGHT = 64  # Change to 64 if needed
 BORDER = 0
@@ -191,10 +194,27 @@ class Screens():
     def __init__(self, state, screens):
         self.state = state
         self.screens = screens
-        self.pointer = Pointer(self.state.get_focused_element())
+        self.focused_screen = 0
+        self.focused_element = 0
+        self.pointer = Pointer(self.focused_element)
 
     def get_focused_screen(self):
-        return self.screens[self.state.get_focused_screen()]
+        return self.focused_screen
+
+    def get_focused_element(self):
+        return self.focused_element
+
+    def next_screen(self):
+        if self.focused_screen == SCREEN_NUMBER:
+            self.focused_screen = 0
+        else:
+            self.focused_screen += 1
+
+    def next_element(self):
+        if self.focused_element == ELEMENT_NUMBER:
+            self.focused_element = 0
+        else:
+            self.focused_element += 1
 
     def show_current(self):
         display.show(self._focused_screen_with_pointer())
@@ -202,7 +222,7 @@ class Screens():
     def _draw_focused_screen_with_pointer(self):
         screen = displayio.Group()
         screen.append(self.pointer)
-        screen.append(self.get_focused_screen(self.state))
+        screen.append(self.get_focused_screen())
 
         return screen
 
