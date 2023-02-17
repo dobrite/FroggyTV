@@ -205,16 +205,10 @@ class Screens():
         return self.focused_element
 
     def next_screen(self):
-        if self.focused_screen == SCREEN_NUMBER:
-            self.focused_screen = 0
-        else:
-            self.focused_screen += 1
+        self.focused_screen = (self.focused_screen + 1) % SCREEN_NUMBER
 
     def next_element(self):
-        if self.focused_element == ELEMENT_NUMBER:
-            self.focused_element = 0
-        else:
-            self.focused_element += 1
+        self.focused_element = (self.focused_element + 1) % ELEMENT_NUMBER
 
     def show_current(self):
         display.show(self._focused_screen_with_pointer())
