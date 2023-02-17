@@ -28,12 +28,18 @@ class BPM():
         self.value = 120
 
     def forward(self):
+        prev = self.value
         if self.value < MAX_BPM:
             self.value += 1
 
+        return prev != self.value
+
     def backwards(self):
+        prev = self.value
         if self.value > MIN_BPM:
             self.value -= 1
+
+        return prev != self.value
 
 
 class Sync():
@@ -41,7 +47,13 @@ class Sync():
         self.value = INT
 
     def forward(self):
+        prev = self.value
         self.value = EXT
 
+        return prev != self.value
+
     def backwards(self):
+        prev = self.value
         self.value = INT
+
+        return prev != self.value

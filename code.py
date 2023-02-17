@@ -59,9 +59,9 @@ while True:
         screen_list.next_element()
         focused_screen.update_pointer(focused_element)
 
-    encoder.update(focused_element.state)
-    focused_element.update()
-    # OUTPUT_LIST[0].set_rate(state.get_bpm().bpm)
+    if encoder.update(focused_element.state):
+        focused_element.update()
+        # OUTPUT_LIST[0].set_rate(state.get_bpm().bpm)
 
     # Runs Outputs
     if state.get_play():

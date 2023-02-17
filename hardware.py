@@ -11,14 +11,15 @@ class Encoder():
         self.encoder = IncrementalEncoder(board.GP14, board.GP15)
 
     def update(self, state):
+        did_update = False
         self.position = self.encoder.position
         if self._moving_forward():
-            state.forward()
-
+            did_update = state.forward()
         if self._moving_backwards():
-            state.backwards()
-
+            did_update = state.backwards()
         self.last_position = self.position
+
+        return did_update
 
     def _moving_forward(self):
         return self.last_position is None or self.position > self.last_position
