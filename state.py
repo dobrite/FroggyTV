@@ -49,23 +49,23 @@ EXT = "Ext"
 
 class BPM():
     def __init__(self):
-        self.bpm = 120
+        self.value = 120
 
     def forward(self):
-        if self.bpm < MAX_BPM:
-            self.bpm += 1
+        if self.value < MAX_BPM:
+            self.value += 1
 
     def backwards(self):
-        if self.bpm > MIN_BPM:
-            self.bpm -= 1
+        if self.value > MIN_BPM:
+            self.value -= 1
 
 
 class Sync():
     def __init__(self):
-        self.sync = INT
+        self.value = INT
 
     def forward(self):
-        self.sync = EXT
+        self.value = EXT
 
     def backwards(self):
-        self.sync = INT
+        self.value = INT
