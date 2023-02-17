@@ -57,6 +57,8 @@ while True:
 
     if encoder_button.rose:
         screen_list.next_element()
+        # TODO this needs to be an int, not an element
+        # TODO this also will not be the right focused_element
         focused_screen.update_pointer(focused_element)
 
     if encoder.update(focused_element.state):
