@@ -37,3 +37,26 @@ class Button():
 
     def make_pin_reader(self):
         return Debouncer(lambda: self.button.value)
+
+
+class Output():
+    def __init__(self, on, off, pin):
+        self.on = on
+        self.off = off
+        self.div = 4
+        self.pin = DigitalInOut(pin)
+        self.pin.direction = Direction.OUTPUT
+        self.prev_time = -1
+
+    def toggle(self, now):
+        if not self.pin.value and now >= self.prev_time + self.off:
+            self.prev_time = now
+            self.pin.value = True
+
+        if self.pin.value and now >= self.prev_time + self.on:
+            self.prev_time = now
+            self.pin.value = False
+
+    def set_rate(self, bpm):
+        self.on = (1 / bpm) * self.div
+        self.off = (1 / bpm) * self.div

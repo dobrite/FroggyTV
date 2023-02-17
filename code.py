@@ -4,9 +4,8 @@
 
 import board
 import time
-from output import Output
 from Screens import Screens
-from hardware import Encoder, Button
+from hardware import Button, Encoder, Output
 from state import State
 
 # ~~~~~~~~~~ Initializing ~~~~~~~~~~~#
