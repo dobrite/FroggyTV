@@ -12,7 +12,14 @@ from state import State
 # ~~~~~~~~~~ Initializing ~~~~~~~~~~~#
 
 state = State()
-screen_list = Screens(state)
+screens = [
+    HomeScreen.make(state),
+    GateScreen.make("A", state),
+    GateScreen.make("B", state),
+    GateScreen.make("C", state),
+    GateScreen.make("D", state)
+]
+screen_list = Screens(state, screens)
 encoder = Encoder()
 play_button = Button(board.GP11).make_pin_reader()
 page_button = Button(board.GP12).make_pin_reader()
@@ -50,7 +57,7 @@ while True:
 
     if encoder_button.rose:
         state.next_element()
-        focused_screen.update_pointer(state)
+        focused_screen.update_pointer(focused_element)
 
     if focused_element == 0:
         encoder.update(state.get_bpm())

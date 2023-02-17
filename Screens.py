@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 import displayio
 from adafruit_display_text import label
 from adafruit_bitmap_font import bitmap_font
@@ -29,8 +31,6 @@ BORDER = 0
 
 PLAY_ICON = 0
 PAUSE_ICON = 1
-
-POINTER_POSITIONS = [[1, 5], [1, 25], [5, 43]]
 
 BLACK = 0x000000
 WHITE = 0xFFFFFF
@@ -64,52 +64,92 @@ POINTER = displayio.OnDiskBitmap("/Icons/pointer.bmp")
 PLAY_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/playpause.bmp")
 
 
-class HomeScreen(displayio.Group):
-    def __init__(self, state):
-        super().__init__()
-        self.div = 1
+@dataclass
+class Coordinates:
+    text_x: int
+    text_y: int
+    label_x: int = 0
+    label_y: int = 0
 
-        # Initial BPM text
-        self.BPMtext_area = label.Label(
+
+class Element(displayio.Group):
+    def __init__(self, state, coordinates, label_text=None, color=WHITE):
+        self.state = state
+        self.label_text = label_text
+        self.coordinates = coordinates
+        self.color = color
+
+        self.text_area = label.Label(
             BIGGE_FONT,
-            text=f"{state.get_bpm().bpm}",
-            color=WHITE,
-            x=20,
-            y=35 // 2 - 1
+            text=f"{self.state.value}",
+            color=self.color,
+            x=self.coordinates.text_x,
+            y=self.coordinates.text_y // 2 - 1
         )
-        self.append(self.BPMtext_area)
 
-        # Creates Label "BPM" in smaller font
-        BPMLabeltext_area = label.Label(
-            SMOL_FONT,
-            text="BPM",
-            color=WHITE,
-            x=69,
-            y=35 // 2 - 1
+        if label_text:
+            self.label_text_area = label.Label(
+                SMOL_FONT,
+                text=self.label_text,
+                color=self.color,
+                x=self.coordinates.label_x,
+                y=self.coordinates.label_y // 2 - 1
+            )
+        else:
+            self.label_text_area = None
+
+    def update(self):
+        self.text_area.text = f"{self.state.value}"
+
+
+class Pointer(displayio.Group):
+    POINTER_POSITIONS = [[1, 5], [1, 25], [5, 43]]
+
+    def __init__(self, focused_element):
+        pointer_area = displayio.TileGrid(
+            POINTER,
+            pixel_shader=POINTER.pixel_shader
         )
-        self.append(BPMLabeltext_area)
+        self.pointer_group = displayio.Group()
+        self.pointer_group.append(pointer_area)
 
-        # Creates Label "Int" in smaller font
-        self.SyncLabeltext_area = label.Label(
-            SMOL_FONT,
-            text=f"{state.get_sync().sync}",
-            color=WHITE,
-            x=20,
-            y=77 // 2 - 1
+        # Pointer positions
+        self.update_pointer(focused_element)
+        self.append(self.pointer_group)
+
+    def update_pointer(self, focused_element):
+        self.pointer_group.x = Pointer.POINTER_POSITIONS[focused_element][0]
+        self.pointer_group.y = Pointer.POINTER_POSITIONS[focused_element][1]
+
+
+class HomeScreen(displayio.Group):
+    @classmethod
+    def make(cls, state):
+        bpm_element = Element(
+            state.get_bpm(),
+            Coordinates(text_x=20, text_y=35, label_x=69, label_y=35),
+            label_text="BPM"
         )
-        self.append(self.SyncLabeltext_area)
 
-        # Initial Division text
-        self.Divtext_area = label.Label(
-            SMOL_FONT,
-            text="x1",
-            color=WHITE,
-            x=28,
-            y=110 // 2 - 1
+        div_element = Element(
+            state.get_div(),
+            Coordinates(text_x=28, text_y=110),
         )
-        self.append(self.Divtext_area)
 
-        # Draws play/pause
+        sync_element = Element(
+            state.get_sync(),
+            Coordinates(text_x=20, text_y=77),
+        )
+
+        elements = [bpm_element, div_element, sync_element]
+        return cls(elements, state)
+
+    def __init__(self, elements, state):
+        super().__init__()
+        self.elements = elements
+        self._draw_play_pause()
+
+    def _draw_play_pause(self):
         self.play_sprite = displayio.TileGrid(
             PLAY_SPRITE_SHEET,
             pixel_shader=PLAY_SPRITE_SHEET.pixel_shader,
@@ -126,80 +166,45 @@ class HomeScreen(displayio.Group):
         play_sprite_group.y = 35
         self.append(play_sprite_group)
 
-        # Draws the pointer icon
-        pointer_area = displayio.TileGrid(
-            POINTER,
-            pixel_shader=POINTER.pixel_shader
-        )
-        self.pointer_group = displayio.Group()
-        self.pointer_group.append(pointer_area)
-
-        # Pointer positions
-        self.update_pointer(state)
-        self.append(self.pointer_group)
-
     def update_play_button(self, playing):
         self.play_sprite[0] = PLAY_ICON if playing else PAUSE_ICON
 
-    def update_pointer(self, state):
-        focused_element = state.get_focused_element()
-        self.pointer_group.x = POINTER_POSITIONS[focused_element][0]
-        self.pointer_group.y = POINTER_POSITIONS[focused_element][1]
-
-    def update_bpm(self, state):
-        self.BPMtext_area.text = f"{state.bpm}"
-
-    def update_sync(self, state):
-        self.SyncLabeltext_area.text = f"{state.sync}"
-
 
 class GateScreen(displayio.Group):
-    ICON_X = 5
-    ICON_Y = 30
-    DIV_X = 105
-    DIV_Y = 30
+    @classmethod
+    def make(cls, name, state):
+        div_element = Element(
+            state.get_div(),  # TODO
+            Coordinates(text_x=105, text_y=30, label_x=5, label_y=30),
+            label_text=name,
+        )
 
-    def __init__(self, text, state):
+        elements = [div_element]
+        return cls(elements, state)
+
+    def __init__(self, elements, state):
         super().__init__()
-        self.div = 1
-
-        # Text icon
-        Labeltext_area = label.Label(
-            BIGGE_FONT,
-            text=text,
-            color=WHITE,
-            x=GateScreen.ICON_X,
-            y=GateScreen.ICON_Y // 2 - 1
-        )
-        self.append(Labeltext_area)
-
-        # Division text
-        Divtext_area = label.Label(
-            SMOL_FONT,
-            text=f"x{self.div}",
-            color=WHITE,
-            x=GateScreen.DIV_X,
-            y=GateScreen.DIV_Y // 2 - 1
-        )
-        self.append(Divtext_area)
+        self.elements = elements
 
 
 class Screens():
-    def __init__(self, state):
+    def __init__(self, state, screens):
         self.state = state
-        self.screens = [
-            HomeScreen(state),
-            GateScreen("A", state),
-            GateScreen("B", state),
-            GateScreen("C", state),
-            GateScreen("D", state)
-        ]
+        self.screens = screens
+        self.pointer = Pointer(self.state.get_focused_element())
 
     def get_focused_screen(self):
         return self.screens[self.state.get_focused_screen()]
 
     def show_current(self):
-        display.show(self.get_focused_screen(self.state))
+        display.show(self._focused_screen_with_pointer())
+
+    def _draw_focused_screen_with_pointer(self):
+        screen = displayio.Group()
+        screen.append(self.pointer)
+        screen.append(self.get_focused_screen(self.state))
+
+        return screen
 
 
 # class HomeDivElement():
