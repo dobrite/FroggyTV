@@ -199,16 +199,18 @@ class Screens():
         self.pointer = Pointer(self.focused_element)
 
     def get_focused_screen(self):
-        return self.focused_screen
+        return self.screens[self.focused_screen]
 
     def get_focused_element(self):
-        return self.focused_element
+        return self.get_focused_screen().elements[self.focused_element]
 
     def next_screen(self):
-        self.focused_screen = (self.focused_screen + 1) % SCREEN_NUMBER
+        num_screens = len(self.screens)
+        self.focused_screen = (self.focused_screen + 1) % (num_screens - 1)
 
     def next_element(self):
-        self.focused_element = (self.focused_element + 1) % ELEMENT_NUMBER
+        num_elements = len(self.get_focused_screen().elements)
+        self.focused_element = (self.focused_element + 1) % (num_elements - 1)
 
     def show_current(self):
         display.show(self._focused_screen_with_pointer())
