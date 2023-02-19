@@ -106,8 +106,8 @@ class Element(displayio.Group):
 
 class Pointer(displayio.Group):
     POINTER_POSITIONS = [[1, 5], [1, 25], [5, 43]]
-
     def __init__(self, focused_element):
+        super().__init__()
         pointer_area = displayio.TileGrid(
             POINTER,
             pixel_shader=POINTER.pixel_shader
@@ -212,56 +212,17 @@ class Screens():
         self.focused_element = (self.focused_element + 1) % (num_elements - 1)
 
     def show_current(self):
-        display.show(self._focused_screen_with_pointer())
+        display.show(self._draw_focused_screen_with_pointer())
 
     def _draw_focused_screen_with_pointer(self):
-        screen = displayio.Group()
-        screen.append(self.pointer)
-        screen.append(self.get_focused_screen())
+        #screen = displayio.Group()
+        #screen.append(self.pointer)
+        #screen.append(self.get_focused_screen())
 
-        return screen
+        return self.get_focused_screen()
 
 
-# class HomeDivElement():
-#     def __init__(self):
-#         self.div_index = 5
-#
-#         mult1 = [120, "x1"]
-#         mult2 = [60, "x2"]
-#         mult3 = [40, "x3"]
-#         mult4 = [15, "x4"]
-#         mult8 = [7.5, "x8"]
-#         mult16 = [3.75, "x16"]
-#         div2 = [240, "/2"]
-#         div3 = [360, "/3"]
-#         div4 = [480, "/4"]
-#         div8 = [960, "/8"]
-#         div16 = [1920, "/16"]
-#
-#         self.divisions = [
-#             div16[0],
-#             div8[0],
-#             div4[0],
-#             div3[0],
-#             div2[0],
-#             mult1[0],
-#             mult2[0],
-#             mult3[0],
-#             mult4[0],
-#             mult8[0],
-#             mult16[0]
-#         ]
-#
-#         self.div_text = [
-#             div16[1],
-#             div8[1],
-#             div4[1],
-#             div3[1],
-#             div2[1],
-#             mult1[1],
-#             mult2[1],
-#             mult3[1],
-#             mult4[1],
-#             mult8[1],
-#             mult16[1]
-#         ]
+
+
+        
+
