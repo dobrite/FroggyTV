@@ -7,6 +7,7 @@ import time
 from Screens import Screens
 from hardware import Button, Encoder, Output
 from state import State
+from Screens import HomeScreen, GateScreen
 
 # ~~~~~~~~~~ Initializing ~~~~~~~~~~~#
 
