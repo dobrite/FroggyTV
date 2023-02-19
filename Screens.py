@@ -63,6 +63,7 @@ SMOL_FONT = bitmap_font.load_font("/Fonts/FrogPrincess-7.pcf")
 BIGGE_FONT = bitmap_font.load_font("/Fonts/FrogPrincess-10.pcf")
 POINTER = displayio.OnDiskBitmap("/Icons/pointer.bmp")
 PLAY_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/playpause.bmp")
+FROGE_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/SpinSpritesheet.bmp")
 
 
 class Coordinates:
@@ -70,8 +71,7 @@ class Coordinates:
         self.text_x = text_x
         self.text_y = text_y
         self.label_x = label_x
-        self.label_y = label_y\
-
+        self.label_y = label_y
 
 
 def default_formatter(value):
@@ -178,8 +178,10 @@ class HomeScreen(displayio.Group):
     def __init__(self, elements, state):
         super().__init__()
         self.elements = elements
+        self.froge = Froge()
         self._draw_play_pause()
         self._draw_elements()
+        self.append(self.froge)
 
     def _draw_elements(self):
         for e in self.elements:
@@ -204,6 +206,41 @@ class HomeScreen(displayio.Group):
 
     def update_play_button(self, playing):
         self.play_sprite[0] = PLAY_ICON if playing else PAUSE_ICON
+
+
+class Froge(displayio.Group):
+    SPIN_RATE = 4
+
+    def __init__(self):
+        super().__init__()
+        self.spinning = False
+        self.prev_time = -1
+        self.index = 0
+        self.frogesprite = displayio.TileGrid(FROGE_SPRITE_SHEET,
+                                              pixel_shader=FROGE_SPRITE_SHEET.pixel_shader,
+                                              width=1,
+                                              height=1,
+                                              tile_width=22,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
+                                              tile_height=22)
+        frogesprite_group = displayio.Group(scale=1)
+        frogesprite_group.append(self.frogesprite)
+        # froge positions
+        frogesprite_group.x = 80
+        frogesprite_group.y = 30
+        self.append(frogesprite_group)
+
+    def spin(self, now, bpm):
+        if not self.spinning and now >= self.prev_time + (1/bpm)*Froge.SPIN_RATE:
+            self.prev_time = now
+            self.index = (self.index + 1) % 8
+            self.frogesprite[0] = self.index
+            self.spinning = True
+
+        if self.spinning and now >= self.prev_time + (1/bpm)*Froge.SPIN_RATE:
+            self.prev_time = now
+            self.index = (self.index + 1) % 8
+            self.frogesprite[0] = self.index
+            self.spinning = False
 
 
 class GateScreen(displayio.Group):
