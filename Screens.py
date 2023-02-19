@@ -75,6 +75,7 @@ class Coordinates:
 
 class Element(displayio.Group):
     def __init__(self, state, coordinates, label_text=None, color=WHITE):
+        super().__init__()
         self.state = state
         self.label_text = label_text
         self.coordinates = coordinates
