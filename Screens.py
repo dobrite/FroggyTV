@@ -209,7 +209,7 @@ class HomeScreen(displayio.Group):
 
 
 class Froge(displayio.Group):
-    SPIN_RATE = 4
+    SPIN_RATE = 16
 
     def __init__(self):
         super().__init__()
