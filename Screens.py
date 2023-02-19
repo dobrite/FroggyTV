@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 import displayio
 from adafruit_display_text import label
 from adafruit_bitmap_font import bitmap_font
@@ -67,13 +65,13 @@ POINTER = displayio.OnDiskBitmap("/Icons/pointer.bmp")
 PLAY_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/playpause.bmp")
 
 
-@dataclass
-class Coordinates:
-    text_x: int
-    text_y: int
-    label_x: int = 0
-    label_y: int = 0
 
+class Coordinates:
+    def __init__(self, text_x, text_y, label_x = 0, label_y = 0):
+        self.text_x = text_x
+        self.text_y = text_y
+        self.label_x = label_x
+        self.label_y = label_y
 
 class Element(displayio.Group):
     def __init__(self, state, coordinates, label_text=None, color=WHITE):
