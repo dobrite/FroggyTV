@@ -74,7 +74,7 @@ class Coordinates:
         self.label_y = label_y
 
 class Element(displayio.Group):
-    def __init__(self, state, coordinates, label_text=None, color=WHITE):
+    def __init__(self, state, coordinates, font, label_text=None, color=WHITE):
         super().__init__()
         self.state = state
         self.label_text = label_text
@@ -82,7 +82,7 @@ class Element(displayio.Group):
         self.color = color
 
         self.text_area = label.Label(
-            BIGGE_FONT,
+            font,
             text=f"{self.state.value}",
             color=self.color,
             x=self.coordinates.text_x,
@@ -99,6 +99,11 @@ class Element(displayio.Group):
             )
         else:
             self.label_text_area = None
+
+        self.append(self.text_area)
+
+        if self.label_text_area:
+            self.append(self.label_text_area)
 
     def update(self):
         self.text_area.text = f"{self.state.value}"
@@ -130,17 +135,20 @@ class HomeScreen(displayio.Group):
         bpm_element = Element(
             state.get_bpm(),
             Coordinates(text_x=20, text_y=35, label_x=69, label_y=35),
+            BIGGE_FONT,
             label_text="BPM"
         )
 
         div_element = Element(
             state.get_div(),
             Coordinates(text_x=28, text_y=110),
+            SMOL_FONT,
         )
 
         sync_element = Element(
             state.get_sync(),
             Coordinates(text_x=20, text_y=77),
+            SMOL_FONT
         )
 
         elements = [bpm_element, div_element, sync_element]
@@ -150,6 +158,11 @@ class HomeScreen(displayio.Group):
         super().__init__()
         self.elements = elements
         self._draw_play_pause()
+        self._draw_elements()
+
+    def _draw_elements(self):
+        for e in self.elements:
+            self.append(e)
 
     def _draw_play_pause(self):
         self.play_sprite = displayio.TileGrid(
@@ -171,13 +184,13 @@ class HomeScreen(displayio.Group):
     def update_play_button(self, playing):
         self.play_sprite[0] = PLAY_ICON if playing else PAUSE_ICON
 
-
 class GateScreen(displayio.Group):
     @classmethod
     def make(cls, name, state):
         div_element = Element(
-            state.get_div(),  # TODO
+            state.get_div(), 
             Coordinates(text_x=105, text_y=30, label_x=5, label_y=30),
+            SMOL_FONT,
             label_text=name,
         )
 
@@ -196,6 +209,10 @@ class Screens():
         self.focused_screen = 0
         self.focused_element = 0
         self.pointer = Pointer(self.focused_element)
+        self.screen = displayio.Group()
+        self.screen.append(self.pointer)
+        self.screen.append(self.get_focused_screen())
+
 
     def get_focused_screen(self):
         return self.screens[self.focused_screen]
@@ -212,17 +229,4 @@ class Screens():
         self.focused_element = (self.focused_element + 1) % (num_elements - 1)
 
     def show_current(self):
-        display.show(self._draw_focused_screen_with_pointer())
-
-    def _draw_focused_screen_with_pointer(self):
-        #screen = displayio.Group()
-        #screen.append(self.pointer)
-        #screen.append(self.get_focused_screen())
-
-        return self.get_focused_screen()
-
-
-
-
-        
-
+        display.show(self.screen)
