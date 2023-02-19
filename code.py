@@ -57,7 +57,7 @@ while True:
 
     if encoder_button.rose:
         screen_list.next_element()
- 
+
     if encoder.update(focused_element.state):
         focused_element.update()
         # OUTPUT_LIST[0].set_rate(state.get_bpm().bpm)

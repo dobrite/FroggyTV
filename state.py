@@ -16,7 +16,7 @@ class State():
 
     def get_sync(self):
         return self.sync
-    
+
     def get_div(self):
         return self.div
 
@@ -62,27 +62,29 @@ class Sync():
 
         return prev != self.value
 
+
 class Div():
-    DIVISIONS = [ 
-        3.75, # x16
-        7.5, # x8
-        15, # x4
-        40, # x3
-        60, # x2
-        120, # x1
-        240, # /2
-        360, # /3
-        480, # /4
-        960, # /8
-        1920 # /16
-    ]   
+    DIVISIONS = [
+        3.75,  # x16
+        7.5,  # x8
+        15,  # x4
+        40,  # x3
+        60,  # x2
+        120,  # x1
+        240,  # /2
+        360,  # /3
+        480,  # /4
+        960,  # /8
+        1920  # /16
+    ]
+
     def __init__(self):
-        self.index = 5  
+        self.index = 5
         self.value = Div.DIVISIONS[self.index]
 
     def forward(self):
         prev = self.index
-        if self.index < len(Div.DIVISIONS) - 1: 
+        if self.index < len(Div.DIVISIONS) - 1:
             self.index += 1
             self.value = Div.DIVISIONS[self.index]
 
@@ -90,10 +92,8 @@ class Div():
 
     def backwards(self):
         prev = self.index
-        if self.index > 0: 
+        if self.index > 0:
             self.index -= 1
             self.value = Div.DIVISIONS[self.index]
 
         return prev != self.index
-
-

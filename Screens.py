@@ -65,29 +65,32 @@ POINTER = displayio.OnDiskBitmap("/Icons/pointer.bmp")
 PLAY_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/playpause.bmp")
 
 
-
 class Coordinates:
-    def __init__(self, text_x, text_y, label_x = 0, label_y = 0):
+    def __init__(self, text_x, text_y, label_x=0, label_y=0):
         self.text_x = text_x
         self.text_y = text_y
         self.label_x = label_x
         self.label_y = label_y\
 
+
+
 def default_formatter(value):
     return value
+
 
 def div_formatter(value):
     if value <= 120:
         number = int(1 / (value / 120))
         char = "/"
     else:
-        number = int (value / 120)
+        number = int(value / 120)
         char = "x"
 
     return f"{char}{number}"
 
+
 class Element(displayio.Group):
-    def __init__(self, state, coordinates, font, label_text=None, color=WHITE, formatter = default_formatter):
+    def __init__(self, state, coordinates, font, label_text=None, color=WHITE, formatter=default_formatter):
         super().__init__()
         self.state = state
         self.label_text = label_text
@@ -125,6 +128,7 @@ class Element(displayio.Group):
 
 class Pointer(displayio.Group):
     POINTER_POSITIONS = [[1, 5], [1, 25], [1, 43]]
+
     def __init__(self, focused_element):
         super().__init__()
         pointer_area = displayio.TileGrid(
@@ -159,7 +163,7 @@ class HomeScreen(displayio.Group):
             SMOL_FONT,
             label_text=None,
             color=WHITE,
-            formatter = div_formatter,
+            formatter=div_formatter,
         )
 
         sync_element = Element(
@@ -201,11 +205,12 @@ class HomeScreen(displayio.Group):
     def update_play_button(self, playing):
         self.play_sprite[0] = PLAY_ICON if playing else PAUSE_ICON
 
+
 class GateScreen(displayio.Group):
     @classmethod
     def make(cls, name, state):
         div_element = Element(
-            state.get_div(), 
+            state.get_div(),
             Coordinates(text_x=105, text_y=30, label_x=5, label_y=30),
             SMOL_FONT,
             label_text=name,
@@ -239,7 +244,7 @@ class Screens():
     def next_screen(self):
         num_screens = len(self.screens)
         self.focused_screen = (self.focused_screen + 1) % num_screens
-    
+
     def next_element(self):
         num_elements = len(self.get_focused_screen().elements)
         self.focused_element = (self.focused_element + 1) % num_elements
