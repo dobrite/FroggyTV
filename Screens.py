@@ -151,7 +151,7 @@ class HomeScreen(displayio.Group):
             SMOL_FONT
         )
 
-        elements = [bpm_element, div_element, sync_element]
+        elements = [bpm_element, sync_element, div_element]
         return cls(elements, state)
 
     def __init__(self, elements, state):
