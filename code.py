@@ -60,7 +60,8 @@ while True:
 
     if encoder.update(focused_element.state):
         focused_element.update()
-        # OUTPUT_LIST[0].set_rate(state.get_bpm().bpm)
+        OUTPUT_LIST[0].set_rate(state.get_bpm().value,
+                                state.get_div().value)
 
     # Runs Outputs
     if state.get_play():

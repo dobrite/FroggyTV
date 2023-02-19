@@ -2,6 +2,7 @@ import board
 from rotaryio import IncrementalEncoder
 from digitalio import DigitalInOut, Direction, Pull
 from adafruit_debouncer import Debouncer
+import state
 
 
 class Encoder():
@@ -43,7 +44,6 @@ class Output():
     def __init__(self, on, off, pin):
         self.on = on
         self.off = off
-        self.div = 4
         self.pin = DigitalInOut(pin)
         self.pin.direction = Direction.OUTPUT
         self.prev_time = -1
@@ -57,6 +57,6 @@ class Output():
             self.prev_time = now
             self.pin.value = False
 
-    def set_rate(self, bpm):
-        self.on = (1 / bpm) * self.div
-        self.off = (1 / bpm) * self.div
+    def set_rate(self, bpm, div):
+        self.on = (1 / bpm) * div
+        self.off = (1 / bpm) * div
