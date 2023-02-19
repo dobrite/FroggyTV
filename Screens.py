@@ -222,11 +222,11 @@ class Screens():
 
     def next_screen(self):
         num_screens = len(self.screens)
-        self.focused_screen = (self.focused_screen + 1) % (num_screens - 1)
+        self.focused_screen = (self.focused_screen + 1) % num_screens
 
     def next_element(self):
         num_elements = len(self.get_focused_screen().elements)
-        self.focused_element = (self.focused_element + 1) % (num_elements - 1)
+        self.focused_element = (self.focused_element + 1) % num_elements
 
     def show_current(self):
         display.show(self.screen)
