@@ -1,12 +1,14 @@
 # FroggyTV
+
 hehe froggy
-#TODO:
+
+# TODO:
 - Flesh out Gate screens
 - Implement Sync and Reset
 - Implement probability
 - Re-Implement pulse width adjustment
 
-#IDEAS:
+# IDEAS:
 - Metronome screen
 - Loading/splash screen
 - Phase/offset?
