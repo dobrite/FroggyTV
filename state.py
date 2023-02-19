@@ -65,21 +65,27 @@ class Sync():
 
 class Div():
     DIVISIONS = [
-        3.75,  # x16
-        7.5,  # x8
-        15,  # x4
-        40,  # x3
-        60,  # x2
-        120,  # x1
-        240,  # /2
-        360,  # /3
-        480,  # /4
+        7680,  # /64
+        3840,  # /32
+        1920,  # /16
         960,  # /8
-        1920  # /16
+        600,  # /5
+        480,  # /4
+        360,  # /3
+        240,  # /2
+        120,  # x1
+        60,  # x2
+        40,  # x3
+        30,  # x4
+        24,  # x5
+        15,  # x8
+        7.5,  # x16
+        3.75,  # x32
+        1.875  # x64
     ]
 
     def __init__(self):
-        self.index = 5
+        self.index = int(len(Div.DIVISIONS)/2)
         self.value = Div.DIVISIONS[self.index]
 
     def forward(self):
@@ -87,6 +93,7 @@ class Div():
         if self.index < len(Div.DIVISIONS) - 1:
             self.index += 1
             self.value = Div.DIVISIONS[self.index]
+            print(self.value)
 
         return prev != self.index
 
@@ -95,5 +102,6 @@ class Div():
         if self.index > 0:
             self.index -= 1
             self.value = Div.DIVISIONS[self.index]
+            print(self.value)
 
         return prev != self.index
