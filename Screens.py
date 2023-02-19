@@ -71,19 +71,33 @@ class Coordinates:
         self.text_x = text_x
         self.text_y = text_y
         self.label_x = label_x
-        self.label_y = label_y
+        self.label_y = label_y\
+
+def default_formatter(value):
+    return value
+
+def div_formatter(value):
+    if value <= 120:
+        number = int(1 / (value / 120))
+        char = "/"
+    else:
+        number = int (value / 120)
+        char = "x"
+
+    return f"{char}{number}"
 
 class Element(displayio.Group):
-    def __init__(self, state, coordinates, font, label_text=None, color=WHITE):
+    def __init__(self, state, coordinates, font, label_text=None, color=WHITE, formatter = default_formatter):
         super().__init__()
         self.state = state
         self.label_text = label_text
         self.coordinates = coordinates
         self.color = color
+        self.formatter = formatter
 
         self.text_area = label.Label(
             font,
-            text=f"{self.state.value}",
+            text=f"{self.formatter(self.state.value)}",
             color=self.color,
             x=self.coordinates.text_x,
             y=self.coordinates.text_y // 2 - 1
@@ -106,11 +120,11 @@ class Element(displayio.Group):
             self.append(self.label_text_area)
 
     def update(self):
-        self.text_area.text = f"{self.state.value}"
+        self.text_area.text = f"{self.formatter(self.state.value)}"
 
 
 class Pointer(displayio.Group):
-    POINTER_POSITIONS = [[1, 5], [1, 25], [5, 43]]
+    POINTER_POSITIONS = [[1, 5], [1, 25], [1, 43]]
     def __init__(self, focused_element):
         super().__init__()
         pointer_area = displayio.TileGrid(
@@ -134,15 +148,18 @@ class HomeScreen(displayio.Group):
     def make(cls, state):
         bpm_element = Element(
             state.get_bpm(),
-            Coordinates(text_x=20, text_y=35, label_x=69, label_y=35),
+            Coordinates(text_x=20, text_y=35, label_x=66, label_y=35),
             BIGGE_FONT,
             label_text="BPM"
         )
 
         div_element = Element(
             state.get_div(),
-            Coordinates(text_x=28, text_y=110),
+            Coordinates(text_x=20, text_y=110),
             SMOL_FONT,
+            label_text=None,
+            color=WHITE,
+            formatter = div_formatter,
         )
 
         sync_element = Element(
