@@ -11,9 +11,9 @@ from Screens import HomeScreen, GateScreen
 
 # ~~~~~~~~~~ Initializing ~~~~~~~~~~~#
 
-state = State()
+state = State(4)
 screens = [
-    HomeScreen.make(state),
+    HomeScreen.make("home", state),
     GateScreen.make("A", state),
     GateScreen.make("B", state),
     GateScreen.make("C", state),
@@ -54,7 +54,6 @@ while True:
 
     if page_button.rose:
         screen_list.next_screen()
-        print("Blorp")
 
     if encoder_button.rose:
         screen_list.next_element()
@@ -62,7 +61,7 @@ while True:
     if encoder.update(focused_element.state):
         focused_element.update()
         OUTPUT_LIST[0].set_rate(state.get_bpm().value,
-                                state.get_div().value)
+                                state.get_div("home").value)
 
     # Runs Outputs
     if state.get_play():

@@ -1,9 +1,27 @@
+ALPHABET = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
+
+
 class State():
-    def __init__(self):
+    def __init__(self, gate_number):
         self.play = True
         self.bpm = BPM()
         self.sync = Sync()
         self.div = Div()
+        self.state = {}
+        self.state["home"] = {}
+        self.state["home"] = {
+            "bpm": BPM(),
+            "sync": Sync(),
+            "div": Div(),
+        }
+
+        for gate in ALPHABET[:gate_number]:
+            self.state[gate] = {}
+            self.state[gate] = {
+                "div": Div(),
+                "prob": Prob(),
+                "pw": PW(),
+            }
 
     def get_play(self):
         return self.play
@@ -12,13 +30,19 @@ class State():
         self.play = not self.play
 
     def get_bpm(self):
-        return self.bpm
+        return self.state["home"]["bpm"]
 
     def get_sync(self):
-        return self.sync
+        return self.state["home"]["sync"]
 
-    def get_div(self):
-        return self.div
+    def get_div(self, screen_name):
+        return self.state[screen_name]["div"]
+
+    def get_prob(self, screen_name):
+        return self.state[screen_name]["prob"]
+
+    def get_pw(self, screen_name):
+        return self.state[screen_name]["pw"]
 
 
 MAX_BPM = 500
@@ -105,3 +129,25 @@ class Div():
             print(self.value)
 
         return prev != self.index
+
+
+class Prob():
+    def __init__(self):
+        pass
+
+    def forward(self):
+        pass
+
+    def backwards(self):
+        pass
+
+
+class PW():
+    def __init__(self):
+        pass
+
+    def forward(self):
+        pass
+
+    def backwards(self):
+        pass

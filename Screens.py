@@ -155,7 +155,7 @@ class Pointer(displayio.Group):
 
 class HomeScreen(displayio.Group):
     @classmethod
-    def make(cls, state):
+    def make(cls, name, state):
         bpm_element = Element(
             state.get_bpm(),
             Coordinates(text_x=20, text_y=35, label_x=66, label_y=35),
@@ -164,7 +164,7 @@ class HomeScreen(displayio.Group):
         )
 
         div_element = Element(
-            state.get_div(),
+            state.get_div(name),
             Coordinates(text_x=20, text_y=110),
             SMOL_FONT,
             label_text=None,
@@ -179,10 +179,11 @@ class HomeScreen(displayio.Group):
         )
 
         elements = [bpm_element, sync_element, div_element]
-        return cls(elements, state)
+        return cls(name, elements, state)
 
-    def __init__(self, elements, state):
+    def __init__(self, name, elements, state):
         super().__init__()
+        self.name = name
         self.elements = elements
         self.froge = Froge()
         self._draw_play_pause()
@@ -256,17 +257,20 @@ class GateScreen(displayio.Group):
     @classmethod
     def make(cls, name, state):
         div_element = Element(
-            state.get_div(),
-            Coordinates(text_x=105, text_y=30, label_x=5, label_y=30),
+            state.get_div(name),
+            Coordinates(text_x=20, text_y=110),
             SMOL_FONT,
-            label_text=name,
+            label_text=None,
+            color=WHITE,
+            formatter=div_formatter,
         )
 
         elements = [div_element]
-        return cls(elements, state)
+        return cls(name, elements, state)
 
-    def __init__(self, elements, state):
+    def __init__(self, name, elements, state):
         super().__init__()
+        self.name = name
         self.elements = elements
         self._draw_elements()
 
