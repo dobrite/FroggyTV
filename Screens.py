@@ -64,6 +64,7 @@ BIGGE_FONT = bitmap_font.load_font("/Fonts/FrogPrincess-10.pcf")
 POINTER = displayio.OnDiskBitmap("/Icons/pointer.bmp")
 PLAY_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/playpause.bmp")
 FROGE_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/SpinSpritesheet.bmp")
+CLOCK = displayio.OnDiskBitmap("/Icons/Clock.bmp")
 
 
 class Coordinates:
@@ -100,7 +101,7 @@ class Element(displayio.Group):
             text=f"{self.formatter(self.state.value)}",
             color=self.color,
             x=self.coordinates.text_x,
-            y=self.coordinates.text_y // 2 - 1
+            y=self.coordinates.text_y
         )
 
         self.append(self.text_area)
@@ -175,7 +176,7 @@ class HomeScreen(displayio.Group):
             text="BPM",
             color=WHITE,
             x=66,
-            y=35 // 2 - 1
+            y=35
         )
         self.append(self.bpm_text_area)
 
@@ -247,7 +248,7 @@ class GateScreen(displayio.Group):
     def make(cls, name, state):
         div_element = Element(
             state.get_div(name),
-            Coordinates(text_x=20, text_y=110),
+            Coordinates(text_x=90, text_y=33),
             SMOL_FONT,
             color=WHITE,
             formatter=div_formatter,
@@ -261,6 +262,23 @@ class GateScreen(displayio.Group):
         self.name = name
         self.elements = elements
         self._draw_elements()
+        name = self.name_text_area = label.Label(
+            BIGGE_FONT,
+            text=f"{name}",
+            color=WHITE,
+            x=5,
+            y=15
+        )
+        self.append(self.name_text_area)
+        clock = displayio.TileGrid(CLOCK,
+                                   pixel_shader=CLOCK.pixel_shader,
+                                   width=1,
+                                   height=1,
+                                   tile_width=15,
+                                   tile_height=15)
+        clock.x = 70
+        clock.y = 3
+        self.append(clock)
 
     def screen_type(self):
         return "Gate"
