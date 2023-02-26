@@ -317,6 +317,7 @@ class Screens():
         self.screen.pop()
         screen_type = self.get_focused_screen().screen_type().upper()
         self.pointer.reset_pointer(screen_type)
+        self.focused_element_index = 0
         self._build_focused_screen()
         self.pointer.update_pointer(screen_type, self.focused_element_index)
 
