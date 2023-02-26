@@ -142,25 +142,17 @@ class HomeScreen(displayio.Group):
     def make(cls, name, state):
         bpm_element = Element(
             state.get_bpm(),
-            Coordinates(text_x=20, text_y=35),  # 66, 35
+            Coordinates(text_x=20, text_y=40),
             BIGGE_FONT,
-        )
-
-        div_element = Element(
-            state.get_div(name),
-            Coordinates(text_x=20, text_y=110),
-            SMOL_FONT,
-            color=WHITE,
-            formatter=div_formatter,
         )
 
         sync_element = Element(
             state.get_sync(),
-            Coordinates(text_x=20, text_y=77),
+            Coordinates(text_x=20, text_y=97),
             SMOL_FONT
         )
 
-        elements = [bpm_element, sync_element, div_element]
+        elements = [bpm_element, sync_element]
         return cls(name, elements, state)
 
     def __init__(self, name, elements, state):
@@ -176,7 +168,7 @@ class HomeScreen(displayio.Group):
             text="BPM",
             color=WHITE,
             x=66,
-            y=35 // 2 - 1
+            y=40 // 2 - 1
         )
         self.append(self.bpm_text_area)
 

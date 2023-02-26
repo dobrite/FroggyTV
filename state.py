@@ -4,17 +4,12 @@ ALPHABET = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
 class State():
     def __init__(self, gate_number):
         self.play = True
-        self.bpm = BPM()
-        self.sync = Sync()
-        self.div = Div()
         self.state = {}
         self.state["home"] = {}
         self.state["home"] = {
             "bpm": BPM(),
             "sync": Sync(),
-            "div": Div(),
         }
-
         for gate in ALPHABET[:gate_number]:
             self.state[gate] = {}
             self.state[gate] = {
