@@ -318,7 +318,8 @@ class Screens():
         num_elements = len(self.get_focused_screen().elements)
         self.focused_element_index = (
             self.focused_element_index + 1) % num_elements
-        self.pointer.update_pointer(self.focused_element_index)
+        screen_type = self.get_focused_screen().screen_type().upper()
+        self.pointer.update_pointer(screen_type, self.focused_element_index)
 
     def show_current(self):
         display.show(self.screen)
