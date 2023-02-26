@@ -101,7 +101,7 @@ class Element(displayio.Group):
             text=f"{self.formatter(self.state.value)}",
             color=self.color,
             x=self.coordinates.text_x,
-            y=self.coordinates.text_y
+            y=self.coordinates.text_y // 2 - 1
         )
 
         self.append(self.text_area)
@@ -176,7 +176,7 @@ class HomeScreen(displayio.Group):
             text="BPM",
             color=WHITE,
             x=66,
-            y=35
+            y=35 // 2 - 1
         )
         self.append(self.bpm_text_area)
 
