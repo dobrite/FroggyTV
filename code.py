@@ -26,11 +26,11 @@ page_button = Button(board.GP12).make_pin_reader()
 encoder_button = Button(board.GP13).make_pin_reader()
 
 outputs = [
-    Output(0.5, 0.5, board.LED),
-    Output(0.7, 0.7, board.GP1),
-    Output(0.7, 0.7, board.GP2),
-    Output(0.7, 0.7, board.GP3),
-    Output(0.7, 0.7, board.GP4)
+    Output("home", 0.5, 0.5, board.LED),
+    Output("A", 0.7, 0.7, board.GP1),
+    Output("B", 0.7, 0.7, board.GP2),
+    Output("C", 0.7, 0.7, board.GP3),
+    Output("D", 0.7, 0.7, board.GP4)
 ]
 output_list = OutputList(outputs)
 
@@ -60,7 +60,10 @@ while True:
 
     if encoder.update(focused_element.state):
         focused_element.update()
-        # OUTPUT_LIST[0].set_rate(state.get_bpm().value, state.get_div("home").value)
+        if focused_element.screen == "home" and focused_element.name == "bpm":
+            output_list.set_rate(state)
+        elif focused_element.name == "div":  # TODO assumes only home OR gate screens exist
+            output_list.set_rate(state)
 
     # Runs Outputs
     if state.get_play():

@@ -7,6 +7,7 @@ class State():
         self.state = {}
         self.state["home"] = {}
         self.state["home"] = {
+            "div": Div(),
             "bpm": BPM(),
             "sync": Sync(),
         }
@@ -31,6 +32,8 @@ class State():
         return self.state["home"]["sync"]
 
     def get_div(self, screen_name):
+        print(self.state)
+        print(self.state[screen_name])
         return self.state[screen_name]["div"]
 
     def get_prob(self, screen_name):

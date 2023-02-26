@@ -89,8 +89,10 @@ def div_formatter(value):
 
 
 class Element(displayio.Group):
-    def __init__(self, state, coordinates, font, color=WHITE, formatter=default_formatter):
+    def __init__(self, name, screen, state, coordinates, font, color=WHITE, formatter=default_formatter):
         super().__init__()
+        self.name = name
+        self.screen = screen
         self.state = state
         self.coordinates = coordinates
         self.color = color
@@ -141,12 +143,16 @@ class HomeScreen(displayio.Group):
     @classmethod
     def make(cls, name, state):
         bpm_element = Element(
+            "bpm",
+            name,
             state.get_bpm(),
             Coordinates(text_x=20, text_y=40),
             BIGGE_FONT,
         )
 
         sync_element = Element(
+            "sync",
+            name,
             state.get_sync(),
             Coordinates(text_x=20, text_y=97),
             SMOL_FONT
@@ -239,6 +245,8 @@ class GateScreen(displayio.Group):
     @classmethod
     def make(cls, name, state):
         div_element = Element(
+            "div",
+            name,
             state.get_div(name),
             Coordinates(text_x=90, text_y=33),
             SMOL_FONT,

@@ -41,7 +41,8 @@ class Button():
 
 
 class Output():
-    def __init__(self, on, off, pin):
+    def __init__(self, name, on, off, pin):
+        self.name = name
         self.on = on
         self.off = off
         self.pin = DigitalInOut(pin)
@@ -57,7 +58,9 @@ class Output():
             self.prev_time = now
             self.pin.value = False
 
-    def set_rate(self, bpm, div):
+    def set_rate(self, state):
+        bpm = state.get_bpm().value
+        div = state.get_div(self.name).value
         self.on = (1 / bpm) * div
         self.off = (1 / bpm) * div
 
@@ -69,3 +72,7 @@ class OutputList():
     def update(self, now):
         for output in self.outputs:
             output.toggle(now)
+
+    def set_rate(self, state):
+        for output in self.outputs:
+            output.set_rate(state)
