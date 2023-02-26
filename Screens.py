@@ -65,6 +65,7 @@ POINTER = displayio.OnDiskBitmap("/Icons/pointer.bmp")
 PLAY_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/playpause.bmp")
 FROGE_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/SpinSpritesheet.bmp")
 CLOCK = displayio.OnDiskBitmap("/Icons/Clock.bmp")
+# FRAME_A = displayio.OnDiskBitmap("/Icons/Frame1.bmp")
 
 
 class Coordinates:
@@ -166,6 +167,16 @@ class HomeScreen(displayio.Group):
         self.name = name
         self.elements = elements
         self.froge = Froge()
+        # frame_a = displayio.TileGrid(
+        #    FRAME_A,
+        #    pixel_shader=FRAME_A.pixel_shader,
+        #    width=1,
+        #    height=1,
+        #    tile_width=56,
+        #    tile_height=23
+        # )
+        # self.append(frame_a)
+
         self._draw_play_pause()
         self._draw_elements()
         self.append(self.froge)
