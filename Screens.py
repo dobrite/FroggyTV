@@ -67,11 +67,9 @@ FROGE_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/SpinSpritesheet.bmp")
 
 
 class Coordinates:
-    def __init__(self, text_x, text_y, label_x=0, label_y=0):
+    def __init__(self, text_x, text_y):
         self.text_x = text_x
         self.text_y = text_y
-        self.label_x = label_x
-        self.label_y = label_y
 
 
 def default_formatter(value):
@@ -90,10 +88,9 @@ def div_formatter(value):
 
 
 class Element(displayio.Group):
-    def __init__(self, state, coordinates, font, label_text=None, color=WHITE, formatter=default_formatter):
+    def __init__(self, state, coordinates, font, color=WHITE, formatter=default_formatter):
         super().__init__()
         self.state = state
-        self.label_text = label_text
         self.coordinates = coordinates
         self.color = color
         self.formatter = formatter
@@ -106,21 +103,7 @@ class Element(displayio.Group):
             y=self.coordinates.text_y // 2 - 1
         )
 
-        if label_text:
-            self.label_text_area = label.Label(
-                SMOL_FONT,
-                text=self.label_text,
-                color=self.color,
-                x=self.coordinates.label_x,
-                y=self.coordinates.label_y // 2 - 1
-            )
-        else:
-            self.label_text_area = None
-
         self.append(self.text_area)
-
-        if self.label_text_area:
-            self.append(self.label_text_area)
 
     def update(self):
         self.text_area.text = f"{self.formatter(self.state.value)}"
@@ -158,16 +141,14 @@ class HomeScreen(displayio.Group):
     def make(cls, name, state):
         bpm_element = Element(
             state.get_bpm(),
-            Coordinates(text_x=20, text_y=35, label_x=66, label_y=35),
+            Coordinates(text_x=20, text_y=35),  # 66, 35
             BIGGE_FONT,
-            label_text="BPM"
         )
 
         div_element = Element(
             state.get_div(name),
             Coordinates(text_x=20, text_y=110),
             SMOL_FONT,
-            label_text=None,
             color=WHITE,
             formatter=div_formatter,
         )
@@ -189,6 +170,14 @@ class HomeScreen(displayio.Group):
         self._draw_play_pause()
         self._draw_elements()
         self.append(self.froge)
+        self.bpm_text_area = label.Label(
+            SMOL_FONT,
+            text="BPM",
+            color=WHITE,
+            x=66,
+            y=35 // 2 - 1
+        )
+        self.append(self.bpm_text_area)
 
     def screen_type(self):
         return "Home"
@@ -260,7 +249,6 @@ class GateScreen(displayio.Group):
             state.get_div(name),
             Coordinates(text_x=20, text_y=110),
             SMOL_FONT,
-            label_text=None,
             color=WHITE,
             formatter=div_formatter,
         )
