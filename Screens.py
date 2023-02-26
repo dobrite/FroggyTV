@@ -111,7 +111,7 @@ class Element(displayio.Group):
 
 
 class Pointer(displayio.Group):
-    HOME_POINTER_POSITIONS = [[1, 5], [1, 25], [1, 43]]
+    HOME_POINTER_POSITIONS = [[1, 10], [1, 37], [1, 43]]
     GATE_POINTER_POSITIONS = [[50, 5], [50, 25], [50, 43]]
 
     def __init__(self, screen_type, focused_element):
