@@ -54,6 +54,7 @@ while True:
 
     if page_button.rose:
         screen_list.next_screen()
+        print("Blorp")
 
     if encoder_button.rose:
         screen_list.next_element()
@@ -64,7 +65,7 @@ while True:
                                 state.get_div().value)
 
     # Runs Outputs
-    if state.get_play():  
+    if state.get_play():
         for out in OUTPUT_LIST:
             out.toggle(now)
         screen_list.screens[0].froge.spin(now, state.get_bpm().value)
