@@ -5,7 +5,7 @@
 import board
 import time
 from Screens import Screens
-from hardware import Button, Encoder, Output
+from hardware import Button, Encoder, Output, OutputList
 from state import State
 from Screens import HomeScreen, GateScreen
 
@@ -25,14 +25,14 @@ play_button = Button(board.GP11).make_pin_reader()
 page_button = Button(board.GP12).make_pin_reader()
 encoder_button = Button(board.GP13).make_pin_reader()
 
-# ~~~~~~~~~ Output Setup ~~~~~~~~~#
-OUTPUT_LIST = [
+outputs = [
     Output(0.5, 0.5, board.LED),
     Output(0.7, 0.7, board.GP1),
     Output(0.7, 0.7, board.GP2),
     Output(0.7, 0.7, board.GP3),
     Output(0.7, 0.7, board.GP4)
 ]
+output_list = OutputList(outputs)
 
 # ~~~~~~~~~ Main Loop ~~~~~~~~~#
 
@@ -60,13 +60,11 @@ while True:
 
     if encoder.update(focused_element.state):
         focused_element.update()
-        OUTPUT_LIST[0].set_rate(state.get_bpm().value,
-                                state.get_div("home").value)
+        # OUTPUT_LIST[0].set_rate(state.get_bpm().value, state.get_div("home").value)
 
     # Runs Outputs
     if state.get_play():
-        for out in OUTPUT_LIST:
-            out.toggle(now)
+        output_list.update(now)
         screen_list.screens[0].froge.spin(now, state.get_bpm().value)
 
     # Displays Screens

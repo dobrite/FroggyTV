@@ -60,3 +60,12 @@ class Output():
     def set_rate(self, bpm, div):
         self.on = (1 / bpm) * div
         self.off = (1 / bpm) * div
+
+
+class OutputList():
+    def __init__(self, outputs):
+        self.outputs = outputs
+
+    def update(self, now):
+        for output in self.outputs:
+            output.toggle(now)
