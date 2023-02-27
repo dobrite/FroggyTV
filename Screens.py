@@ -225,17 +225,16 @@ class Froge(displayio.Group):
         self.spinning = False
         self.prev_time = -1
         self.index = 0
-        self.frogesprite = displayio.TileGrid(FROGE_SPRITE_SHEET,
-                                              pixel_shader=FROGE_SPRITE_SHEET.pixel_shader,
-                                              width=1,
-                                              height=1,
-                                              tile_width=22,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
-                                              tile_height=22)
-        frogesprite_group = displayio.Group(scale=1)
+        self.frogesprite = displayio.TileGrid(
+            FROGE_SPRITE_SHEET,
+            pixel_shader=FROGE_SPRITE_SHEET.pixel_shader,
+            width=1,
+            height=1,
+            tile_width=22,
+            tile_height=22
+        )
+        frogesprite_group = displayio.Group(scale=1, x=80, y=30)
         frogesprite_group.append(self.frogesprite)
-        # froge positions
-        frogesprite_group.x = 80
-        frogesprite_group.y = 30
         self.append(frogesprite_group)
 
     def spin(self, now, bpm):
