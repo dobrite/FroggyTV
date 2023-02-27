@@ -114,10 +114,18 @@ class Element(displayio.Group):
 
 
 class Pointer(displayio.Group):
-    HOME_POINTER_POSITIONS = [[1, 10], [1, 37], [1, 43]]
-    GATE_POINTER_POSITIONS = [[50, 5], [50, 25], [50, 43]]
+    HOME_POINTER_POSITIONS = [
+        Coordinates(1, 10),
+        Coordinates(1, 37),
+        Coordinates(1, 43)
+    ]
+    GATE_POINTER_POSITIONS = [
+        Coordinates(50, 5),
+        Coordinates(50, 25),
+        Coordinates(50, 43)
+    ]
 
-    def __init__(self, screen_type, focused_element):
+    def __init__(self, screen_type, focused_element_index):
         super().__init__()
         pointer_area = displayio.TileGrid(
             POINTER,
@@ -127,14 +135,14 @@ class Pointer(displayio.Group):
         self.pointer_group.append(pointer_area)
 
         # Pointer positions
-        self.update_pointer(screen_type, focused_element)
+        self.update_pointer(screen_type, focused_element_index)
         self.append(self.pointer_group)
 
-    def update_pointer(self, screen_type, focused_element):
-        self.pointer_group.x = getattr(Pointer, f"{screen_type}_POINTER_POSITIONS")[
-            focused_element][0]
-        self.pointer_group.y = getattr(Pointer, f"{screen_type}_POINTER_POSITIONS")[
-            focused_element][1]
+    def update_pointer(self, screen_type, focused_element_index):
+        attr_name = f"{screen_type}_POINTER_POSITIONS"
+        pointer_positions = getattr(Pointer, attr_name)
+        self.pointer_group.x = pointer_positions[focused_element_index].x
+        self.pointer_group.y = pointer_positions[focused_element_index].y
 
     def reset_pointer(self, screen_type):
         self.update_pointer(screen_type, 0)
