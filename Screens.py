@@ -273,14 +273,15 @@ class GateScreen(displayio.Group):
         self.name = name
         self.elements = elements
         self._draw_elements()
-        name = self.name_text_area = label.Label(
+        self.text_area = label.Label(
             BIGGE_FONT,
             text=f"{name}",
             color=WHITE,
             x=5,
             y=15
         )
-        self.append(self.name_text_area)
+        self.append(self.text_area)
+
         clock = displayio.TileGrid(
             CLOCK,
             pixel_shader=CLOCK.pixel_shader,
