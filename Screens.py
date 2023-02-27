@@ -202,15 +202,11 @@ class HomeScreen(displayio.Group):
             pixel_shader=PLAY_SPRITE_SHEET.pixel_shader,
             width=1,
             height=1,
-            tile_width=16,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
+            tile_width=16,
             tile_height=16
         )
-        play_sprite_group = displayio.Group(scale=1)
+        play_sprite_group = displayio.Group(scale=1, x=55, y=35)
         play_sprite_group.append(self.play_sprite)
-
-        # icon positions
-        play_sprite_group.x = 55
-        play_sprite_group.y = 35
         self.append(play_sprite_group)
 
     def update_play_button(self, playing):
