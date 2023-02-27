@@ -69,9 +69,9 @@ CLOCK = displayio.OnDiskBitmap("/Icons/Clock.bmp")
 
 
 class Coordinates:
-    def __init__(self, text_x, text_y):
-        self.text_x = text_x
-        self.text_y = text_y
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
 
 def default_formatter(value):
@@ -103,8 +103,8 @@ class Element(displayio.Group):
             font,
             text=f"{self.formatter(self.state.value)}",
             color=self.color,
-            x=self.coordinates.text_x,
-            y=self.coordinates.text_y // 2 - 1
+            x=self.coordinates.x,
+            y=self.coordinates.y // 2 - 1
         )
 
         self.append(self.text_area)
@@ -147,7 +147,7 @@ class HomeScreen(displayio.Group):
             "bpm",
             name,
             state.get_bpm(),
-            Coordinates(text_x=20, text_y=40),
+            Coordinates(20, 40),
             BIGGE_FONT,
         )
 
@@ -155,7 +155,7 @@ class HomeScreen(displayio.Group):
             "sync",
             name,
             state.get_sync(),
-            Coordinates(text_x=20, text_y=97),
+            Coordinates(20, 97),
             SMOL_FONT
         )
 
@@ -259,7 +259,7 @@ class GateScreen(displayio.Group):
             "div",
             name,
             state.get_div(name),
-            Coordinates(text_x=90, text_y=33),
+            Coordinates(90, 33),
             SMOL_FONT,
             color=WHITE,
             formatter=div_formatter,
