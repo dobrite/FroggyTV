@@ -281,14 +281,16 @@ class GateScreen(displayio.Group):
             y=15
         )
         self.append(self.name_text_area)
-        clock = displayio.TileGrid(CLOCK,
-                                   pixel_shader=CLOCK.pixel_shader,
-                                   width=1,
-                                   height=1,
-                                   tile_width=15,
-                                   tile_height=15)
-        clock.x = 70
-        clock.y = 3
+        clock = displayio.TileGrid(
+            CLOCK,
+            pixel_shader=CLOCK.pixel_shader,
+            width=1,
+            height=1,
+            tile_width=15,
+            tile_height=15,
+            x=70,
+            y=3
+        )
         self.append(clock)
 
     def screen_type(self):
