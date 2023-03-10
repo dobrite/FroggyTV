@@ -318,12 +318,9 @@ class Screens():
         self.focused_element_index = 0
         self.screen = displayio.Group()
         self.pointer = Pointer()
-        self._build_focused_screen()
-        self._update_pointer()
-
-    def _build_focused_screen(self):
         self.screen.append(self.pointer)
         self.screen.append(self.get_focused_screen())
+        self._update_pointer()
 
     def get_focused_screen(self):
         return self.screens[self.focused_screen_index]
@@ -335,11 +332,9 @@ class Screens():
         num_screens = len(self.screens)
         self.focused_screen_index = (
             self.focused_screen_index + 1) % num_screens
-        self.screen.pop()
-        self.screen.pop()
         self.focused_element_index = 0
+        self.screen[1] = self.get_focused_screen()
         self._update_pointer()
-        self._build_focused_screen()
 
     def next_element(self):
         num_elements = len(self.get_focused_screen().elements)
