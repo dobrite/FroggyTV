@@ -139,7 +139,7 @@ class Pointer(displayio.Group):
         self.append(self.pointer_group)
 
     def update_pointer(self, screen_type, focused_element_index):
-        attr_name = f"{screen_type}_POINTER_POSITIONS"
+        attr_name = f"{screen_type.upper()}_POINTER_POSITIONS"
         pointer_positions = getattr(Pointer, attr_name)
         self.pointer_group.x = pointer_positions[focused_element_index].x
         self.pointer_group.y = pointer_positions[focused_element_index].y
@@ -198,7 +198,7 @@ class HomeScreen(displayio.Group):
         self.append(self.bpm_text_area)
 
     def screen_type(self):
-        return "Home"
+        return "home"
 
     def _draw_elements(self):
         for e in self.elements:
@@ -298,7 +298,7 @@ class GateScreen(displayio.Group):
         self.append(clock)
 
     def screen_type(self):
-        return "Gate"
+        return "gate"
 
     def _draw_elements(self):
         for e in self.elements:
@@ -311,7 +311,7 @@ class Screens():
         self.screens = screens
         self.focused_screen_index = 0
         self.focused_element_index = 0
-        screen_type = self.get_focused_screen().screen_type().upper()
+        screen_type = self.get_focused_screen().screen_type()
         self.pointer = Pointer(screen_type, self.focused_element_index)
         self.screen = displayio.Group()
         self._build_focused_screen()
@@ -332,7 +332,7 @@ class Screens():
             self.focused_screen_index + 1) % num_screens
         self.screen.pop()
         self.screen.pop()
-        screen_type = self.get_focused_screen().screen_type().upper()
+        screen_type = self.get_focused_screen().screen_type()
         self.pointer.reset_pointer(screen_type)
         self.focused_element_index = 0
         self._build_focused_screen()
@@ -342,7 +342,7 @@ class Screens():
         num_elements = len(self.get_focused_screen().elements)
         self.focused_element_index = (
             self.focused_element_index + 1) % num_elements
-        screen_type = self.get_focused_screen().screen_type().upper()
+        screen_type = self.get_focused_screen().screen_type()
         self.pointer.update_pointer(screen_type, self.focused_element_index)
 
     def show_current(self):
