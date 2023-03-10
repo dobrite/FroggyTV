@@ -90,19 +90,18 @@ def div_formatter(value):
 
 
 class Element(displayio.Group):
-    def __init__(self, name, index, state, coordinates, font, color=WHITE, formatter=default_formatter):
+    def __init__(self, name, index, state, coordinates, font, formatter=default_formatter):
         super().__init__()
         self.name = name
         self.index = index
         self.state = state
         self.coordinates = coordinates
-        self.color = color
         self.formatter = formatter
 
         self.text_area = label.Label(
             font,
             text=f"{self.formatter(self.state.value)}",
-            color=self.color,
+            color=WHITE,
             x=self.coordinates.x,
             y=self.coordinates.y // 2 - 1
         )
@@ -269,7 +268,6 @@ class GateScreen(displayio.Group):
             state.get_div(name),
             Coordinates(90, 33),
             SMOL_FONT,
-            color=WHITE,
             formatter=div_formatter,
         )
 
