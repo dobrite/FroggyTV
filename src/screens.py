@@ -90,10 +90,10 @@ def div_formatter(value):
 
 
 class Element(displayio.Group):
-    def __init__(self, name, screen, state, coordinates, font, color=WHITE, formatter=default_formatter):
+    def __init__(self, name, index, state, coordinates, font, color=WHITE, formatter=default_formatter):
         super().__init__()
         self.name = name
-        self.screen = screen
+        self.index = index
         self.state = state
         self.coordinates = coordinates
         self.color = color
@@ -109,8 +109,17 @@ class Element(displayio.Group):
 
         self.append(self.text_area)
 
+    def set_screen(self, screen):
+        self.screen = screen
+
     def update(self):
         self.text_area.text = f"{self.formatter(self.state.value)}"
+
+    def screen_type(self):
+        return self.screen.screen_type()
+
+    def get_index(self):
+        return self.index
 
 
 class Pointer(displayio.Group):
@@ -125,7 +134,7 @@ class Pointer(displayio.Group):
         Coordinates(50, 43)
     ]
 
-    def __init__(self, screen_type, focused_element_index):
+    def __init__(self):
         super().__init__()
         pointer_area = displayio.TileGrid(
             POINTER,
@@ -133,19 +142,13 @@ class Pointer(displayio.Group):
         )
         self.pointer_group = displayio.Group()
         self.pointer_group.append(pointer_area)
-
-        # Pointer positions
-        self.update_pointer(screen_type, focused_element_index)
         self.append(self.pointer_group)
 
-    def update_pointer(self, screen_type, focused_element_index):
-        attr_name = f"{screen_type.upper()}_POINTER_POSITIONS"
+    def point_to(self, focused_element):
+        attr_name = f"{focused_element.screen_type().upper()}_POINTER_POSITIONS"
         pointer_positions = getattr(Pointer, attr_name)
-        self.pointer_group.x = pointer_positions[focused_element_index].x
-        self.pointer_group.y = pointer_positions[focused_element_index].y
-
-    def reset_pointer(self, screen_type):
-        self.update_pointer(screen_type, 0)
+        self.pointer_group.x = pointer_positions[focused_element.get_index()].x
+        self.pointer_group.y = pointer_positions[focused_element.get_index()].y
 
 
 class HomeScreen(displayio.Group):
@@ -153,7 +156,7 @@ class HomeScreen(displayio.Group):
     def make(cls, name, state):
         bpm_element = Element(
             "bpm",
-            name,
+            0,
             state.get_bpm(),
             Coordinates(20, 40),
             BIGGE_FONT,
@@ -161,14 +164,16 @@ class HomeScreen(displayio.Group):
 
         sync_element = Element(
             "sync",
-            name,
+            1,
             state.get_sync(),
             Coordinates(20, 97),
             SMOL_FONT
         )
 
         elements = [bpm_element, sync_element]
-        return cls(name, elements, state)
+        screen = cls(name, elements, state)
+        [e.set_screen(screen) for e in elements]
+        return screen
 
     def __init__(self, name, elements, state):
         super().__init__()
@@ -260,7 +265,7 @@ class GateScreen(displayio.Group):
     def make(cls, name, state):
         div_element = Element(
             "div",
-            name,
+            0,
             state.get_div(name),
             Coordinates(90, 33),
             SMOL_FONT,
@@ -269,7 +274,9 @@ class GateScreen(displayio.Group):
         )
 
         elements = [div_element]
-        return cls(name, elements, state)
+        screen = cls(name, elements, state)
+        [e.set_screen(screen) for e in elements]
+        return screen
 
     def __init__(self, name, elements, state):
         super().__init__()
@@ -311,10 +318,10 @@ class Screens():
         self.screens = screens
         self.focused_screen_index = 0
         self.focused_element_index = 0
-        screen_type = self.get_focused_screen().screen_type()
-        self.pointer = Pointer(screen_type, self.focused_element_index)
         self.screen = displayio.Group()
+        self.pointer = Pointer()
         self._build_focused_screen()
+        self._update_pointer()
 
     def _build_focused_screen(self):
         self.screen.append(self.pointer)
@@ -332,18 +339,18 @@ class Screens():
             self.focused_screen_index + 1) % num_screens
         self.screen.pop()
         self.screen.pop()
-        screen_type = self.get_focused_screen().screen_type()
-        self.pointer.reset_pointer(screen_type)
         self.focused_element_index = 0
+        self._update_pointer()
         self._build_focused_screen()
-        self.pointer.update_pointer(screen_type, self.focused_element_index)
 
     def next_element(self):
         num_elements = len(self.get_focused_screen().elements)
         self.focused_element_index = (
             self.focused_element_index + 1) % num_elements
-        screen_type = self.get_focused_screen().screen_type()
-        self.pointer.update_pointer(screen_type, self.focused_element_index)
+        self._update_pointer()
+
+    def _update_pointer(self):
+        self.pointer.point_to(self.get_focused_element())
 
     def show_current(self):
         display.show(self.screen)
