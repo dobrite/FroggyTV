@@ -99,12 +99,11 @@ class Element(displayio.Group):
 
         self.text_area = label.Label(
             font,
-            text=f"{self.formatter(self.state.value)}",
             color=WHITE,
             x=self.coordinates.x,
             y=self.coordinates.y // 2 - 1
         )
-
+        self.update()
         self.append(self.text_area)
 
     def set_screen(self, screen):
