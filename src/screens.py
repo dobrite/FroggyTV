@@ -90,10 +90,9 @@ def div_formatter(value):
 
 
 class Element(displayio.Group):
-    def __init__(self, name, index, state, coordinates, font, formatter=default_formatter):
+    def __init__(self, name, state, coordinates, font, formatter=default_formatter):
         super().__init__()
         self.name = name
-        self.index = index
         self.state = state
         self.coordinates = coordinates
         self.formatter = formatter
@@ -110,6 +109,9 @@ class Element(displayio.Group):
 
     def set_screen(self, screen):
         self.screen = screen
+
+    def set_index(self, index):
+        self.index = index
 
     def update(self):
         self.text_area.text = f"{self.formatter(self.state.value)}"
@@ -155,7 +157,6 @@ class HomeScreen(displayio.Group):
     def make(cls, name, state):
         bpm_element = Element(
             "bpm",
-            0,
             state.get_bpm(),
             Coordinates(20, 40),
             BIGGE_FONT,
@@ -163,7 +164,6 @@ class HomeScreen(displayio.Group):
 
         sync_element = Element(
             "sync",
-            1,
             state.get_sync(),
             Coordinates(20, 97),
             SMOL_FONT
@@ -171,7 +171,9 @@ class HomeScreen(displayio.Group):
 
         elements = [bpm_element, sync_element]
         screen = cls(name, elements, state)
-        [e.set_screen(screen) for e in elements]
+        for idx, elem in enumerate(elements):
+            elem.set_index(idx)
+            elem.set_screen(screen)
         return screen
 
     def __init__(self, name, elements, state):
@@ -263,7 +265,6 @@ class GateScreen(displayio.Group):
     def make(cls, name, state):
         div_element = Element(
             "div",
-            0,
             state.get_div(name),
             Coordinates(90, 33),
             SMOL_FONT,
@@ -272,7 +273,9 @@ class GateScreen(displayio.Group):
 
         elements = [div_element]
         screen = cls(name, elements, state)
-        [e.set_screen(screen) for e in elements]
+        for idx, elem in enumerate(elements):
+            elem.set_index(idx)
+            elem.set_screen(screen)
         return screen
 
     def __init__(self, name, elements, state):
