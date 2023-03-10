@@ -73,7 +73,3 @@ while True:
     if state.get_play():
         output_list.update(now)
         screen_list.screens[0].froge.spin(now, state.get_bpm().value)
-
-    # Displays Screens
-    # TODO show_current is probably not the right way to do this
-    screen_list.show_current()
