@@ -205,8 +205,7 @@ class HomeScreen(displayio.Group):
         return "home"
 
     def _draw_elements(self):
-        for e in self.elements:
-            self.append(e)
+        [self.append(e) for e in self.elements]
 
     def _draw_play_pause(self):
         self.play_sprite = displayio.TileGrid(
@@ -306,8 +305,7 @@ class GateScreen(displayio.Group):
         return "gate"
 
     def _draw_elements(self):
-        for e in self.elements:
-            self.append(e)
+        [self.append(e) for e in self.elements]
 
 
 class Screens():
