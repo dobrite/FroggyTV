@@ -9,6 +9,7 @@ from bpm import Bpm
 from hardware import Button, Encoder, Output, OutputList
 from state import State
 from screens import HomeScreen, GateScreen, Screens
+from triggers import FanOut, Periodic
 
 # ~~~~~~~~~~ Initializing ~~~~~~~~~~~#
 
@@ -35,13 +36,20 @@ outputs = [
 ]
 output_list = OutputList(outputs)
 bpm = Bpm(120)
+triggers = [Periodic(bpm.resolution, outputs[i])
+            for i, output in enumerate(outputs)]
+fan_out = FanOut(triggers)
 
 # ~~~~~~~~~ Main Loop ~~~~~~~~~#
 
 screen_list.show_current()
 
+
 while True:
     now = time.monotonic_ns()
+    if not bpm.is_running():
+        bpm.start(now)
+    bpm.update(now, fan_out)
 
     play_button.update()
     page_button.update()
