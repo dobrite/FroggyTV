@@ -43,3 +43,7 @@ Assumes bash or bash-like shell. i.e. probably needs adjusted on windows.
 ```bash
 rerun -c -p "**/*.py" "cp -R *.py /Volumes/CIRCUITPY/"
 ```
+
+### Overclocking?
+This may work, but it could be dumb to implement as below
+https://github.com/adafruit/circuitpython/issues/4339#issuecomment-857351719
