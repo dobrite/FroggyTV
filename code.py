@@ -41,7 +41,7 @@ bpm = Bpm(120)
 screen_list.show_current()
 
 while True:
-    now = time.monotonic()
+    now = time.monotonic_ns()
 
     play_button.update()
     page_button.update()
