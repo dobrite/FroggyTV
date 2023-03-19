@@ -1,9 +1,11 @@
+import board
+import busio
 import displayio
+
+import adafruit_displayio_ssd1306
+
 from adafruit_display_text import label
 from adafruit_bitmap_font import bitmap_font
-import adafruit_displayio_ssd1306
-import busio
-import board
 
 # ----------------------------- Screen Setup ---------------------------------#
 

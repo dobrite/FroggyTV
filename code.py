@@ -4,10 +4,10 @@
 
 import board
 import time
-from Screens import Screens
+
 from hardware import Button, Encoder, Output, OutputList
 from state import State
-from Screens import HomeScreen, GateScreen
+from screens import HomeScreen, GateScreen, Screens
 
 # ~~~~~~~~~~ Initializing ~~~~~~~~~~~#
 
