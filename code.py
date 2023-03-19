@@ -68,10 +68,9 @@ while True:
     focused_element = screen_list.get_focused_element()
     if encoder.update(focused_element.state):
         focused_element.update()
-
         # TODO assumes only home OR gate screens exist
-        if focused_element.screen == "home" and focused_element.name == "bpm":
-            pass  # TODO: set bpm
+        if focused_element.screen.name == "home" and focused_element.name == "bpm":
+            bpm.set_bpm(state.get_bpm().value)
         elif focused_element.name == "div":
             pass  # TODO: set mult
 
