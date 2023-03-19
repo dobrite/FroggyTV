@@ -1,11 +1,13 @@
+import board
+import busio
 import displayio
+
+import adafruit_displayio_ssd1306
+
 from adafruit_display_text import label
 from adafruit_bitmap_font import bitmap_font
-import adafruit_displayio_ssd1306
-import busio
-import board
 
-# ------------------------------- Screen Setup ------------------------------------#
+# ----------------------------- Screen Setup ---------------------------------#
 
 displayio.release_displays()
 
@@ -90,7 +92,14 @@ def div_formatter(value):
 
 
 class Element(displayio.Group):
-    def __init__(self, name, state, coordinates, font, formatter=default_formatter):
+    def __init__(
+        self,
+        name,
+        state,
+        coordinates,
+        font,
+        formatter=default_formatter
+    ):
         super().__init__()
         self.name = name
         self.state = state
@@ -145,7 +154,8 @@ class Pointer(displayio.Group):
         self.append(self.pointer_group)
 
     def point_to(self, focused_element):
-        attr_name = f"{focused_element.screen_type().upper()}_POINTER_POSITIONS"
+        screen_type = focused_element.screen_type().upper()
+        attr_name = f"{screen_type}_POINTER_POSITIONS"
         pointer_positions = getattr(Pointer, attr_name)
         self.pointer_group.x = pointer_positions[focused_element.get_index()].x
         self.pointer_group.y = pointer_positions[focused_element.get_index()].y

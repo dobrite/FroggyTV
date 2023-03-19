@@ -1,8 +1,8 @@
 import board
+
 from rotaryio import IncrementalEncoder
 from digitalio import DigitalInOut, Direction, Pull
 from adafruit_debouncer import Debouncer
-import state
 
 
 class Encoder():
@@ -41,38 +41,16 @@ class Button():
 
 
 class Output():
-    def __init__(self, name, on, off, pin):
-        self.name = name
-        self.on = on
-        self.off = off
-        self.pin = DigitalInOut(pin)
-        self.pin.direction = Direction.OUTPUT
-        self.prev_time = -1
+    def __init__(self, name, pin):
+        self._name = name
+        self._pin = DigitalInOut(pin)
+        self._pin.direction = Direction.OUTPUT
 
-    def toggle(self, now):
-        if not self.pin.value and now >= self.prev_time + self.off:
-            self.prev_time = now
-            self.pin.value = True
-
-        if self.pin.value and now >= self.prev_time + self.on:
-            self.prev_time = now
-            self.pin.value = False
-
-    def set_rate(self, state):
-        bpm = state.get_bpm().value
-        div = state.get_div(self.name).value
-        self.on = (1 / bpm) * div
-        self.off = (1 / bpm) * div
+    def trigger(self):
+        # TODO: needs triggered twice per mult for 50% PWM
+        self._pin.value = not self._pin.value
 
 
 class OutputList():
     def __init__(self, outputs):
-        self.outputs = outputs
-
-    def update(self, now):
-        for output in self.outputs:
-            output.toggle(now)
-
-    def set_rate(self, state):
-        for output in self.outputs:
-            output.set_rate(state)
+        self._outputs = outputs

@@ -4,11 +4,12 @@
 
 import board
 import time
-import rp2pio
-from Screens import Screens
+
+from bpm import Bpm
 from hardware import Button, Encoder, Output, OutputList
 from state import State
-from Screens import HomeScreen, GateScreen
+from screens import HomeScreen, GateScreen, Screens
+from triggers import FanOut, Periodic
 
 # ~~~~~~~~~~ Initializing ~~~~~~~~~~~#
 
@@ -27,23 +28,28 @@ page_button = Button(board.GP12).make_pin_reader()
 encoder_button = Button(board.GP13).make_pin_reader()
 
 outputs = [
-    Output("home", 0.5, 0.5, board.LED),
-    Output("A", 0.7, 0.7, board.GP1),
-    Output("B", 0.7, 0.7, board.GP2),
-    Output("C", 0.7, 0.7, board.GP3),
-    Output("D", 0.7, 0.7, board.GP4)
+    Output("home", board.LED),
+    Output("A", board.GP1),
+    Output("B", board.GP2),
+    Output("C", board.GP3),
+    Output("D", board.GP4)
 ]
 output_list = OutputList(outputs)
+bpm = Bpm(120)
+triggers = [Periodic(bpm.resolution, outputs[i])
+            for i, output in enumerate(outputs)]
+fan_out = FanOut(triggers)
 
 # ~~~~~~~~~ Main Loop ~~~~~~~~~#
 
 screen_list.show_current()
 
+
 while True:
-
-    # TODO async is what we gotta do: https://learn.adafruit.com/cooperative-multitasking-in-circuitpython-with-asyncio/communicating-between-tasks#control-two-blinking-leds-3106381
-
-    now = time.monotonic()
+    now = time.monotonic_ns()
+    if not bpm.is_running():
+        bpm.start(now)
+    bpm.update(now, fan_out)
 
     play_button.update()
     page_button.update()
@@ -62,12 +68,15 @@ while True:
     focused_element = screen_list.get_focused_element()
     if encoder.update(focused_element.state):
         focused_element.update()
+
+        # TODO assumes only home OR gate screens exist
         if focused_element.screen == "home" and focused_element.name == "bpm":
-            output_list.set_rate(state)
-        elif focused_element.name == "div":  # TODO assumes only home OR gate screens exist
-            output_list.set_rate(state)
+            pass  # TODO: set bpm
+        elif focused_element.name == "div":
+            pass  # TODO: set mult
 
     # Runs Outputs
     if state.get_play():
-        output_list.update(now)
-        screen_list.screens[0].froge.spin(now, state.get_bpm().value)
+        # output_list.update(now)
+        # screen_list.screens[0].froge.spin(now, state.get_bpm().value)
+        pass
