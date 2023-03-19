@@ -32,8 +32,6 @@ class State():
         return self.state["home"]["sync"]
 
     def get_div(self, screen_name):
-        print(self.state)
-        print(self.state[screen_name])
         return self.state[screen_name]["div"]
 
     def get_prob(self, screen_name):
@@ -115,7 +113,6 @@ class Div():
         if self.index < len(Div.DIVISIONS) - 1:
             self.index += 1
             self.value = Div.DIVISIONS[self.index]
-            print(self.value)
 
         return prev != self.index
 
@@ -124,7 +121,6 @@ class Div():
         if self.index > 0:
             self.index -= 1
             self.value = Div.DIVISIONS[self.index]
-            print(self.value)
 
         return prev != self.index
 

@@ -49,9 +49,6 @@ while True:
     page_button.update()
     encoder_button.update()
 
-    focused_screen = screen_list.get_focused_screen()
-    focused_element = screen_list.get_focused_element()
-
     if play_button.rose:
         state.toggle_play()
         screen_list.screens[0].update_play_button(state.get_play())
@@ -62,6 +59,7 @@ while True:
     if encoder_button.rose:
         screen_list.next_element()
 
+    focused_element = screen_list.get_focused_element()
     if encoder.update(focused_element.state):
         focused_element.update()
         if focused_element.screen == "home" and focused_element.name == "bpm":
@@ -73,7 +71,3 @@ while True:
     if state.get_play():
         output_list.update(now)
         screen_list.screens[0].froge.spin(now, state.get_bpm().value)
-
-    # Displays Screens
-    # TODO show_current is probably not the right way to do this
-    screen_list.show_current()
