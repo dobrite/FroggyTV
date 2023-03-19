@@ -7,9 +7,10 @@ import time
 
 from bpm import Bpm
 from hardware import Button, Encoder, Output, OutputList
-from state import State
+from state import State, ALPHABET
 from screens import HomeScreen, GateScreen, Screens
 from triggers import FanOut, Periodic
+
 
 # ~~~~~~~~~~ Initializing ~~~~~~~~~~~#
 
@@ -72,7 +73,8 @@ while True:
         if focused_element.screen.name == "home" and focused_element.name == "bpm":
             bpm.set_bpm(state.get_bpm().value)
         elif focused_element.name == "div":
-            pass  # TODO: set mult
+            triggers[ALPHABET.index(focused_element.screen.name)+1].set_mult(
+                state.get_div(focused_element.screen.name).value)
 
     # Runs Outputs
     if state.get_play():

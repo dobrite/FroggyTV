@@ -81,11 +81,11 @@ def default_formatter(value):
 
 
 def div_formatter(value):
-    if value <= 120:
-        number = int(1 / (value / 120))
+    if value >= 1:
+        number = value
         char = "x"
     else:
-        number = int(value / 120)
+        number = int(1/value)
         char = "/"
 
     return f"{char}{number}"
