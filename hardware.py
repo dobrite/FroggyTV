@@ -49,8 +49,3 @@ class Output():
     def trigger(self):
         # TODO: needs triggered twice per mult for 50% PWM
         self._pin.value = not self._pin.value
-
-
-class OutputList():
-    def __init__(self, outputs):
-        self._outputs = outputs

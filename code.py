@@ -7,7 +7,7 @@ import time
 
 from bpm import Bpm
 from debug import Debug
-from hardware import Button, Encoder, Output, OutputList
+from hardware import Button, Encoder, Output
 from state import State, ALPHABET
 from screens import HomeScreen, GateScreen, Screens
 from triggers import FanOut, Periodic
@@ -36,7 +36,6 @@ outputs = [
     Output("C", board.GP3),
     Output("D", board.GP4)
 ]
-output_list = OutputList(outputs)
 bpm = Bpm(120)
 triggers = [Periodic(bpm.resolution, outputs[i])
             for i, output in enumerate(outputs)]
@@ -78,7 +77,6 @@ while True:
             triggers[ALPHABET.index(focused_element.screen.name)+1].set_mult(
                 state.get_div(focused_element.screen.name).value)
 
-    # Runs Outputs
     if state.get_play():
         # output_list.update(now)
         # screen_list.screens[0].froge.spin(now, state.get_bpm().value)
