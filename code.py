@@ -6,6 +6,7 @@ import board
 import time
 
 from bpm import Bpm
+from debug import Debug
 from hardware import Button, Encoder, Output, OutputList
 from state import State, ALPHABET
 from screens import HomeScreen, GateScreen, Screens
@@ -46,11 +47,13 @@ fan_out = FanOut(triggers)
 screen_list.show_current()
 
 
+debug = Debug(False)
 while True:
     now = time.monotonic_ns()
     if not bpm.is_running():
         bpm.start(now)
     bpm.update(now, fan_out)
+    debug.update(now)
 
     play_button.update()
     page_button.update()
