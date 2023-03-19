@@ -46,12 +46,11 @@ fan_out = FanOut(triggers)
 
 screen_list.show_current()
 
-
 debug = Debug(False)
+
+now = time.monotonic_ns()
+bpm.start(now)
 while True:
-    now = time.monotonic_ns()
-    if not bpm.is_running():
-        bpm.start(now)
     bpm.update(now, fan_out)
     debug.update(now)
 
@@ -84,3 +83,5 @@ while True:
         # output_list.update(now)
         # screen_list.screens[0].froge.spin(now, state.get_bpm().value)
         pass
+
+    now = time.monotonic_ns()
