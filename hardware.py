@@ -2,7 +2,6 @@ import board
 from rotaryio import IncrementalEncoder
 from digitalio import DigitalInOut, Direction, Pull
 from adafruit_debouncer import Debouncer
-import state
 
 
 class Encoder():

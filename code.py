@@ -4,7 +4,6 @@
 
 import board
 import time
-import rp2pio
 from Screens import Screens
 from hardware import Button, Encoder, Output, OutputList
 from state import State
@@ -40,9 +39,6 @@ output_list = OutputList(outputs)
 screen_list.show_current()
 
 while True:
-
-    # TODO async is what we gotta do: https://learn.adafruit.com/cooperative-multitasking-in-circuitpython-with-asyncio/communicating-between-tasks#control-two-blinking-leds-3106381
-
     now = time.monotonic()
 
     play_button.update()
@@ -62,9 +58,11 @@ while True:
     focused_element = screen_list.get_focused_element()
     if encoder.update(focused_element.state):
         focused_element.update()
+
+        # TODO assumes only home OR gate screens exist
         if focused_element.screen == "home" and focused_element.name == "bpm":
             output_list.set_rate(state)
-        elif focused_element.name == "div":  # TODO assumes only home OR gate screens exist
+        elif focused_element.name == "div":
             output_list.set_rate(state)
 
     # Runs Outputs
