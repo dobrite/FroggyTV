@@ -41,7 +41,7 @@ class State():
         return self.state[screen_name]["pw"]
 
 
-MAX_BPM = 500
+MAX_BPM = 240
 MIN_BPM = 5
 INT = "Int"
 EXT = "Ext"
