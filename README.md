@@ -10,6 +10,10 @@ hehe froggy
 - Re-Implement pulse width adjustment
 - Stress test max 12 gate screens? - (Is an expander possible?)
 
+# Questions:
+
+- Is stop/start a reset, or resume?
+
 # IDEAS:
 
 - Metronome screen
@@ -45,5 +49,6 @@ rerun -c -p "**/*.py" "cp -R *.py /Volumes/CIRCUITPY/"
 ```
 
 ### Overclocking?
+
 This may work, but it could be dumb to implement as below
 https://github.com/adafruit/circuitpython/issues/4339#issuecomment-857351719
