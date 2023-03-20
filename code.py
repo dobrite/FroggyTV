@@ -49,37 +49,42 @@ debug = Debug(False)
 
 now = time.monotonic_ns()
 bpm.start(now)
+ct = 0
+UPDATE_RATE = 100
 while True:
     bpm.update(now, fan_out)
     debug.update(now)
 
-    play_button.update()
-    page_button.update()
-    encoder_button.update()
+    if ct == UPDATE_RATE:
+        ct = 0
 
-    if play_button.fell:
-        state.toggle_play()
-        screen_list.screens[0].update_play_button(state.get_play())
+        play_button.update()
+        page_button.update()
+        encoder_button.update()
 
-    if page_button.fell:
-        screen_list.next_screen()
+        if play_button.fell:
+            state.toggle_play()
+            screen_list.screens[0].update_play_button(state.get_play())
 
-    if encoder_button.fell:
-        screen_list.next_element()
+        if page_button.fell:
+            screen_list.next_screen()
 
-    focused_element = screen_list.get_focused_element()
-    if encoder.update(focused_element.state):
-        focused_element.update()
-        # TODO assumes only home OR gate screens exist
-        if focused_element.screen.name == "home" and focused_element.name == "bpm":
-            bpm.set_bpm(state.get_bpm().value)
-        elif focused_element.name == "div":
-            triggers[ALPHABET.index(focused_element.screen.name)+1].set_mult(
-                state.get_div(focused_element.screen.name).value)
+        if encoder_button.fell:
+            screen_list.next_element()
+
+        focused_element = screen_list.get_focused_element()
+        if encoder.update(focused_element.state):
+            focused_element.update()
+            # TODO assumes only home OR gate screens exist
+            if focused_element.screen.name == "home" and focused_element.name == "bpm":
+                bpm.set_bpm(state.get_bpm().value)
+            elif focused_element.name == "div":
+                triggers[ALPHABET.index(focused_element.screen.name)+1].set_mult(
+                    state.get_div(focused_element.screen.name).value)
 
     if state.get_play():
-        # output_list.update(now)
         # screen_list.screens[0].froge.spin(now, state.get_bpm().value)
         pass
 
     now = time.monotonic_ns()
+    ct += 1
