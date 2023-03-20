@@ -4,15 +4,21 @@ hehe froggy
 
 # TODO:
 
+- Rename bpm to clock, ticks, pulses or similar
+- Add trigger tests
+- Bpm.RESOLUTION = 640 (32x10x2)
+  - 32 MAX_MULT
+  - 10 PERCENT_INCREMENTS
+  - 2 pulses per bpm (one on one off)
+- Rename Periodic to Divison
+  - mult to div
+  - redefine DIVISIONS in terms of division of RESOLUTION
+- Pulse width adjustment (PWM Percent trigger)
 - Flesh out Gate screens
 - Implement Sync and Reset
+  - Is stop/start a reset, or resume?
 - Implement probability
-- Re-Implement pulse width adjustment
 - Stress test max 12 gate screens? - (Is an expander possible?)
-
-# Questions:
-
-- Is stop/start a reset, or resume?
 
 # IDEAS:
 
