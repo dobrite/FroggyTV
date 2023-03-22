@@ -37,11 +37,31 @@ hehe froggy
 
 Assumes bash or bash-like shell (not Windows).
 Assumes `screen` is installed and avaiable in `$PATH`.
-Replace `.usbmodem143401` with output of `ls`.
+Replace `usbmodem143401` with output of `ls`.
 
 ```bash
 ls /dev/tty.*
 screen /dev/tty.usbmodem14340 1115200
+```
+
+### Running Tests and Linting with Nox
+
+First, ensure `nox` is installed and in your `$PATH`.
+
+```
+python3 -m pip install nox
+```
+
+Then it is easy as running:
+
+```bash
+nox
+```
+
+### Rerunning Nox on File Changes
+
+```
+rerun -c -p "**/*.py" nox
 ```
 
 ### Copy Files to Pi Pico on Save
