@@ -2,14 +2,14 @@
 # Designed by Izaak Hollander
 # CC-BY-SA 4.0 I guess? Licenses are hard
 
-import board
 import time
 
+import board
 from bpm import Bpm
 from debug import Debug
 from hardware import Button, Encoder, Output
-from state import State, ALPHABET
-from screens import HomeScreen, GateScreen, Screens
+from screens import GateScreen, HomeScreen, Screens
+from state import ALPHABET, State
 from triggers import FanOut, Periodic
 
 
@@ -76,11 +76,14 @@ while True:
         if encoder.update(focused_element.state):
             focused_element.update()
             # TODO assumes only home OR gate screens exist
-            if focused_element.screen.name == "home" and focused_element.name == "bpm":
+            on_home_screen = focused_element.screen.name == "home"
+            on_bpm_element = focused_element.name == "bpm"
+            if on_home_screen and on_bpm_element:
                 bpm.set_bpm(state.get_bpm().value)
             elif focused_element.name == "div":
-                triggers[ALPHABET.index(focused_element.screen.name)+1].set_mult(
-                    state.get_div(focused_element.screen.name).value)
+                trigger_index = ALPHABET.index(focused_element.screen.name) + 1
+                new_mult = state.get_div(focused_element.screen.name).value
+                triggers[trigger_index].set_mult(new_mult)
 
     if state.get_play():
         # screen_list.screens[0].froge.spin(now, state.get_bpm().value)
