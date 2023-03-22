@@ -254,13 +254,15 @@ class Froge(displayio.Group):
         self.append(frogesprite_group)
 
     def spin(self, now, bpm):
-        if not self.spinning and now >= self.prev_time + (1/bpm)*Froge.SPIN_RATE:
+        spin_rate = Froge.SPIN_RATE
+
+        if not self.spinning and now >= self.prev_time + (1/bpm)*spin_rate:
             self.prev_time = now
             self.index = (self.index + 1) % 8
             self.frogesprite[0] = self.index
             self.spinning = True
 
-        if self.spinning and now >= self.prev_time + (1/bpm)*Froge.SPIN_RATE:
+        if self.spinning and now >= self.prev_time + (1/bpm)*spin_rate:
             self.prev_time = now
             self.index = (self.index + 1) % 8
             self.frogesprite[0] = self.index
