@@ -1,4 +1,4 @@
-class Debug():
+class Debug:
     def __init__(self, debug):
         self.debug = debug
         self.count = 0

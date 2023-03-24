@@ -4,7 +4,7 @@ from digitalio import DigitalInOut, Direction, Pull
 from rotaryio import IncrementalEncoder
 
 
-class Encoder():
+class Encoder:
     def __init__(self):
         self.position = 0
         self.last_position = None
@@ -28,7 +28,7 @@ class Encoder():
         return self.last_position is None or self.position < self.last_position
 
 
-class Button():
+class Button:
     def __init__(self, pin):
         self.button = DigitalInOut(pin)
         self.button.direction = Direction.INPUT
@@ -39,7 +39,7 @@ class Button():
         return Debouncer(lambda: self.button.value)
 
 
-class Output():
+class Output:
     def __init__(self, name, pin):
         self._name = name
         self._pin = DigitalInOut(pin)

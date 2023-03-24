@@ -21,7 +21,7 @@ screens = [
     GateScreen.make("A", state),
     GateScreen.make("B", state),
     GateScreen.make("C", state),
-    GateScreen.make("D", state)
+    GateScreen.make("D", state),
 ]
 screen_list = Screens(state, screens)
 encoder = Encoder()
@@ -34,11 +34,10 @@ outputs = [
     Output("A", board.GP1),
     Output("B", board.GP2),
     Output("C", board.GP3),
-    Output("D", board.GP4)
+    Output("D", board.GP4),
 ]
 bpm = Bpm(120)
-triggers = [Periodic(bpm.resolution, outputs[i])
-            for i, output in enumerate(outputs)]
+triggers = [Periodic(bpm.resolution, outputs[i]) for i, output in enumerate(outputs)]
 fan_out = FanOut(triggers)
 
 # ~~~~~~~~~ Main Loop ~~~~~~~~~#

@@ -13,18 +13,21 @@ class TestPeriodic:
     def triggerable(self):
         return FakeOutput()
 
-    @pytest.mark.parametrize("resolution, mult, trigger_count, expected", [
-        (640, 1, 0, 0),
-        (640, 1, 1, 1),
-        (640, 1, 640, 2),
-        (640, 1, 641, 3),
-        (640, 2, 640, 4),
-        (640, 2, 641, 5),
-        (640, 2, 960, 6),
-        (640, 2, 961, 7),
-        (640, 0.5, 1280, 2),
-        (640, 0.5, 1281, 3),
-    ])
+    @pytest.mark.parametrize(
+        "resolution, mult, trigger_count, expected",
+        [
+            (640, 1, 0, 0),
+            (640, 1, 1, 1),
+            (640, 1, 640, 2),
+            (640, 1, 641, 3),
+            (640, 2, 640, 4),
+            (640, 2, 641, 5),
+            (640, 2, 960, 6),
+            (640, 2, 961, 7),
+            (640, 0.5, 1280, 2),
+            (640, 0.5, 1281, 3),
+        ],
+    )
     def test_periodic(
         self,
         triggerable,

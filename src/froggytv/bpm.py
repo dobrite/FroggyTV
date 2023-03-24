@@ -3,7 +3,7 @@ import math
 from froggytv.triggers import Noop
 
 
-class Bpm():
+class Bpm:
     DEFAULT_RESOLUTION = 640
     NANOS_PER_SECOND = 1_000_000_000
     SECONDS_PER_MINUTE = 60

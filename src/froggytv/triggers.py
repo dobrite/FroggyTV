@@ -1,4 +1,4 @@
-class Noop():
+class Noop:
     def __init__(self):
         pass
 
@@ -6,7 +6,7 @@ class Noop():
         pass
 
 
-class FanOut():
+class FanOut:
     def __init__(self, triggers, final_trigger=Noop()):
         self._triggers = triggers
         self._final_trigger = final_trigger
@@ -17,7 +17,7 @@ class FanOut():
         self._final_trigger.trigger(tick)
 
 
-class Periodic():
+class Periodic:
     def __init__(self, resolution, triggerable, mult=1):
         self._resolution = resolution
         self._triggerable = triggerable

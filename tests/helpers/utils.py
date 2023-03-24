@@ -6,7 +6,7 @@ def is_even(num):
     return num % 2
 
 
-class FakeOutput():
+class FakeOutput:
     def __init__(self):
         self.count = 0
         self.on = False
@@ -16,7 +16,7 @@ class FakeOutput():
         self.on = not self.on
 
 
-class ImmediateBPM():
+class ImmediateBPM:
     def __init__(self, resolution=Bpm.DEFAULT_RESOLUTION):
         self.resolution = resolution
         self._tick = 0
