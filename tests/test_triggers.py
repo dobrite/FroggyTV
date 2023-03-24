@@ -45,3 +45,31 @@ class TestPeriodic:
 
         assert triggerable.count == expected_count
         assert triggerable.on == is_even(expected_count)
+
+    @pytest.mark.parametrize(
+        "resolution, pwm, trigger_count, expected_on",
+        [
+            (640, 0.5, 0, False),
+            (640, 0.5, 1, True),
+            (640, 0.5, 320, True),
+            (640, 0.5, 321, False),
+            (640, 0.5, 640, False),
+            (640, 0.5, 641, True),
+        ],
+    )
+    def test_pwm(
+        self,
+        triggerable,
+        resolution,
+        pwm,
+        trigger_count,
+        expected_on,
+    ):
+        now = None
+        bpm = ImmediateBPM(resolution)
+        periodic = Periodic(bpm.resolution, triggerable, pwm=pwm)
+
+        for _ in range(trigger_count):
+            bpm.update(now, periodic)
+
+        assert triggerable.on == expected_on

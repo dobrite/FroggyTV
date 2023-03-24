@@ -18,11 +18,12 @@ class FanOut:
 
 
 class Periodic:
-    def __init__(self, resolution, triggerable, mult=1):
+    def __init__(self, resolution, triggerable, mult=1, pwm=0.5):
         self._resolution = resolution
         self._triggerable = triggerable
         self._mult = mult
         self._next_mult = None
+        self._pwm = pwm
         self._count = 0
 
     def trigger(self, tick):
@@ -46,4 +47,4 @@ class Periodic:
         self._next_mult = mult
 
     def _trigger_count(self):
-        return self._resolution / self._mult / 2
+        return self._resolution / self._mult / (1 / self._pwm)
