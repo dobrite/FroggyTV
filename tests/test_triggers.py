@@ -1,19 +1,18 @@
-import pytest
-
 from froggytv.triggers import Noop, Periodic
+import pytest
 
 
 class CountingTriggerable():
     def __init__(self):
         self.count = 0
 
-    def trigger(self):
+    def trigger(self, _tick):
         self.count += 1
 
 
 class TestNoop:
     def test_noop_does_nothing(self):
-        assert Noop().trigger() is None
+        assert Noop().trigger(0) is None
 
 
 class TestPeriodic:
@@ -41,8 +40,12 @@ class TestPeriodic:
         expected
     ):
         periodic = Periodic(resolution, triggerable, mult=mult)
+        tick = 0
 
         for _ in range(trigger_count):
-            periodic.trigger()
+            periodic.trigger(tick)
+            tick += 1
+            if tick == resolution:
+                tick = 0
 
         assert triggerable.count == expected

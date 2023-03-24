@@ -11,11 +11,13 @@ class Bpm():
     def __init__(self, bpm, resolution=DEFAULT_RESOLUTION):
         self._bpm = bpm
         self._running = False
+        self._tick = 0
         self.resolution = resolution
 
     def start(self, now):
         self._next_beat_at = now
         self._prev_beat_at = now - self._nanos_per_beat()
+        self._tick = 0
         self._running = True
 
     def resolution(self):
@@ -28,7 +30,7 @@ class Bpm():
         if now < self._next_beat_at:
             return
 
-        triggerable.trigger()
+        triggerable.trigger(self._tick)
 
         self._step()
 
@@ -37,6 +39,10 @@ class Bpm():
         self._next_beat_at = self._calc_next_beat_at()
 
     def _step(self):
+        self._tick += 1
+        if self._tick == self.resolution:
+            self._tick = 0
+
         self._prev_beat_at = self._next_beat_at
         self._next_beat_at = self._calc_next_beat_at()
 

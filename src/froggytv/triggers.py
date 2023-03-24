@@ -2,7 +2,7 @@ class Noop():
     def __init__(self):
         pass
 
-    def trigger(self):
+    def trigger(self, _tick):
         pass
 
 
@@ -11,10 +11,10 @@ class FanOut():
         self._triggers = triggers
         self._final_trigger = final_trigger
 
-    def trigger(self):
+    def trigger(self, tick):
         for t in self._triggers:
-            t.trigger()
-        self._final_trigger.trigger()
+            t.trigger(tick)
+        self._final_trigger.trigger(tick)
 
 
 class Periodic():
@@ -25,9 +25,9 @@ class Periodic():
         self._next_mult = None
         self._count = 0
 
-    def trigger(self):
+    def trigger(self, tick):
         if self._count == 0:
-            self._triggerable.trigger()
+            self._triggerable.trigger(tick)
 
         self._count += 1
 
