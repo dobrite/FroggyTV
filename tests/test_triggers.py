@@ -1,4 +1,4 @@
-from froggytv.bpm import FanOut
+from froggytv.tickables import FanOut
 from froggytv.triggers import Noop, Periodic
 import pytest
 from helpers.utils import FakeOutput, ImmediateBPM, is_even
