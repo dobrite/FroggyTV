@@ -1,13 +1,6 @@
 from froggytv.triggers import Noop, Periodic
 import pytest
-
-
-class CountingTriggerable():
-    def __init__(self):
-        self.count = 0
-
-    def trigger(self, _tick):
-        self.count += 1
+from utils import CountingTriggerable
 
 
 class TestNoop:
