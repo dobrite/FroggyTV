@@ -17,3 +17,9 @@ def format(session):
 def lint(session):
     session.install("ruff")
     session.run("ruff", "check", ".")
+
+
+@nox.session
+def check(session):
+    session.install("pyright")
+    session.run("pyright")
