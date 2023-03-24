@@ -4,7 +4,7 @@ import triggers
 
 
 class Bpm():
-    DEFAULT_RESOLUTION = 24
+    DEFAULT_RESOLUTION = 640
     NANOS_PER_SECOND = 1_000_000_000
     SECONDS_PER_MINUTE = 60
 
