@@ -8,6 +8,12 @@ def tests(session):
 
 
 @nox.session
+def format(session):
+    session.install("black")
+    session.run("black", ".")
+
+
+@nox.session
 def lint(session):
     session.install("flake8", "flake8-import-order")
     session.run("flake8", "src", "--import-order-style", "google")
