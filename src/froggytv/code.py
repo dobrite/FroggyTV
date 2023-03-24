@@ -37,7 +37,7 @@ outputs = [
     Output("D", board.GP4),
 ]
 bpm = Bpm(120)
-triggers = [Periodic(bpm.resolution, outputs[i]) for i, output in enumerate(outputs)]
+triggers = [Periodic(bpm.resolution, outputs[i]) for i in range(outputs)]
 fan_out = FanOut(triggers)
 
 # ~~~~~~~~~ Main Loop ~~~~~~~~~#
