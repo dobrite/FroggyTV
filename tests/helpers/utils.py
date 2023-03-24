@@ -2,12 +2,14 @@ from froggytv.bpm import Bpm
 from froggytv.triggers import Noop
 
 
-class CountingTriggerable():
+class FakeOutput():
     def __init__(self):
         self.count = 0
+        self.on = False
 
     def trigger(self, _tick):
         self.count += 1
+        self.on = not self.on
 
 
 class ImmediateBPM():

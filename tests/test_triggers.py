@@ -1,6 +1,6 @@
 from froggytv.triggers import Noop, Periodic
 import pytest
-from utils import CountingTriggerable, ImmediateBPM
+from utils import FakeOutput, ImmediateBPM
 
 
 class TestNoop:
@@ -11,7 +11,7 @@ class TestNoop:
 class TestPeriodic:
     @pytest.fixture
     def triggerable(self):
-        return CountingTriggerable()
+        return FakeOutput()
 
     @pytest.mark.parametrize("resolution, mult, trigger_count, expected", [
         (640, 1, 0, 0),
