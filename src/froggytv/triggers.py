@@ -46,4 +46,4 @@ class Periodic():
         self._next_mult = mult
 
     def _trigger_count(self):
-        return self._resolution / self._mult
+        return self._resolution / self._mult / 2
