@@ -36,7 +36,7 @@ class Periodic():
 
         self._count = 0
 
-        if not self._next_mult:
+        if not (self._next_mult and tick == 0):
             return
 
         self._mult = self._next_mult
