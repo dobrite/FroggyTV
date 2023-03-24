@@ -1,3 +1,4 @@
+from froggytv.bpm import FanOut
 from froggytv.triggers import Noop, Periodic
 import pytest
 from helpers.utils import FakeOutput, ImmediateBPM, is_even
@@ -39,9 +40,10 @@ class TestPeriodic:
         now = None
         bpm = ImmediateBPM(resolution)
         periodic = Periodic(bpm.resolution, triggerable, mult=mult)
+        fan_out = FanOut([periodic])
 
         for _ in range(trigger_count):
-            bpm.update(now, periodic)
+            bpm.update(now, fan_out)
 
         assert triggerable.count == expected_count
         assert triggerable.on == is_even(expected_count)
@@ -68,8 +70,9 @@ class TestPeriodic:
         now = None
         bpm = ImmediateBPM(resolution)
         periodic = Periodic(bpm.resolution, triggerable, pwm=pwm)
+        fan_out = FanOut([periodic])
 
         for _ in range(trigger_count):
-            bpm.update(now, periodic)
+            bpm.update(now, fan_out)
 
         assert triggerable.on == expected_on

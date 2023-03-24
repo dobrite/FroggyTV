@@ -26,7 +26,7 @@ class Periodic:
         self._pwm = pwm
         self._count = 0
 
-    def trigger(self, tick):
+    def tick(self, tick):
         if self._count == 0:
             self._triggerable.trigger(tick)
 

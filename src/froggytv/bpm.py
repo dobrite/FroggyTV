@@ -9,6 +9,15 @@ class Noop:
         pass
 
 
+class FanOut:
+    def __init__(self, tickables):
+        self._tickables = tickables
+
+    def tick(self, ticks):
+        for tickable in self._tickables:
+            tickable.tick(ticks)
+
+
 class Bpm:
     DEFAULT_RESOLUTION = 640
     NANOS_PER_SECOND = 1_000_000_000
