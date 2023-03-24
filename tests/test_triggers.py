@@ -15,6 +15,7 @@ class TestPeriodic:
 
     @pytest.mark.parametrize("resolution, mult, trigger_count, expected", [
         (640, 1, 0, 0),
+        (640, 1, 1, 1),
         (640, 1, 640, 1),
         (640, 1, 641, 2),
         (640, 2, 640, 2),
