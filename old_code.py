@@ -421,9 +421,9 @@ interval = 0.5
 while True:
     now = time.monotonic()
 
-    if play == True:
+    if play is True:
         # Sets the rate for all outputs!! Super slick
-        if sync_mode == False:
+        if sync_mode is False:
             for out in OUTPUT_LIST:
                 # rng = random.randrange(0,100,1)
                 if out["PIN"].value is False:
@@ -438,7 +438,7 @@ while True:
 
                         out["PIN"].value = False
 
-        if sync_mode == True:
+        if sync_mode is True:
             for out in OUTPUT_LIST:
                 if now > out["PREV_TIME"] + interval:
                     out["PREV_TIME"] = now
@@ -516,7 +516,7 @@ while True:
             if baseRisePW < 0.1:
                 baseRisePW = 0.1
         elif active_element == "Syncedit":
-            if sync_mode == False:
+            if sync_mode is False:
                 SyncLabeltext_area.text = "EXT"
                 sync_mode = True
             else:
@@ -556,7 +556,7 @@ while True:
                 baseRisePW = 0.9
 
         elif active_element == "Syncedit":
-            if sync_mode == False:
+            if sync_mode is False:
                 SyncLabeltext_area.text = "EXT"
                 sync_mode = True
             else:
@@ -568,11 +568,11 @@ while True:
     active_element = elements[elem_index]
 
     # Trigger mode: If Trigger mode is enabled,
-    if Trig_mode == False:
+    if Trig_mode is False:
         OUTPUT_LIST[0]["ON"] = baseRisePW * base_clock_rate
         OUTPUT_LIST[0]["OFF"] = baseFallPW * base_clock_rate
 
-    if Trig_mode == True:
+    if Trig_mode is True:
         OUTPUT_LIST[0]["ON"] = 0.01
         OUTPUT_LIST[0]["OFF"] = base_clock_rate - 0.01
 
@@ -611,7 +611,7 @@ while True:
         button3_state = "pressed"
 
     if button3.value and button3_state == "pressed":
-        if play == True:  # Changes state to
+        if play is True:  # Changes state to
             play = False
             play_index = 1
         else:
