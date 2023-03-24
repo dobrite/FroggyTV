@@ -1,5 +1,4 @@
-from froggytv.bpm import Bpm
-from froggytv.triggers import Noop
+from froggytv.bpm import Bpm, Noop
 
 
 def is_even(num):
@@ -21,9 +20,9 @@ class ImmediateBPM:
         self.resolution = resolution
         self._tick = 0
 
-    def update(self, _now, triggerable=Noop()):
+    def update(self, _now, tickable=Noop()):
         self._tick += 1
         if self._tick == self.resolution:
             self._tick = 0
 
-        triggerable.trigger(self._tick)
+        tickable.tick(self._tick)

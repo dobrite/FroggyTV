@@ -1,6 +1,12 @@
 import math
 
-from froggytv.triggers import Noop
+
+class Noop:
+    def __init__(self):
+        pass
+
+    def tick(self, __ticks__):
+        pass
 
 
 class Bpm:
@@ -23,11 +29,11 @@ class Bpm:
     def is_running(self):
         return self._running
 
-    def update(self, now, triggerable=Noop()):
+    def update(self, now, tickable=Noop()):
         if now < self._next_beat_at:
             return
 
-        triggerable.trigger(self._tick)
+        tickable.tick(self._tick)
 
         self._step()
 
