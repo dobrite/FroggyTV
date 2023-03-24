@@ -1,6 +1,6 @@
 from froggytv.triggers import Noop, Periodic
 import pytest
-from utils import CountingTriggerable
+from utils import CountingTriggerable, ImmediateBPM
 
 
 class TestNoop:
@@ -32,13 +32,11 @@ class TestPeriodic:
         trigger_count,
         expected
     ):
-        periodic = Periodic(resolution, triggerable, mult=mult)
-        tick = 0
+        now = None
+        bpm = ImmediateBPM(resolution)
+        periodic = Periodic(bpm.resolution, triggerable, mult=mult)
 
         for _ in range(trigger_count):
-            periodic.trigger(tick)
-            tick += 1
-            if tick == resolution:
-                tick = 0
+            bpm.update(now, periodic)
 
         assert triggerable.count == expected
