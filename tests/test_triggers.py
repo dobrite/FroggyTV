@@ -1,6 +1,6 @@
 from froggytv.triggers import Noop, Periodic
 import pytest
-from utils import FakeOutput, ImmediateBPM
+from utils import FakeOutput, ImmediateBPM, is_even
 
 
 class TestNoop:
@@ -31,7 +31,7 @@ class TestPeriodic:
         resolution,
         mult,
         trigger_count,
-        expected
+        expected,
     ):
         now = None
         bpm = ImmediateBPM(resolution)
@@ -41,3 +41,4 @@ class TestPeriodic:
             bpm.update(now, periodic)
 
         assert triggerable.count == expected
+        assert triggerable.on == is_even(expected)

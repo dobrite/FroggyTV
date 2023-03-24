@@ -2,6 +2,10 @@ from froggytv.bpm import Bpm
 from froggytv.triggers import Noop
 
 
+def is_even(num):
+    return num % 2
+
+
 class FakeOutput():
     def __init__(self):
         self.count = 0
