@@ -14,7 +14,7 @@ class TestPeriodic:
         return FakeOutput()
 
     @pytest.mark.parametrize(
-        "resolution, mult, trigger_count, expected",
+        "resolution, mult, trigger_count, expected_count",
         [
             (640, 1, 0, 0),
             (640, 1, 1, 1),
@@ -34,7 +34,7 @@ class TestPeriodic:
         resolution,
         mult,
         trigger_count,
-        expected,
+        expected_count,
     ):
         now = None
         bpm = ImmediateBPM(resolution)
@@ -43,5 +43,5 @@ class TestPeriodic:
         for _ in range(trigger_count):
             bpm.update(now, periodic)
 
-        assert triggerable.count == expected
-        assert triggerable.on == is_even(expected)
+        assert triggerable.count == expected_count
+        assert triggerable.on == is_even(expected_count)
