@@ -20,9 +20,6 @@ class Bpm:
         self._tick = 0
         self._running = True
 
-    def resolution(self):
-        return self.resolution
-
     def is_running(self):
         return self._running
 

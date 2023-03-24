@@ -7,7 +7,10 @@ name = "FroggyTV"
 version = "0.0.1"
 
 [tool.pytest.ini_options]
-pythonpath = "src tests/helpers"
+pythonpath = "src tests"
 addopts = [
     "--import-mode=importlib",
 ]
+
+# [tools.pyright]
+# ignore = ["old_code.py"]

@@ -146,13 +146,13 @@ class HomeScreen(displayio.Group):
         sync_element = Element("sync", state.get_sync(), Coordinates(20, 97), SMOL_FONT)
 
         elements = [bpm_element, sync_element]
-        screen = cls(name, elements, state)
+        screen = cls(name, elements)
         for idx, elem in enumerate(elements):
             elem.set_index(idx)
             elem.set_screen(screen)
         return screen
 
-    def __init__(self, name, elements, state):
+    def __init__(self, name, elements):
         super().__init__()
         self.name = name
         self.elements = elements
@@ -246,13 +246,13 @@ class GateScreen(displayio.Group):
         )
 
         elements = [div_element]
-        screen = cls(name, elements, state)
+        screen = cls(name, elements)
         for idx, elem in enumerate(elements):
             elem.set_index(idx)
             elem.set_screen(screen)
         return screen
 
-    def __init__(self, name, elements, state):
+    def __init__(self, name, elements):
         super().__init__()
         self.name = name
         self.elements = elements

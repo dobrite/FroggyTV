@@ -2,7 +2,7 @@ class Noop:
     def __init__(self):
         pass
 
-    def trigger(self, _tick):
+    def trigger(self, __tick__):
         pass
 
 

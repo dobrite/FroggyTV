@@ -1,6 +1,6 @@
 from froggytv.triggers import Noop, Periodic
 import pytest
-from utils import FakeOutput, ImmediateBPM, is_even
+from helpers.utils import FakeOutput, ImmediateBPM, is_even
 
 
 class TestNoop:
