@@ -10,7 +10,7 @@ class FakeOutput:
         self.count = 0
         self.on = False
 
-    def trigger(self, _tick):
+    def trigger(self, __tick__):
         self.count += 1
         self.on = not self.on
 
@@ -20,7 +20,7 @@ class ImmediateBPM:
         self.resolution = resolution
         self._tick = 0
 
-    def update(self, _now, tickable=Noop()):
+    def update(self, __now__, tickable=Noop()):
         self._tick += 1
         if self._tick == self.resolution:
             self._tick = 0
