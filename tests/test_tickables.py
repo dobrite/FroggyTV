@@ -1,11 +1,11 @@
-from froggytv.tickables import Division, Noop, FanOut, TicksToTrigger
+import froggytv.tickables as tickables
 from helpers.utils import CountingTickable, ImmediateBPM, FakeOutput
 import pytest
 
 
 class TestNoop:
     def test_noop_does_nothing(self):
-        assert Noop().tick(0) is None
+        assert tickables.Noop().tick(0) is None
 
 
 class TestDivision:
@@ -26,11 +26,10 @@ class TestDivision:
     def test_division(self, tickable, resolution, div, tick_count, expected_count):
         now = None
         bpm = ImmediateBPM(resolution)
-        division = Division(tickable, div)
-        fan_out = FanOut([division])
+        division = tickables.Division(tickable, div)
 
         for _ in range(tick_count):
-            bpm.update(now, fan_out)
+            bpm.update(now, division)
 
         assert tickable.count == expected_count
 
@@ -56,7 +55,7 @@ class TestTicksToTrigger:
     ):
         now = None
         bpm = ImmediateBPM(resolution)
-        ticks_to_trigger = TicksToTrigger(ticks_to_trigger, triggerable)
+        ticks_to_trigger = tickables.TicksToTrigger(ticks_to_trigger, triggerable)
 
         for _ in range(tick_count):
             bpm.update(now, ticks_to_trigger)
