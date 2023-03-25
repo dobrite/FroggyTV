@@ -1,4 +1,4 @@
-from froggytv.triggers import Periodic, Division, Noop, Counter
+from froggytv.triggers import Periodic, Division, Noop, Counter, Scaler
 from helpers.utils import ImmediateBPM, is_even
 import pytest
 
@@ -33,6 +33,54 @@ class TestDivision:
             bpm.update(now, division)
 
         assert test_output.tick_call_count == expected_count
+
+
+class TestScaler:
+    @pytest.mark.parametrize(
+        "resolution, scale, tick_call_count, expected_tick_call_count, expected_ticks",
+        [
+            (640, 1, 1, 1, 1),
+            (640, 1, 640, 640, 640),
+            (640, 1, 641, 641, 1),
+            (640, 1, 1280, 1280, 640),
+            (640, 1, 1281, 1281, 1),
+            (640, 10, 64, 64, 640),
+            (640, 10, 640, 640, 6400),
+            (640, 10, 641, 641, 10),
+            (10, 0.1, 10, 10, 1),
+            (10, 0.1, 20, 20, 2),
+            (10, 0.1, 90, 90, 9),
+            (10, 0.1, 100, 100, 10),
+            (10, 0.1, 101, 101, 0.1),
+            (640, 0.1, 640, 640, 64),
+            (640, 0.1, 641, 641, 64.1),
+            (640, 0.1, 649, 649, 64.9),
+            (640, 0.1, 650, 650, 65),
+            (640, 0.1, 6400, 6400, 640),
+            (640, 0.1, 6401, 6401, 0.1),
+            (640, 1 / 3, 640, 640, 213 + 1 / 3),
+            (640, 1 / 3, 642, 642, 214),
+            (640, 1 / 3, 1280, 1280, 426 + 2 / 3),
+        ],
+    )
+    def test_scale(
+        self,
+        test_output,
+        resolution,
+        scale,
+        tick_call_count,
+        expected_tick_call_count,
+        expected_ticks,
+    ):
+        now = None
+        bpm = ImmediateBPM(resolution)
+        division = Scaler(bpm.resolution, test_output, scale)
+
+        for _ in range(tick_call_count):
+            bpm.update(now, division)
+
+        assert test_output.tick_call_count == expected_tick_call_count
+        assert pytest.approx(test_output.ticks) == expected_ticks
 
 
 class TestCounter:

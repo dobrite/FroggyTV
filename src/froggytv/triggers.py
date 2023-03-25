@@ -40,6 +40,46 @@ class Division:
         self._count = 0
 
 
+class Scaler:
+    def __init__(self, resolution, tickable, scale=1):
+        self._resolution = resolution
+        self._tickable = tickable
+        self._scale = scale
+        self._last_tick = 0
+        self._cycle_count = 0
+
+    def tick(self, tick):
+        if self._last_tick >= tick:
+            self._cycle_count += 1
+        self._last_tick = tick
+
+        scaled_tick = self._scaled_tick(tick)
+        if scaled_tick > self._resolution:
+            self._cycle_count = 0
+            scaled_tick = self._scaled_tick(tick)
+
+        self._tickable.tick(scaled_tick)
+
+    def _scaled_tick(self, tick):
+        return (tick + (self._cycle_count * self._resolution)) * self._scale
+
+    def _debug(self, tick, scaled_tick):
+        print(
+            "tick:",
+            tick,
+            "cycle_count:",
+            self._cycle_count,
+            "scaled_tick:",
+            scaled_tick,
+            "last_tick:",
+            self._last_tick,
+            "scale:",
+            self._scale,
+            "resolution:",
+            self._resolution,
+        )
+
+
 class Counter:
     def __init__(self, trigger_count, callable):
         self._trigger_count = trigger_count
