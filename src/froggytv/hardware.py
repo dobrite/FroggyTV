@@ -45,6 +45,6 @@ class Output:
         self._pin = DigitalInOut(pin)
         self._pin.direction = Direction.OUTPUT
 
-    def trigger(self, __tick__):
-        # TODO: needs triggered twice per mult for 50% PWM
+    def __call__(self, __tick__):
+        # TODO: needs called twice per mult for 50% PWM
         self._pin.value = not self._pin.value

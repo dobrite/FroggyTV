@@ -33,17 +33,17 @@ class Division:
         self._count = 0
 
 
-class TicksToTrigger:
-    def __init__(self, ticks_to_trigger, triggerable):
-        self._ticks_to_trigger = ticks_to_trigger
-        self._triggerable = triggerable
+class TicksToCall:
+    def __init__(self, ticks_to_call, callable):
+        self._ticks_to_call = ticks_to_call
+        self._callable = callable
         self._count = 0
 
     def tick(self, tick):
         if self._count == 0:
-            self._triggerable.trigger(tick)
+            self._callable(tick)
 
         self._count += 1
 
-        if self._count == self._ticks_to_trigger:
+        if self._count == self._ticks_to_call:
             self._count = 0

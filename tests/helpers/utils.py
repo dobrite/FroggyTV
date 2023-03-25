@@ -18,7 +18,7 @@ class FakeOutput:
         self.count = 0
         self.on = False
 
-    def trigger(self, __tick__):
+    def __call__(self, __tick__):
         self.count += 1
         self.on = not self.on
 

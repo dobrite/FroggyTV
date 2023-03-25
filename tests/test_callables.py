@@ -1,20 +1,20 @@
-import froggytv.triggers as triggers
+import froggytv.callables as callables
 import pytest
 from helpers.utils import FakeOutput, ImmediateBPM, is_even
 
 
 class TestNoop:
     def test_noop_does_nothing(self):
-        assert triggers.Noop().trigger(0) is None
+        assert callables.Noop()(0) is None
 
 
 class TestPeriodic:
     @pytest.fixture
-    def triggerable(self):
+    def callable(self):
         return FakeOutput()
 
     @pytest.mark.parametrize(
-        "resolution, mult, trigger_count, expected_count",
+        "resolution, mult, call_count, expected_count",
         [
             (640, 1, 0, 0),
             (640, 1, 1, 1),
@@ -30,24 +30,24 @@ class TestPeriodic:
     )
     def test_periodic(
         self,
-        triggerable,
+        callable,
         resolution,
         mult,
-        trigger_count,
+        call_count,
         expected_count,
     ):
         now = None
         bpm = ImmediateBPM(resolution)
-        periodic = triggers.Periodic(bpm.resolution, triggerable, mult=mult)
+        periodic = callables.Periodic(bpm.resolution, callable, mult=mult)
 
-        for _ in range(trigger_count):
+        for _ in range(call_count):
             bpm.update(now, periodic)
 
-        assert triggerable.count == expected_count
-        assert triggerable.on == is_even(expected_count)
+        assert callable.count == expected_count
+        assert callable.on == is_even(expected_count)
 
     @pytest.mark.parametrize(
-        "resolution, pwm, trigger_count, expected_on",
+        "resolution, pwm, call_count, expected_on",
         [
             (640, 0.5, 0, False),
             (640, 0.5, 1, True),
@@ -59,17 +59,17 @@ class TestPeriodic:
     )
     def test_pwm(
         self,
-        triggerable,
+        callable,
         resolution,
         pwm,
-        trigger_count,
+        call_count,
         expected_on,
     ):
         now = None
         bpm = ImmediateBPM(resolution)
-        periodic = triggers.Periodic(bpm.resolution, triggerable, pwm=pwm)
+        periodic = callables.Periodic(bpm.resolution, callable, pwm=pwm)
 
-        for _ in range(trigger_count):
+        for _ in range(call_count):
             bpm.update(now, periodic)
 
-        assert triggerable.on == expected_on
+        assert callable.on == expected_on

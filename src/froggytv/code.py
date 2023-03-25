@@ -10,7 +10,7 @@ from debug import Debug
 from hardware import Button, Encoder, Output
 from screens import GateScreen, HomeScreen, Screens
 from state import ALPHABET, State
-from triggers import FanOut, Periodic
+from callables import FanOut, Periodic
 
 
 # ~~~~~~~~~~ Initializing ~~~~~~~~~~~#
@@ -37,8 +37,8 @@ outputs = [
     Output("D", board.GP4),
 ]
 bpm = Bpm(120)
-triggers = [Periodic(bpm.resolution, outputs[i]) for i in range(outputs)]
-fan_out = FanOut(triggers)
+callables = [Periodic(bpm.resolution, outputs[i]) for i in range(outputs)]
+fan_out = FanOut(callables)
 
 # ~~~~~~~~~ Main Loop ~~~~~~~~~#
 
@@ -80,9 +80,9 @@ while True:
             if on_home_screen and on_bpm_element:
                 bpm.set_bpm(state.get_bpm().value)
             elif focused_element.name == "div":
-                trigger_index = ALPHABET.index(focused_element.screen.name) + 1
+                callable_index = ALPHABET.index(focused_element.screen.name) + 1
                 new_mult = state.get_div(focused_element.screen.name).value
-                triggers[trigger_index].set_mult(new_mult)
+                callables[callable_index].set_mult(new_mult)
 
     if state.get_play():
         # screen_list.screens[0].froge.spin(now, state.get_bpm().value)

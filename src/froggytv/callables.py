@@ -2,23 +2,23 @@ class Noop:
     def __init__(self):
         pass
 
-    def trigger(self, __tick__):
+    def __call__(self, __tick__):
         pass
 
 
 class FanOut:
-    def __init__(self, triggerables):
-        self._triggerables = triggerables
+    def __init__(self, callables):
+        self._callables = callables
 
-    def trigger(self, tick):
-        for t in self._triggerables:
-            t.trigger(tick)
+    def __call__(self, tick):
+        for callable in self._callables:
+            callable(tick)
 
 
 class Periodic:
-    def __init__(self, resolution, triggerable, mult=1, pwm=0.5):
+    def __init__(self, resolution, callable, mult=1, pwm=0.5):
         self._resolution = resolution
-        self._triggerable = triggerable
+        self._callable = callable
         self._mult = mult
         self._next_mult = None
         self._pwm = pwm
@@ -26,11 +26,11 @@ class Periodic:
 
     def tick(self, tick):
         if self._count == 0:
-            self._triggerable.trigger(tick)
+            self._callable(tick)
 
         self._count += 1
 
-        if not self._count == self._trigger_count():
+        if not self._count == self._call_count():
             return
 
         self._count = 0
@@ -44,5 +44,5 @@ class Periodic:
     def set_mult(self, mult):
         self._next_mult = mult
 
-    def _trigger_count(self):
+    def _call_count(self):
         return self._resolution / self._mult / (1 / self._pwm)
