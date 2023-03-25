@@ -13,7 +13,7 @@ class TestNoop:
 
 class TestDivision:
     @pytest.mark.parametrize(
-        "resolution, div, tick_call_count, expected_count",
+        "resolution, div, tick_call_count, expected_tick_call_count",
         [
             (640, 1, 0, 0),
             (640, 1, 1, 1),
@@ -23,7 +23,7 @@ class TestDivision:
         ],
     )
     def test_division(
-        self, test_output, resolution, div, tick_call_count, expected_count
+        self, test_output, resolution, div, tick_call_count, expected_tick_call_count
     ):
         now = None
         bpm = ImmediateBPM(resolution)
@@ -32,7 +32,7 @@ class TestDivision:
         for _ in range(tick_call_count):
             bpm.update(now, division)
 
-        assert test_output.tick_call_count == expected_count
+        assert test_output.tick_call_count == expected_tick_call_count
 
 
 class TestScaler:
@@ -85,7 +85,7 @@ class TestScaler:
 
 class TestCounter:
     @pytest.mark.parametrize(
-        "resolution, trigger_count, tick_call_count, expected_calls",
+        "resolution, trigger_count, tick_call_count, expected_call_count",
         [
             (640, 10, 0, 0),
             (640, 10, 1, 1),
@@ -97,7 +97,12 @@ class TestCounter:
         ],
     )
     def test_counter(
-        self, test_output, resolution, trigger_count, tick_call_count, expected_calls
+        self,
+        test_output,
+        resolution,
+        trigger_count,
+        tick_call_count,
+        expected_call_count,
     ):
         now = None
         bpm = ImmediateBPM(resolution)
@@ -106,12 +111,12 @@ class TestCounter:
         for _ in range(tick_call_count):
             bpm.update(now, counter)
 
-        assert test_output.call_count == expected_calls
+        assert test_output.call_count == expected_call_count
 
 
 class TestPeriodic:
     @pytest.mark.parametrize(
-        "resolution, mult, call_count, expected_count",
+        "resolution, mult, tick_call_count, expected_call_count",
         [
             (640, 1, 0, 0),
             (640, 1, 1, 1),
@@ -130,21 +135,21 @@ class TestPeriodic:
         test_output,
         resolution,
         mult,
-        call_count,
-        expected_count,
+        tick_call_count,
+        expected_call_count,
     ):
         now = None
         bpm = ImmediateBPM(resolution)
         periodic = Periodic(bpm.resolution, test_output, mult=mult)
 
-        for _ in range(call_count):
+        for _ in range(tick_call_count):
             bpm.update(now, periodic)
 
-        assert test_output.call_count == expected_count
-        assert test_output.on == is_even(expected_count)
+        assert test_output.call_count == expected_call_count
+        assert test_output.on == is_even(expected_call_count)
 
     @pytest.mark.parametrize(
-        "resolution, pwm, call_count, expected_on",
+        "resolution, pwm, tick_call_count, expected_on",
         [
             (640, 0.5, 0, False),
             (640, 0.5, 1, True),
@@ -159,14 +164,14 @@ class TestPeriodic:
         test_output,
         resolution,
         pwm,
-        call_count,
+        tick_call_count,
         expected_on,
     ):
         now = None
         bpm = ImmediateBPM(resolution)
         periodic = Periodic(bpm.resolution, test_output, pwm=pwm)
 
-        for _ in range(call_count):
+        for _ in range(tick_call_count):
             bpm.update(now, periodic)
 
         assert test_output.on == expected_on
