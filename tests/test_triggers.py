@@ -1,5 +1,5 @@
-from froggytv.triggers import Periodic, Division, Noop, Counter
-from helpers.utils import CountingTickable, ImmediateBPM, FakeOutput, is_even
+from froggytv.triggers import FanOut, Periodic, Division, Noop, Counter, Sequence
+from helpers.utils import CallCounter, ImmediateBPM, FakeOutput, is_even
 import pytest
 
 
@@ -13,8 +13,8 @@ class TestNoop:
 
 class TestDivision:
     @pytest.fixture
-    def tickable(self):
-        return CountingTickable()
+    def call_counter(self):
+        return CallCounter()
 
     @pytest.mark.parametrize(
         "resolution, div, tick_count, expected_count",
@@ -26,20 +26,20 @@ class TestDivision:
             (640, 10, 6400, 640),
         ],
     )
-    def test_division(self, tickable, resolution, div, tick_count, expected_count):
+    def test_division(self, call_counter, resolution, div, tick_count, expected_count):
         now = None
         bpm = ImmediateBPM(resolution)
-        division = Division(tickable, div)
+        division = Division(call_counter, div)
 
         for _ in range(tick_count):
             bpm.update(now, division)
 
-        assert tickable.count == expected_count
+        assert call_counter.count == expected_count
 
 
 class TestCounter:
     @pytest.fixture
-    def callable(self):
+    def call_counter(self):
         return FakeOutput()
 
     @pytest.mark.parametrize(
@@ -55,21 +55,21 @@ class TestCounter:
         ],
     )
     def test_counter(
-        self, callable, resolution, trigger_count, tick_count, expected_calls
+        self, call_counter, resolution, trigger_count, tick_count, expected_calls
     ):
         now = None
         bpm = ImmediateBPM(resolution)
-        counter = Counter(trigger_count, callable)
+        counter = Counter(trigger_count, call_counter)
 
         for _ in range(tick_count):
             bpm.update(now, counter)
 
-        assert callable.count == expected_calls
+        assert call_counter.count == expected_calls
 
 
 class TestPeriodic:
     @pytest.fixture
-    def callable(self):
+    def call_counter(self):
         return FakeOutput()
 
     @pytest.mark.parametrize(
@@ -89,7 +89,7 @@ class TestPeriodic:
     )
     def test_periodic(
         self,
-        callable,
+        call_counter,
         resolution,
         mult,
         call_count,
@@ -97,13 +97,13 @@ class TestPeriodic:
     ):
         now = None
         bpm = ImmediateBPM(resolution)
-        periodic = Periodic(bpm.resolution, callable, mult=mult)
+        periodic = Periodic(bpm.resolution, call_counter, mult=mult)
 
         for _ in range(call_count):
             bpm.update(now, periodic)
 
-        assert callable.count == expected_count
-        assert callable.on == is_even(expected_count)
+        assert call_counter.count == expected_count
+        assert call_counter.on == is_even(expected_count)
 
     @pytest.mark.parametrize(
         "resolution, pwm, call_count, expected_on",
@@ -118,7 +118,7 @@ class TestPeriodic:
     )
     def test_pwm(
         self,
-        callable,
+        call_counter,
         resolution,
         pwm,
         call_count,
@@ -126,9 +126,9 @@ class TestPeriodic:
     ):
         now = None
         bpm = ImmediateBPM(resolution)
-        periodic = Periodic(bpm.resolution, callable, pwm=pwm)
+        periodic = Periodic(bpm.resolution, call_counter, pwm=pwm)
 
         for _ in range(call_count):
             bpm.update(now, periodic)
 
-        assert callable.on == expected_on
+        assert call_counter.on == expected_on
