@@ -1,4 +1,5 @@
-from froggytv.bpm import Bpm, Noop
+from froggytv.bpm import Bpm
+from froggytv.triggers import Noop
 
 
 def is_even(num):
