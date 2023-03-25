@@ -10,7 +10,7 @@ from debug import Debug
 from hardware import Button, Encoder, Output
 from screens import GateScreen, HomeScreen, Screens
 from state import ALPHABET, State
-from callables import FanOut, Periodic
+from triggers import FanOut, Periodic
 
 
 # ~~~~~~~~~~ Initializing ~~~~~~~~~~~#
@@ -37,7 +37,7 @@ outputs = [
     Output("D", board.GP4),
 ]
 bpm = Bpm(120)
-callables = [Periodic(bpm.resolution, outputs[i]) for i in range(outputs)]
+callables = [Periodic(bpm.resolution, output) for output in outputs]
 fan_out = FanOut(callables)
 
 # ~~~~~~~~~ Main Loop ~~~~~~~~~#

@@ -1,5 +1,9 @@
 import math
-from froggytv.triggers import Noop
+
+try:
+    from triggers import Noop
+except ModuleNotFoundError:
+    from froggytv.triggers import Noop
 
 
 class Bpm:
