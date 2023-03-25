@@ -82,10 +82,10 @@ class TestScaler:
     ):
         now = None
         bpm = ImmediateBPM(resolution)
-        division = Scaler(bpm.resolution, test_output, scale)
+        scaler = Scaler(bpm.resolution, test_output, scale)
 
         for _ in range(tick_call_count):
-            bpm.update(now, division)
+            bpm.update(now, scaler)
 
         assert test_output.tick_call_count == expected_tick_call_count
         assert pytest.approx(test_output.ticks) == expected_ticks
