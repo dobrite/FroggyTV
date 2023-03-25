@@ -9,12 +9,12 @@ def is_even(num):
 class TestOutput:
     def __init__(self):
         self.call_count = 0
-        self.tick_count = 0
+        self.tick_call_count = 0
         self.ticks = 0
         self.on = False
 
     def tick(self, tick):
-        self.tick_count += 1
+        self.tick_call_count += 1
         self.ticks = tick
 
     def __call__(self, __tick__):

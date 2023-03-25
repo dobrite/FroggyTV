@@ -13,7 +13,7 @@ class TestNoop:
 
 class TestDivision:
     @pytest.mark.parametrize(
-        "resolution, div, tick_count, expected_count",
+        "resolution, div, tick_call_count, expected_count",
         [
             (640, 1, 0, 0),
             (640, 1, 1, 1),
@@ -22,20 +22,22 @@ class TestDivision:
             (640, 10, 6400, 640),
         ],
     )
-    def test_division(self, test_output, resolution, div, tick_count, expected_count):
+    def test_division(
+        self, test_output, resolution, div, tick_call_count, expected_count
+    ):
         now = None
         bpm = ImmediateBPM(resolution)
         division = Division(test_output, div)
 
-        for _ in range(tick_count):
+        for _ in range(tick_call_count):
             bpm.update(now, division)
 
-        assert test_output.tick_count == expected_count
+        assert test_output.tick_call_count == expected_count
 
 
 class TestCounter:
     @pytest.mark.parametrize(
-        "resolution, trigger_count, tick_count, expected_calls",
+        "resolution, trigger_count, tick_call_count, expected_calls",
         [
             (640, 10, 0, 0),
             (640, 10, 1, 1),
@@ -47,13 +49,13 @@ class TestCounter:
         ],
     )
     def test_counter(
-        self, test_output, resolution, trigger_count, tick_count, expected_calls
+        self, test_output, resolution, trigger_count, tick_call_count, expected_calls
     ):
         now = None
         bpm = ImmediateBPM(resolution)
         counter = Counter(trigger_count, test_output)
 
-        for _ in range(tick_count):
+        for _ in range(tick_call_count):
             bpm.update(now, counter)
 
         assert test_output.call_count == expected_calls
