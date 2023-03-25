@@ -31,3 +31,19 @@ class Division:
             return
 
         self._count = 0
+
+
+class TicksToTrigger:
+    def __init__(self, ticks_to_trigger, triggerable):
+        self._ticks_to_trigger = ticks_to_trigger
+        self._triggerable = triggerable
+        self._count = 0
+
+    def tick(self, tick):
+        if self._count == 0:
+            self._triggerable.trigger(tick)
+
+        self._count += 1
+
+        if self._count == self._ticks_to_trigger:
+            self._count = 0

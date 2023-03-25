@@ -1,5 +1,5 @@
-from froggytv.tickables import Division, Noop, FanOut
-from helpers.utils import CountingTickable, ImmediateBPM
+from froggytv.tickables import Division, Noop, FanOut, TicksToTrigger
+from helpers.utils import CountingTickable, ImmediateBPM, FakeOutput
 import pytest
 
 
@@ -33,3 +33,32 @@ class TestDivision:
             bpm.update(now, fan_out)
 
         assert tickable.count == expected_count
+
+
+class TestTicksToTrigger:
+    @pytest.fixture
+    def triggerable(self):
+        return FakeOutput()
+
+    @pytest.mark.parametrize(
+        "resolution, ticks_to_trigger, tick_count, expected_triggers",
+        [
+            (640, 10, 0, 0),
+            (640, 10, 9, 1),
+            (640, 10, 10, 1),
+            (640, 10, 11, 2),
+            (640, 32, 32, 1),
+            (640, 32, 33, 2),
+        ],
+    )
+    def test_ticks_to_trigger(
+        self, triggerable, resolution, ticks_to_trigger, tick_count, expected_triggers
+    ):
+        now = None
+        bpm = ImmediateBPM(resolution)
+        ticks_to_trigger = TicksToTrigger(ticks_to_trigger, triggerable)
+
+        for _ in range(tick_count):
+            bpm.update(now, ticks_to_trigger)
+
+        assert triggerable.count == expected_triggers
