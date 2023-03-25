@@ -5,6 +5,14 @@ def is_even(num):
     return num % 2
 
 
+class CountingTickable:
+    def __init__(self):
+        self.count = 0
+
+    def tick(self, __tick__):
+        self.count += 1
+
+
 class FakeOutput:
     def __init__(self):
         self.count = 0
