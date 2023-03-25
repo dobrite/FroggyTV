@@ -1,4 +1,4 @@
-from froggytv.triggers import FanOut, Periodic, Division, Noop, Counter, Sequence
+from froggytv.triggers import Periodic, Division, Noop, Counter
 from helpers.utils import CallCounter, ImmediateBPM, FakeOutput, is_even
 import pytest
 
