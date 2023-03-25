@@ -81,19 +81,27 @@ class Scaler:
 
 
 class Counter:
-    def __init__(self, trigger_count, callable):
+    def __init__(self, trigger_count, callable=Noop()):
         self._trigger_count = trigger_count
         self._callable = callable
+        self._final_callable = Noop()
         self._count = 0
+
+    def set_final_callable(self, final_callable):
+        self._final_callable = final_callable
+
+    def __call__(self, tick):
+        self._callable(tick)
 
     def tick(self, tick):
         if self._count == 0:
-            self._callable(tick)
+            self(tick)
 
         self._count += 1
 
         if self._count == self._trigger_count:
             self._count = 0
+            self._final_callable(tick)
 
 
 class Periodic:
@@ -127,3 +135,20 @@ class Periodic:
 
     def _call_count(self):
         return self._resolution / self._mult / (1 / self._pwm)
+
+
+class Sequence:
+    def __init__(self):
+        self._index = 0
+        self._callables = []
+
+    def append(self, callable):
+        self._callables.append(callable)
+
+    def __call__(self, __tick__):
+        self._index += 1
+        if self._index == len(self._callables):
+            self._index = 0
+
+    def tick(self, tick):
+        self._callables[self._index].tick(tick)

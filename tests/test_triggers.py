@@ -1,4 +1,11 @@
-from froggytv.triggers import Periodic, Division, Noop, Counter, Scaler
+from froggytv.triggers import (
+    Counter,
+    Division,
+    Noop,
+    Periodic,
+    Scaler,
+    Sequence,
+)
 from helpers.utils import ImmediateBPM, is_even
 import pytest
 
@@ -173,5 +180,36 @@ class TestPeriodic:
 
         for _ in range(tick_call_count):
             bpm.update(now, periodic)
+
+        assert test_output.on == expected_on
+
+
+class TestSequence:
+    @pytest.mark.parametrize(
+        "resolution, tick_call_count, expected_on",
+        [
+            (640, 0, False),
+            (640, 1, True),
+            (640, 9, True),
+            (640, 10, True),
+            (640, 11, False),
+            (640, 21, False),
+            (640, 30, False),
+            (640, 31, True),
+        ],
+    )
+    def test_sequence(self, test_output, resolution, tick_call_count, expected_on):
+        now = None
+        bpm = ImmediateBPM(resolution)
+        counter1 = Counter(10, test_output)
+        counter2 = Counter(20, test_output)
+        sequence = Sequence()
+        sequence.append(counter1)
+        sequence.append(counter2)
+        counter1.set_final_callable(sequence)
+        counter2.set_final_callable(sequence)
+
+        for _ in range(tick_call_count):
+            bpm.update(now, sequence)
 
         assert test_output.on == expected_on
