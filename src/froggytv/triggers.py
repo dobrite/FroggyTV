@@ -152,3 +152,25 @@ class Sequence:
 
     def tick(self, tick):
         self._callables[self._index].tick(tick)
+
+
+class PWM:
+    def __init__(self, resolution, pwm, callable=Noop()):
+        self._resolution = resolution
+        self._pwm = pwm
+
+        counter1 = Counter(round(resolution * pwm), callable)
+        counter2 = Counter(round(resolution * (1 - pwm)), callable)
+        sequence = Sequence()
+        sequence.append(counter1)
+        sequence.append(counter2)
+        counter1.set_final_callable(sequence)
+        counter2.set_final_callable(sequence)
+
+        self._callable = sequence
+
+    def __call__(self, __tick__):
+        pass
+
+    def tick(self, tick):
+        self._callable.tick(tick)
