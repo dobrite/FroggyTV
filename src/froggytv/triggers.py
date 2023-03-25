@@ -7,14 +7,12 @@ class Noop:
 
 
 class FanOut:
-    def __init__(self, triggers, final_trigger=Noop()):
-        self._triggers = triggers
-        self._final_trigger = final_trigger
+    def __init__(self, triggerables):
+        self._triggerables = triggerables
 
     def trigger(self, tick):
-        for t in self._triggers:
+        for t in self._triggerables:
             t.trigger(tick)
-        self._final_trigger.trigger(tick)
 
 
 class Periodic:
