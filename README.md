@@ -64,6 +64,12 @@ nox
 rerun -c -p "**/*.py" nox
 ```
 
+### Rerunning Tests (pytest) on File Changes
+
+```
+rerun -c -p '**/*.py' 'pytest -rx'
+```
+
 ### Copy Files to Pi Pico on Save
 
 Requires the `rerun` Ruby gem to be installed and avaiable in `$PATH`.
@@ -71,7 +77,7 @@ Assumes pi pico is mounted at the location specified.
 Assumes bash or bash-like shell. i.e. probably needs adjusted on windows.
 
 ```bash
-rerun -c -p "**/*.py" "cp -R *.py /Volumes/CIRCUITPY/"
+rerun -c -p "src/**/*.py" "cp -R src/froggytv/*.py /Volumes/CIRCUITPY/"
 ```
 
 ### Overclocking?
