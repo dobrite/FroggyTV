@@ -26,34 +26,26 @@ class Division:
     def __init__(self, tickable, div=1):
         self._tickable = tickable
         self._div = div
-        self._count = 0
+        self._count = div
 
     def tick(self, tick):
-        if self._count == 0:
+        if self._count == self._div:
             self._tickable.tick(tick)  # TODO
-
+            self._count = 0
         self._count += 1
-
-        if not self._count == self._div:
-            return
-
-        self._count = 0
 
 
 class Counter:
     def __init__(self, trigger_count, callable):
         self._trigger_count = trigger_count
         self._callable = callable
-        self._count = 0
+        self._count = trigger_count
 
     def tick(self, tick):
-        if self._count == 0:
-            self._callable(tick)
-
-        self._count += 1
-
         if self._count == self._trigger_count:
+            self._callable(tick)
             self._count = 0
+        self._count += 1
 
 
 class Periodic:
@@ -63,18 +55,13 @@ class Periodic:
         self._mult = mult
         self._next_mult = None
         self._pwm = pwm
-        self._count = 0
+        self._count = self._call_count()
 
     def tick(self, tick):
-        if self._count == 0:
+        if self._count == self._call_count():
             self._callable(tick)
-
+            self._count = 0
         self._count += 1
-
-        if not self._count == self._call_count():
-            return
-
-        self._count = 0
 
         if not (self._next_mult and tick == 0):
             return
