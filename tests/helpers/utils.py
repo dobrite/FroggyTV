@@ -29,7 +29,7 @@ class ImmediateBPM:
 
     def update(self, __now__, tickable=Noop()):
         self._tick += 1
-        if self._tick == self.resolution:
-            self._tick = 0
+        if self._tick > self.resolution:
+            self._tick = 1
 
         tickable.tick(self._tick)

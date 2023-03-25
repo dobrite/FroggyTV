@@ -36,8 +36,8 @@ class Bpm:
 
     def _step(self):
         self._tick += 1
-        if self._tick == self.resolution:
-            self._tick = 0
+        if self._tick > self.resolution:
+            self._tick = 1
 
         self._prev_beat_at = self._next_beat_at
         self._next_beat_at = self._calc_next_beat_at()
