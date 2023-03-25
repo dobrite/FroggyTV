@@ -6,21 +6,19 @@ def is_even(num):
     return num % 2
 
 
-class CallCounter:
+class TestOutput:
     def __init__(self):
-        self.count = 0
-
-    def tick(self, __tick__):
-        self.count += 1
-
-
-class FakeOutput:
-    def __init__(self):
-        self.count = 0
+        self.call_count = 0
+        self.tick_count = 0
+        self.ticks = 0
         self.on = False
 
+    def tick(self, tick):
+        self.tick_count += 1
+        self.ticks = tick
+
     def __call__(self, __tick__):
-        self.count += 1
+        self.call_count += 1
         self.on = not self.on
 
 
