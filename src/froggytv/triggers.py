@@ -40,9 +40,9 @@ class Division:
         self._count = 0
 
 
-class TicksToCall:
-    def __init__(self, ticks_to_call, callable):
-        self._ticks_to_call = ticks_to_call
+class Counter:
+    def __init__(self, trigger_count, callable):
+        self._trigger_count = trigger_count
         self._callable = callable
         self._count = 0
 
@@ -52,7 +52,7 @@ class TicksToCall:
 
         self._count += 1
 
-        if self._count == self._ticks_to_call:
+        if self._count == self._trigger_count:
             self._count = 0
 
 

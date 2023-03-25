@@ -1,4 +1,4 @@
-from froggytv.triggers import Periodic, Division, Noop, TicksToCall
+from froggytv.triggers import Periodic, Division, Noop, Counter
 from helpers.utils import CountingTickable, ImmediateBPM, FakeOutput, is_even
 import pytest
 
@@ -37,15 +37,16 @@ class TestDivision:
         assert tickable.count == expected_count
 
 
-class TestTicksToCall:
+class TestCounter:
     @pytest.fixture
     def callable(self):
         return FakeOutput()
 
     @pytest.mark.parametrize(
-        "resolution, ticks_to_call, tick_count, expected_calls",
+        "resolution, trigger_count, tick_count, expected_calls",
         [
             (640, 10, 0, 0),
+            (640, 10, 1, 1),
             (640, 10, 9, 1),
             (640, 10, 10, 1),
             (640, 10, 11, 2),
@@ -53,15 +54,15 @@ class TestTicksToCall:
             (640, 32, 33, 2),
         ],
     )
-    def test_ticks_to_call(
-        self, callable, resolution, ticks_to_call, tick_count, expected_calls
+    def test_counter(
+        self, callable, resolution, trigger_count, tick_count, expected_calls
     ):
         now = None
         bpm = ImmediateBPM(resolution)
-        ticks_to_call = TicksToCall(ticks_to_call, callable)
+        counter = Counter(trigger_count, callable)
 
         for _ in range(tick_count):
-            bpm.update(now, ticks_to_call)
+            bpm.update(now, counter)
 
         assert callable.count == expected_calls
 
