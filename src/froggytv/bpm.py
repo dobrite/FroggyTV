@@ -1,5 +1,5 @@
 import math
-from froggytv.tickables import Noop
+from froggytv.triggers import Noop
 
 
 class Bpm:

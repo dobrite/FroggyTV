@@ -1,14 +1,14 @@
-import froggytv.tickables as tickables
+from froggytv.triggers import Periodic, Division, Noop, TicksToCall
 from helpers.utils import CountingTickable, ImmediateBPM, FakeOutput, is_even
 import pytest
 
 
 class TestNoop:
     def test_ticking_noop_does_nothing(self):
-        assert tickables.Noop().tick(0) is None
+        assert Noop().tick(0) is None
 
     def test_calling_noop_does_nothing(self):
-        assert tickables.Noop()(0) is None
+        assert Noop()(0) is None
 
 
 class TestDivision:
@@ -29,7 +29,7 @@ class TestDivision:
     def test_division(self, tickable, resolution, div, tick_count, expected_count):
         now = None
         bpm = ImmediateBPM(resolution)
-        division = tickables.Division(tickable, div)
+        division = Division(tickable, div)
 
         for _ in range(tick_count):
             bpm.update(now, division)
@@ -58,7 +58,7 @@ class TestTicksToCall:
     ):
         now = None
         bpm = ImmediateBPM(resolution)
-        ticks_to_call = tickables.TicksToCall(ticks_to_call, callable)
+        ticks_to_call = TicksToCall(ticks_to_call, callable)
 
         for _ in range(tick_count):
             bpm.update(now, ticks_to_call)
@@ -96,7 +96,7 @@ class TestPeriodic:
     ):
         now = None
         bpm = ImmediateBPM(resolution)
-        periodic = tickables.Periodic(bpm.resolution, callable, mult=mult)
+        periodic = Periodic(bpm.resolution, callable, mult=mult)
 
         for _ in range(call_count):
             bpm.update(now, periodic)
@@ -125,7 +125,7 @@ class TestPeriodic:
     ):
         now = None
         bpm = ImmediateBPM(resolution)
-        periodic = tickables.Periodic(bpm.resolution, callable, pwm=pwm)
+        periodic = Periodic(bpm.resolution, callable, pwm=pwm)
 
         for _ in range(call_count):
             bpm.update(now, periodic)
