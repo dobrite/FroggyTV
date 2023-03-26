@@ -16,7 +16,7 @@ class State:
             self.state[gate] = {
                 "div": Div(),
                 "prob": Prob(),
-                "pw": PW(),
+                "pwm": PWM(),
             }
 
     def get_play(self):
@@ -37,8 +37,8 @@ class State:
     def get_prob(self, screen_name):
         return self.state[screen_name]["prob"]
 
-    def get_pw(self, screen_name):
-        return self.state[screen_name]["pw"]
+    def get_pwm(self, screen_name):
+        return self.state[screen_name]["pwm"]
 
 
 MAX_BPM = 300
@@ -136,12 +136,25 @@ class Prob:
         pass
 
 
-class PW:
+MIN_PWM = 0.1
+MAX_PWM = 0.9
+PWM_INCREMENTS = 0.1
+
+
+class PWM:
     def __init__(self):
-        pass
+        self.value = 0.5
 
     def forward(self):
-        pass
+        prev = self.value
+        if self.value < MAX_PWM:
+            self.value = round(self.value + PWM_INCREMENTS, 1)
+
+        return prev != self.value
 
     def backwards(self):
-        pass
+        prev = self.value
+        if self.value > MIN_PWM:
+            self.value = round(self.value - PWM_INCREMENTS, 1)
+
+        return prev != self.value
