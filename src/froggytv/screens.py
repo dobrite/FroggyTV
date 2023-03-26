@@ -245,7 +245,14 @@ class GateScreen(displayio.Group):
             formatter=div_formatter,
         )
 
-        elements = [div_element]
+        pwm_element = Element(
+            "pwm",
+            state.get_pwm(name),
+            Coordinates(90, 65),
+            SMOL_FONT,
+        )
+
+        elements = [div_element, pwm_element]
         screen = cls(name, elements)
         for idx, elem in enumerate(elements):
             elem.set_index(idx)
