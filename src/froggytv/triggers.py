@@ -80,6 +80,31 @@ class Scaler:
         )
 
 
+class Delay:
+    def __init__(self, trigger_tick, callable=Noop(), final_callable=Noop()):
+        self._trigger_tick = trigger_tick
+        self._callable = callable
+        self._final_callable = final_callable
+        self._final_callable_called = False
+        self._last_tick = 1_000_000
+
+    def set_final_callable(self, final_callable):
+        self._final_callable = final_callable
+
+    def __call__(self, tick):
+        self._callable(tick)
+
+    def tick(self, tick):
+        if tick < self._last_tick:
+            self._final_callable_called = False
+            self(tick)
+
+        if not self._final_callable_called and tick >= self._trigger_tick:
+            self._final_callable_called = True
+            self._final_callable(tick)
+        self._last_tick = tick
+
+
 class Counter:
     def __init__(self, trigger_count, callable=Noop()):
         self._trigger_count = trigger_count

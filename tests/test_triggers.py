@@ -1,5 +1,6 @@
 from froggytv.triggers import (
     Counter,
+    Delay,
     Division,
     Noop,
     PWM,
@@ -89,6 +90,50 @@ class TestScaler:
 
         assert test_output.tick_call_count == expected_tick_call_count
         assert pytest.approx(test_output.ticks) == expected_ticks
+
+
+class TestDelay:
+    @pytest.mark.parametrize(
+        "resolution, trigger_tick, tick_call_count, expected_call_count",
+        [
+            (640, 10, 0, 0),
+            (640, 10, 1, 1),
+            (640, 10, 9, 1),
+            (640, 10, 10, 2),
+            (640, 10, 11, 2),
+            (640, 10, 640, 2),
+            (640, 10, 641, 3),
+            (640, 10, 649, 3),
+            (640, 10, 650, 4),
+            (640, 10, 651, 4),
+            (640, 32, 0, 0),
+            (640, 32, 1, 1),
+            (640, 32, 31, 1),
+            (640, 32, 32, 2),
+            (640, 32, 33, 2),
+            (640, 32, 640, 2),
+            (640, 32, 641, 3),
+            (640, 32, 671, 3),
+            (640, 32, 672, 4),
+            (640, 32, 673, 4),
+        ],
+    )
+    def test_delay(
+        self,
+        test_output,
+        resolution,
+        trigger_tick,
+        tick_call_count,
+        expected_call_count,
+    ):
+        now = None
+        bpm = ImmediateBPM(resolution)
+        delay = Delay(trigger_tick, test_output, test_output)
+
+        for _ in range(tick_call_count):
+            bpm.update(now, delay)
+
+        assert test_output.call_count == expected_call_count
 
 
 class TestCounter:
