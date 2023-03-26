@@ -129,7 +129,7 @@ class PWM:
         self._pwm = pwm
 
         delay1 = Delay(1, callable)
-        delay2 = Delay(round(resolution * pwm), callable)
+        delay2 = Delay(round(resolution * pwm) + 1, callable)
 
         self._callable = FanOut([delay1, delay2])
 
