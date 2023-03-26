@@ -40,7 +40,10 @@ class Scaler:
             self._cycle_count = 0
             scaled_tick = self._scaled_tick(tick)
 
-        self._tickable.tick(scaled_tick)
+        if scaled_tick % self._resolution == 0:
+            self._tickable.tick(self._resolution)
+        else:
+            self._tickable.tick(scaled_tick % self._resolution)
 
     def _scaled_tick(self, tick):
         return (tick + (self._cycle_count * self._resolution)) * self._scale
