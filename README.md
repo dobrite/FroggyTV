@@ -9,11 +9,13 @@ hehe froggy
   - 32 MAX_MULT
   - 10 PERCENT_INCREMENTS
   - 2 pulses per bpm (one on one off)
+  - FWIW Pams is 192 mult @ 320 BPM
 - Implement PWM in terms of Sequence
   - Only one Delay gets ticked at a time, rather than all
 - Flesh out Gate screens
 - Implement Sync and Reset
   - Is stop/start a reset, or resume?
+    - reset!
 - Implement probability
 - Stress test max 12 gate screens? - (Is an expander possible?)
 
@@ -29,6 +31,9 @@ hehe froggy
   - Type 1: Pulse width + Probability
   - Type 2: Simple Euclidean Sequencer (Length and Density)
   - Type 3: Binary Sequencer (A la Trigseq on O_C Hemispheres)
+- Dynamically adjust PWM percentage as mult increases?
+- C/C++/Rust timing library?
+- "pew" mode (10ms trigger)
 
 ### Viewing Logs with Mu
 
