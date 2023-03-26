@@ -23,7 +23,15 @@ class FanOut:
 
 
 class Scaler:
-    def __init__(self, resolution, tickable, scale=1):
+    def __new__(cls, resolution, tickable, scale):
+        if scale >= 1:
+            return Multiply(resolution, tickable, scale)
+        else:
+            return Divide(resolution, tickable, scale)
+
+
+class Divide:
+    def __init__(self, resolution, tickable, scale):
         self._resolution = resolution
         self._tickable = tickable
         self._scale = scale
@@ -40,10 +48,7 @@ class Scaler:
             self._cycle_count = 0
             scaled_tick = self._scaled_tick(tick)
 
-        if scaled_tick % self._resolution == 0:
-            self._tickable.tick(self._resolution)
-        else:
-            self._tickable.tick(scaled_tick % self._resolution)
+        self._tickable.tick(scaled_tick)
 
     def _scaled_tick(self, tick):
         return (tick + (self._cycle_count * self._resolution)) * self._scale
@@ -62,6 +67,36 @@ class Scaler:
             self._scale,
             "resolution:",
             self._resolution,
+            "-> % remainder",
+            scaled_tick % self._resolution,
+        )
+
+
+class Multiply:
+    def __init__(self, resolution, tickable, scale):
+        self._resolution = resolution
+        self._tickable = tickable
+        self._scale = scale
+
+    def tick(self, tick):
+        scaled_tick = tick * self._scale
+        if scaled_tick % self._resolution == 0:
+            self._tickable.tick(self._resolution)
+        else:
+            self._tickable.tick(scaled_tick % self._resolution)
+
+    def _debug(self, tick, scaled_tick):
+        print(
+            "tick:",
+            tick,
+            "scaled_tick:",
+            scaled_tick,
+            "scale:",
+            self._scale,
+            "resolution:",
+            self._resolution,
+            "-> % remainder",
+            scaled_tick % self._resolution,
         )
 
 
@@ -80,6 +115,22 @@ class Delay:
             self._callable_called = True
             self._callable(tick)
         self._last_tick = tick
+
+    def _debug(self, tick, scaled_tick):
+        print(
+            "tick:",
+            tick,
+            "cycle_count:",
+            self._cycle_count,
+            "scaled_tick:",
+            scaled_tick,
+            "last_tick:",
+            self._last_tick,
+            "scale:",
+            self._scale,
+            "resolution:",
+            self._resolution,
+        )
 
 
 class Counter:
