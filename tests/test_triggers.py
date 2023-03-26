@@ -267,19 +267,21 @@ class TestPWM:
 
 class TestSequence:
     @pytest.mark.parametrize(
-        "resolution, tick_call_count, expected_on",
+        "resolution, tick_call_count, expected_call_count, expected_on",
         [
-            (640, 0, False),
-            (640, 1, True),
-            (640, 9, True),
-            (640, 10, True),
-            (640, 11, False),
-            (640, 21, False),
-            (640, 30, False),
-            (640, 31, True),
+            (640, 0, 0, False),
+            (640, 1, 1, True),
+            (640, 9, 1, True),
+            (640, 10, 1, True),
+            (640, 11, 2, False),
+            (640, 21, 2, False),
+            (640, 30, 2, False),
+            (640, 31, 3, True),
         ],
     )
-    def test_sequence(self, test_output, resolution, tick_call_count, expected_on):
+    def test_sequence(
+        self, test_output, resolution, tick_call_count, expected_call_count, expected_on
+    ):
         now = None
         bpm = ImmediateBPM(resolution)
         counter1 = Counter(10, test_output)
@@ -294,3 +296,4 @@ class TestSequence:
             bpm.update(now, sequence)
 
         assert test_output.on == expected_on
+        assert test_output.call_count == expected_call_count
