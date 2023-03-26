@@ -2,10 +2,6 @@ from froggytv.bpm import Bpm
 from froggytv.triggers import Noop
 
 
-def is_even(num):
-    return num % 2
-
-
 class TestOutput:
     def __init__(self):
         self.call_count = 0

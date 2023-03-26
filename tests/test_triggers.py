@@ -6,7 +6,7 @@ from froggytv.triggers import (
     Scaler,
     Sequence,
 )
-from helpers.utils import ImmediateBPM, is_even
+from helpers.utils import ImmediateBPM
 import pytest
 
 
