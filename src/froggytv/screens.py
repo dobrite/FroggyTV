@@ -51,6 +51,7 @@ BIGGE_FONT = bitmap_font.load_font("/Fonts/FrogPrincess-10.pcf")
 POINTER = displayio.OnDiskBitmap("/Icons/pointer.bmp")
 PLAY_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/playpause.bmp")
 FROGE_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/SpinSpritesheet.bmp")
+PWM_SMOL_SPRITE_SHEET = displayio.OnDiskBitmap("/Icons/PWMSpritesheetSmol.bmp")
 CLOCK = displayio.OnDiskBitmap("/Icons/Clock.bmp")
 # FRAME_A = displayio.OnDiskBitmap("/Icons/Frame1.bmp")
 
@@ -100,6 +101,43 @@ class Element(displayio.Group):
 
     def update(self):
         self.text_area.text = f"{self.formatter(self.state.value)}"
+
+    def screen_type(self):
+        return self.screen.screen_type()
+
+    def get_index(self):
+        return self.index
+
+
+class SpriteElement(displayio.Group):
+    def __init__(self, name, state, coordinates, sprite_bitmap, size, scale=1):
+        super().__init__()
+        self.name = name
+        self.state = state
+        self.coordinates = coordinates
+
+        self.sprite = displayio.TileGrid(
+            sprite_bitmap,
+            pixel_shader=sprite_bitmap.pixel_shader,
+            width=1,
+            height=1,
+            tile_width=size[0],
+            tile_height=size[1],
+        )
+        sprite_group = displayio.Group(scale=scale, x=coordinates.x, y=coordinates.y)
+        sprite_group.append(self.sprite)
+        self.append(sprite_group)
+
+        self.update()
+
+    def set_screen(self, screen):
+        self.screen = screen
+
+    def set_index(self, index):
+        self.index = index
+
+    def update(self):
+        pass  # index the tilegroup
 
     def screen_type(self):
         return self.screen.screen_type()
@@ -247,11 +285,13 @@ class GateScreen(displayio.Group):
             formatter=div_formatter,
         )
 
-        pwm_element = Element(
+        pwm_element = SpriteElement(
             "pwm",
             state.get_pwm(name),
-            Coordinates(90, 65),
-            SMOL_FONT,
+            Coordinates(75, 20),
+            PWM_SMOL_SPRITE_SHEET,
+            [13, 8],
+            scale=2,
         )
 
         elements = [div_element, pwm_element]
