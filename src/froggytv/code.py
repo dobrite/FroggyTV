@@ -10,7 +10,7 @@ from debug import Debug
 from hardware import Button, Encoder, Output
 from screens import GateScreen, HomeScreen, Screens
 from state import ALPHABET, State
-from triggers import FanOut, Periodic
+from triggers import FanOut, Gate
 
 
 # ~~~~~~~~~~ Initializing ~~~~~~~~~~~#
@@ -29,16 +29,15 @@ play_button = Button(board.GP11).make_pin_reader()
 page_button = Button(board.GP12).make_pin_reader()
 encoder_button = Button(board.GP13).make_pin_reader()
 
-outputs = [
-    Output("home", board.LED),
-    Output("A", board.GP1),
-    Output("B", board.GP2),
-    Output("C", board.GP3),
-    Output("D", board.GP4),
-]
 bpm = Bpm(120)
-callables = [Periodic(bpm.resolution, output) for output in outputs]
-fan_out = FanOut(callables)
+gates = [
+    Gate(Output("home", board.LED), bpm.resolution, 1, 0.5),
+    Gate(Output("A", board.GP1), bpm.resolution, 1, 0.5),
+    Gate(Output("B", board.GP2), bpm.resolution, 1, 0.1),
+    Gate(Output("C", board.GP3), bpm.resolution, 2, 0.5),
+    Gate(Output("D", board.GP4), bpm.resolution, 0.5, 0.5),
+]
+fan_out = FanOut(gates)
 
 # ~~~~~~~~~ Main Loop ~~~~~~~~~#
 
@@ -82,7 +81,7 @@ while True:
             elif focused_element.name == "div":
                 callable_index = ALPHABET.index(focused_element.screen.name) + 1
                 new_mult = state.get_div(focused_element.screen.name).value
-                callables[callable_index].set_mult(new_mult)
+                gates[callable_index].set_scale(new_mult)
 
     if state.get_play():
         # screen_list.screens[0].froge.spin(now, state.get_bpm().value)
