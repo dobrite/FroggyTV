@@ -1,7 +1,7 @@
 ALPHABET = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
 
 
-class State():
+class State:
     def __init__(self, gate_number):
         self.play = True
         self.state = {}
@@ -41,13 +41,13 @@ class State():
         return self.state[screen_name]["pw"]
 
 
-MAX_BPM = 500
+MAX_BPM = 300
 MIN_BPM = 5
 INT = "Int"
 EXT = "Ext"
 
 
-class BPM():
+class BPM:
     def __init__(self):
         self.value = 120
 
@@ -66,7 +66,7 @@ class BPM():
         return prev != self.value
 
 
-class Sync():
+class Sync:
     def __init__(self):
         self.value = INT
 
@@ -83,29 +83,29 @@ class Sync():
         return prev != self.value
 
 
-class Div():
+class Div:
     DIVISIONS = [
-        # 1/64,
-        # 1/32,
-        # 1/16,
-        1/8,
-        # 1/5,
-        1/4,
-        1/3,
-        1/2,
+        1 / 64,
+        1 / 32,
+        1 / 16,
+        1 / 8,
+        1 / 5,
+        1 / 4,
+        1 / 3,
+        1 / 2,
         1,
         2,
         3,
         4,
-        # 5,
+        5,
         8,
-        # 16,
-        # 32,
-        # 64
+        16,
+        32,
+        64,
     ]
 
     def __init__(self):
-        self.index = int(len(Div.DIVISIONS)/2)
+        self.index = int(len(Div.DIVISIONS) / 2)
         self.value = Div.DIVISIONS[self.index]
 
     def forward(self):
@@ -125,7 +125,7 @@ class Div():
         return prev != self.index
 
 
-class Prob():
+class Prob:
     def __init__(self):
         pass
 
@@ -136,7 +136,7 @@ class Prob():
         pass
 
 
-class PW():
+class PW:
     def __init__(self):
         pass
 

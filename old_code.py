@@ -23,16 +23,16 @@ oled_reset = board.GP20
 # Use for SPI
 oled_cs = board.GP17
 oled_dc = board.GP16
-display_bus = displayio.FourWire(spi, command=oled_dc, chip_select=oled_cs,
-                                 reset=oled_reset, baudrate=1000000)
+display_bus = displayio.FourWire(
+    spi, command=oled_dc, chip_select=oled_cs, reset=oled_reset, baudrate=1000000
+)
 
 WIDTH = 128
 HEIGHT = 64  # Change to 64 if needed
 BORDER = 0
 
 
-display = adafruit_displayio_ssd1306.SSD1306(
-    display_bus, width=WIDTH, height=HEIGHT)
+display = adafruit_displayio_ssd1306.SSD1306(display_bus, width=WIDTH, height=HEIGHT)
 
 # Make the display context
 splash = displayio.Group()
@@ -42,8 +42,7 @@ color_bitmap = displayio.Bitmap(WIDTH, HEIGHT, 1)
 color_palette = displayio.Palette(1)
 color_palette[0] = 0x000000  # Black
 
-bg_sprite = displayio.TileGrid(
-    color_bitmap, pixel_shader=color_palette, x=0, y=0)
+bg_sprite = displayio.TileGrid(color_bitmap, pixel_shader=color_palette, x=0, y=0)
 splash.append(bg_sprite)
 
 
@@ -85,48 +84,12 @@ clk_in_state = None
 # Defines each output! Don't change PREV_TIME
 
 OUTPUT_LIST = [
-    {
-        "ON": 0.5,
-        "OFF": 0.5,
-        "PREV_TIME": -1,
-        "PIN": board.LED,
-        "PROB": 100
-    },
-    {
-        "ON": 0.25,
-        "OFF": 0.25,
-        "PREV_TIME": -1,
-        "PIN": board.GP1,
-        "PROB": 50
-    },
-    {
-        "ON": 0.25,
-        "OFF": 0.25,
-        "PREV_TIME": -1,
-        "PIN": board.GP2,
-        "PROB": 100
-    },
-    {
-        "ON": 0.25,
-        "OFF": 0.25,
-        "PREV_TIME": -1,
-        "PIN": board.GP3,
-        "PROB": 100
-    },
-    {
-        "ON": 0.25,
-        "OFF": 0.25,
-        "PREV_TIME": -1,
-        "PIN": board.GP4,
-        "PROB": 100
-    },
-    {
-        "ON": 0.25,
-        "OFF": 0.25,
-        "PREV_TIME": -1,
-        "PIN": board.GP5,
-        "PROB": 100
-    }
+    {"ON": 0.5, "OFF": 0.5, "PREV_TIME": -1, "PIN": board.LED, "PROB": 100},
+    {"ON": 0.25, "OFF": 0.25, "PREV_TIME": -1, "PIN": board.GP1, "PROB": 50},
+    {"ON": 0.25, "OFF": 0.25, "PREV_TIME": -1, "PIN": board.GP2, "PROB": 100},
+    {"ON": 0.25, "OFF": 0.25, "PREV_TIME": -1, "PIN": board.GP3, "PROB": 100},
+    {"ON": 0.25, "OFF": 0.25, "PREV_TIME": -1, "PIN": board.GP4, "PROB": 100},
+    {"ON": 0.25, "OFF": 0.25, "PREV_TIME": -1, "PIN": board.GP5, "PROB": 100},
 ]
 
 # Defines output pins
@@ -151,7 +114,7 @@ biggefont = bitmap_font.load_font("/Fonts/FrogPrincess-10.pcf")
 # Menu Element list
 elements = ["BPMedit", "Syncedit", "Divedit"]  # , "PWedit"] #"DivAedit"]
 # Pointer Position list
-pointer_positions = [[1, 5],      [1, 25],     [5, 43],    [69, 43],   [65, 5]]
+pointer_positions = [[1, 5], [1, 25], [5, 43], [69, 43], [65, 5]]
 
 # Sets the currently selected menu element
 elem_index = 0
@@ -166,9 +129,7 @@ homeScreen = displayio.Group()
 
 # Initial BPM text
 BPMText = "120"
-BPMtext_area = label.Label(
-    biggefont, text=BPMText, color=0xFFFFFF, x=20, y=35 // 2 - 1
-)
+BPMtext_area = label.Label(biggefont, text=BPMText, color=0xFFFFFF, x=20, y=35 // 2 - 1)
 homeScreen.append(BPMtext_area)
 
 # Creates Label "BPM" in smaller font
@@ -186,9 +147,7 @@ homeScreen.append(SyncLabeltext_area)
 
 # Initial Division text
 DivText = "x1"
-Divtext_area = label.Label(
-    smolfont, text=DivText, color=0xFFFFFF, x=28, y=110 // 2 - 1
-)
+Divtext_area = label.Label(smolfont, text=DivText, color=0xFFFFFF, x=28, y=110 // 2 - 1)
 homeScreen.append(Divtext_area)
 
 
@@ -298,12 +257,14 @@ currentScreen.append(pointer_group)
 
 # Draws the pwm sprite
 pwmsprite_sheet = displayio.OnDiskBitmap("/Icons/PWMSpritesheetSmol.bmp")
-pwmsprite = displayio.TileGrid(pwmsprite_sheet,
-                               pixel_shader=pwmsprite_sheet.pixel_shader,
-                               width=1,
-                               height=1,
-                               tile_width=13,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
-                               tile_height=8)
+pwmsprite = displayio.TileGrid(
+    pwmsprite_sheet,
+    pixel_shader=pwmsprite_sheet.pixel_shader,
+    width=1,
+    height=1,
+    tile_width=13,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
+    tile_height=8,
+)
 pwmsprite_group = displayio.Group(scale=2)
 pwmsprite_group.append(pwmsprite)
 # PW icon positions
@@ -313,7 +274,10 @@ pwmsprite_group.y = 40
 
 # Draws the stage
 stage = displayio.OnDiskBitmap("/Icons/stage.bmp")
-stagegrid = displayio.TileGrid(stage, pixel_shader=stage.pixel_shader,)
+stagegrid = displayio.TileGrid(
+    stage,
+    pixel_shader=stage.pixel_shader,
+)
 stage_group = displayio.Group()
 stage_group.append(stagegrid)
 # PW icon positions
@@ -323,12 +287,14 @@ homeScreen.append(stage_group)
 
 # Draws froge
 frogesprite_sheet = displayio.OnDiskBitmap("/Icons/SpinSpritesheet.bmp")
-frogesprite = displayio.TileGrid(frogesprite_sheet,
-                                 pixel_shader=frogesprite_sheet.pixel_shader,
-                                 width=1,
-                                 height=1,
-                                 tile_width=22,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
-                                 tile_height=22)
+frogesprite = displayio.TileGrid(
+    frogesprite_sheet,
+    pixel_shader=frogesprite_sheet.pixel_shader,
+    width=1,
+    height=1,
+    tile_width=22,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
+    tile_height=22,
+)
 frogesprite_group = displayio.Group(scale=1)
 frogesprite_group.append(frogesprite)
 # froge positions
@@ -342,12 +308,14 @@ froge_spin = False
 
 # Draws play/pause
 playsprite_sheet = displayio.OnDiskBitmap("/Icons/playpause.bmp")
-playsprite = displayio.TileGrid(playsprite_sheet,
-                                pixel_shader=playsprite_sheet.pixel_shader,
-                                width=1,
-                                height=1,
-                                tile_width=16,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
-                                tile_height=16)
+playsprite = displayio.TileGrid(
+    playsprite_sheet,
+    pixel_shader=playsprite_sheet.pixel_shader,
+    width=1,
+    height=1,
+    tile_width=16,  # Determines sprite size, Bigge tile is 41x22, Smol tile is 13x8
+    tile_height=16,
+)
 playsprite_group = displayio.Group(scale=1)
 playsprite_group.append(playsprite)
 # froge positions
@@ -378,11 +346,33 @@ div8 = [960, "/8"]
 div16 = [1920, "/16"]
 
 # Clock Division list
-divisions = [div16[0], div8[0], div4[0], div3[0], div2[0],
-             mult1[0], mult2[0], mult3[0], mult4[0], mult8[0], mult16[0]]
+divisions = [
+    div16[0],
+    div8[0],
+    div4[0],
+    div3[0],
+    div2[0],
+    mult1[0],
+    mult2[0],
+    mult3[0],
+    mult4[0],
+    mult8[0],
+    mult16[0],
+]
 
-divisionsText = [div16[1], div8[1], div4[1], div3[1], div2[1],
-                 mult1[1], mult2[1], mult3[1], mult4[1], mult8[1], mult16[1]]
+divisionsText = [
+    div16[1],
+    div8[1],
+    div4[1],
+    div3[1],
+    div2[1],
+    mult1[1],
+    mult2[1],
+    mult3[1],
+    mult4[1],
+    mult8[1],
+    mult16[1],
+]
 
 
 # ~~~~~~~ Tempo/Rate/Div/PW on startup ~~~~~~~~#
@@ -429,16 +419,14 @@ interval = 0.5
 
 
 while True:
-
     now = time.monotonic()
 
-    if play == True:
+    if play is True:
         # Sets the rate for all outputs!! Super slick
-        if sync_mode == False:
+        if sync_mode is False:
             for out in OUTPUT_LIST:
                 # rng = random.randrange(0,100,1)
                 if out["PIN"].value is False:
-
                     if now >= out["PREV_TIME"] + out["OFF"]:
                         out["PREV_TIME"] = now
 
@@ -450,7 +438,7 @@ while True:
 
                         out["PIN"].value = False
 
-        if sync_mode == True:
+        if sync_mode is True:
             for out in OUTPUT_LIST:
                 if now > out["PREV_TIME"] + interval:
                     out["PREV_TIME"] = now
@@ -470,7 +458,7 @@ while True:
 
         # Spins froge around wheeeee
         if froge_spin is False:
-            if now >= out["PREV_TIME"] + (1/beatsperminute)*spin_rate:
+            if now >= out["PREV_TIME"] + (1 / beatsperminute) * spin_rate:
                 if froge_index != 7:
                     froge_index = froge_index + 1
                 else:
@@ -479,7 +467,7 @@ while True:
                 froge_spin = True
         # Needs a True and False loop just so that he syncs up right
         if froge_spin is True:
-            if now >= out["PREV_TIME"] + (1/beatsperminute)*spin_rate:
+            if now >= out["PREV_TIME"] + (1 / beatsperminute) * spin_rate:
                 if froge_index != 7:
                     froge_index = froge_index + 1
                 else:
@@ -490,9 +478,9 @@ while True:
         pass  # Stops the clock
 
     # Determines the clock rates based on BPM and time division
-    base_clock_rate = (1/beatsperminute)*divisions[basediv]
+    base_clock_rate = (1 / beatsperminute) * divisions[basediv]
 
-    A_clock_rate = (1/beatsperminute)*divisions[Adiv]
+    A_clock_rate = (1 / beatsperminute) * divisions[Adiv]
 
     # Init definiteion of encoder position
     position = encoder.position
@@ -528,7 +516,7 @@ while True:
             if baseRisePW < 0.1:
                 baseRisePW = 0.1
         elif active_element == "Syncedit":
-            if sync_mode == False:
+            if sync_mode is False:
                 SyncLabeltext_area.text = "EXT"
                 sync_mode = True
             else:
@@ -568,7 +556,7 @@ while True:
                 baseRisePW = 0.9
 
         elif active_element == "Syncedit":
-            if sync_mode == False:
+            if sync_mode is False:
                 SyncLabeltext_area.text = "EXT"
                 sync_mode = True
             else:
@@ -580,11 +568,11 @@ while True:
     active_element = elements[elem_index]
 
     # Trigger mode: If Trigger mode is enabled,
-    if Trig_mode == False:
-        OUTPUT_LIST[0]["ON"] = baseRisePW*base_clock_rate
-        OUTPUT_LIST[0]["OFF"] = baseFallPW*base_clock_rate
+    if Trig_mode is False:
+        OUTPUT_LIST[0]["ON"] = baseRisePW * base_clock_rate
+        OUTPUT_LIST[0]["OFF"] = baseFallPW * base_clock_rate
 
-    if Trig_mode == True:
+    if Trig_mode is True:
         OUTPUT_LIST[0]["ON"] = 0.01
         OUTPUT_LIST[0]["OFF"] = base_clock_rate - 0.01
 
@@ -592,7 +580,9 @@ while True:
     if not button1.value and button1_state is None:  # Button stuff
         button1_state = "pressed"
 
-    if button1.value and button1_state == "pressed":  # Increments the menu element index
+    if (
+        button1.value and button1_state == "pressed"
+    ):  # Increments the menu element index
         if elem_index != len(elements) - 1:
             elem_index = elem_index + 1  # Increments index by 1
         elif elem_index == len(elements) - 1:
@@ -621,7 +611,7 @@ while True:
         button3_state = "pressed"
 
     if button3.value and button3_state == "pressed":
-        if play == True:  # Changes state to
+        if play is True:  # Changes state to
             play = False
             play_index = 1
         else:
@@ -630,12 +620,12 @@ while True:
         button3_state = None
 
     # Changes Div text to current Div
-    Divtext_area.text = (divisionsText[basediv])
+    Divtext_area.text = divisionsText[basediv]
     # Changes DivA text to current DivA
-    DivAtext_area.text = (divisionsText[Adiv])
+    DivAtext_area.text = divisionsText[Adiv]
 
     # Changes BPM text to current BPM
-    BPMtext_area.text = (str(beatsperminute))
+    BPMtext_area.text = str(beatsperminute)
 
     pwmsprite[0] = pw_index  # Changes PWM Sprite to the correct one
     frogesprite[0] = froge_index  # Changes froge Sprite to the correct one

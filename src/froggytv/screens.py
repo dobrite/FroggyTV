@@ -1,11 +1,9 @@
+from adafruit_bitmap_font import bitmap_font
+from adafruit_display_text import label
+import adafruit_displayio_ssd1306
 import board
 import busio
 import displayio
-
-import adafruit_displayio_ssd1306
-
-from adafruit_display_text import label
-from adafruit_bitmap_font import bitmap_font
 
 # ----------------------------- Screen Setup ---------------------------------#
 
@@ -18,11 +16,7 @@ oled_reset = board.GP20
 oled_cs = board.GP17
 oled_dc = board.GP16
 display_bus = displayio.FourWire(
-    spi,
-    command=oled_dc,
-    chip_select=oled_cs,
-    reset=oled_reset,
-    baudrate=1000000
+    spi, command=oled_dc, chip_select=oled_cs, reset=oled_reset, baudrate=1000000
 )
 
 SCREEN_NUMBER = 5 - 1  # Number of screens in use, may be changed later
@@ -38,11 +32,7 @@ PAUSE_ICON = 1
 BLACK = 0x000000
 WHITE = 0xFFFFFF
 
-display = adafruit_displayio_ssd1306.SSD1306(
-    display_bus,
-    width=WIDTH,
-    height=HEIGHT
-)
+display = adafruit_displayio_ssd1306.SSD1306(display_bus, width=WIDTH, height=HEIGHT)
 
 # Make the display context
 splash = displayio.Group()
@@ -52,12 +42,7 @@ color_bitmap = displayio.Bitmap(WIDTH, HEIGHT, 1)
 color_palette = displayio.Palette(1)
 color_palette[0] = BLACK
 
-bg_sprite = displayio.TileGrid(
-    color_bitmap,
-    pixel_shader=color_palette,
-    x=0,
-    y=0
-)
+bg_sprite = displayio.TileGrid(color_bitmap, pixel_shader=color_palette, x=0, y=0)
 splash.append(bg_sprite)
 
 # Import Fonts
@@ -85,21 +70,14 @@ def div_formatter(value):
         number = value
         char = "x"
     else:
-        number = int(1/value)
+        number = int(1 / value)
         char = "/"
 
     return f"{char}{number}"
 
 
 class Element(displayio.Group):
-    def __init__(
-        self,
-        name,
-        state,
-        coordinates,
-        font,
-        formatter=default_formatter
-    ):
+    def __init__(self, name, state, coordinates, font, formatter=default_formatter):
         super().__init__()
         self.name = name
         self.state = state
@@ -107,10 +85,7 @@ class Element(displayio.Group):
         self.formatter = formatter
 
         self.text_area = label.Label(
-            font,
-            color=WHITE,
-            x=self.coordinates.x,
-            y=self.coordinates.y // 2 - 1
+            font, color=WHITE, x=self.coordinates.x, y=self.coordinates.y // 2 - 1
         )
         self.update()
         self.append(self.text_area)
@@ -135,20 +110,17 @@ class Pointer(displayio.Group):
     HOME_POINTER_POSITIONS = [
         Coordinates(1, 10),
         Coordinates(1, 37),
-        Coordinates(1, 43)
+        Coordinates(1, 43),
     ]
     GATE_POINTER_POSITIONS = [
         Coordinates(50, 5),
         Coordinates(50, 25),
-        Coordinates(50, 43)
+        Coordinates(50, 43),
     ]
 
     def __init__(self):
         super().__init__()
-        pointer_area = displayio.TileGrid(
-            POINTER,
-            pixel_shader=POINTER.pixel_shader
-        )
+        pointer_area = displayio.TileGrid(POINTER, pixel_shader=POINTER.pixel_shader)
         self.pointer_group = displayio.Group()
         self.pointer_group.append(pointer_area)
         self.append(self.pointer_group)
@@ -171,21 +143,16 @@ class HomeScreen(displayio.Group):
             BIGGE_FONT,
         )
 
-        sync_element = Element(
-            "sync",
-            state.get_sync(),
-            Coordinates(20, 97),
-            SMOL_FONT
-        )
+        sync_element = Element("sync", state.get_sync(), Coordinates(20, 97), SMOL_FONT)
 
         elements = [bpm_element, sync_element]
-        screen = cls(name, elements, state)
+        screen = cls(name, elements)
         for idx, elem in enumerate(elements):
             elem.set_index(idx)
             elem.set_screen(screen)
         return screen
 
-    def __init__(self, name, elements, state):
+    def __init__(self, name, elements):
         super().__init__()
         self.name = name
         self.elements = elements
@@ -204,11 +171,7 @@ class HomeScreen(displayio.Group):
         self._draw_elements()
         self.append(self.froge)
         self.bpm_text_area = label.Label(
-            SMOL_FONT,
-            text="BPM",
-            color=WHITE,
-            x=66,
-            y=40 // 2 - 1
+            SMOL_FONT, text="BPM", color=WHITE, x=66, y=40 // 2 - 1
         )
         self.append(self.bpm_text_area)
 
@@ -225,7 +188,7 @@ class HomeScreen(displayio.Group):
             width=1,
             height=1,
             tile_width=16,
-            tile_height=16
+            tile_height=16,
         )
         play_sprite_group = displayio.Group(scale=1, x=55, y=35)
         play_sprite_group.append(self.play_sprite)
@@ -249,20 +212,22 @@ class Froge(displayio.Group):
             width=1,
             height=1,
             tile_width=22,
-            tile_height=22
+            tile_height=22,
         )
         frogesprite_group = displayio.Group(scale=1, x=80, y=30)
         frogesprite_group.append(self.frogesprite)
         self.append(frogesprite_group)
 
     def spin(self, now, bpm):
-        if not self.spinning and now >= self.prev_time + (1/bpm)*Froge.SPIN_RATE:
+        spin_rate = Froge.SPIN_RATE
+
+        if not self.spinning and now >= self.prev_time + (1 / bpm) * spin_rate:
             self.prev_time = now
             self.index = (self.index + 1) % 8
             self.frogesprite[0] = self.index
             self.spinning = True
 
-        if self.spinning and now >= self.prev_time + (1/bpm)*Froge.SPIN_RATE:
+        if self.spinning and now >= self.prev_time + (1 / bpm) * spin_rate:
             self.prev_time = now
             self.index = (self.index + 1) % 8
             self.frogesprite[0] = self.index
@@ -281,24 +246,18 @@ class GateScreen(displayio.Group):
         )
 
         elements = [div_element]
-        screen = cls(name, elements, state)
+        screen = cls(name, elements)
         for idx, elem in enumerate(elements):
             elem.set_index(idx)
             elem.set_screen(screen)
         return screen
 
-    def __init__(self, name, elements, state):
+    def __init__(self, name, elements):
         super().__init__()
         self.name = name
         self.elements = elements
         self._draw_elements()
-        self.text_area = label.Label(
-            BIGGE_FONT,
-            text=f"{name}",
-            color=WHITE,
-            x=5,
-            y=15
-        )
+        self.text_area = label.Label(BIGGE_FONT, text=f"{name}", color=WHITE, x=5, y=15)
         self.append(self.text_area)
 
         clock = displayio.TileGrid(
@@ -309,7 +268,7 @@ class GateScreen(displayio.Group):
             tile_width=15,
             tile_height=15,
             x=70,
-            y=3
+            y=3,
         )
         self.append(clock)
 
@@ -320,7 +279,7 @@ class GateScreen(displayio.Group):
         [self.append(e) for e in self.elements]
 
 
-class Screens():
+class Screens:
     def __init__(self, state, screens):
         self.state = state
         self.screens = screens
@@ -340,16 +299,14 @@ class Screens():
 
     def next_screen(self):
         num_screens = len(self.screens)
-        self.focused_screen_index = (
-            self.focused_screen_index + 1) % num_screens
+        self.focused_screen_index = (self.focused_screen_index + 1) % num_screens
         self.focused_element_index = 0
         self.screen[1] = self.get_focused_screen()
         self._update_pointer()
 
     def next_element(self):
         num_elements = len(self.get_focused_screen().elements)
-        self.focused_element_index = (
-            self.focused_element_index + 1) % num_elements
+        self.focused_element_index = (self.focused_element_index + 1) % num_elements
         self._update_pointer()
 
     def _update_pointer(self):
