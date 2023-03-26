@@ -189,3 +189,20 @@ class PWM:
 
     def tick(self, tick):
         self._callable.tick(tick)
+
+
+class Gate:
+    def __init__(self, output, resolution, scale, pwm):
+        self._resolution = resolution
+        self._output = output
+        self._pwm = PWM(resolution, pwm, self._output)
+        self._scaler = Scaler(self._resolution, self._pwm, scale)
+
+    def set_scale(self, scale):
+        self._scaler = Scaler(self._resolution, self._pwm, scale)
+
+    def __call__(self, tick):
+        self._scaler(tick)
+
+    def tick(self, tick):
+        self._scaler.tick(tick)

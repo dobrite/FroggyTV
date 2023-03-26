@@ -1,6 +1,7 @@
 from froggytv.triggers import (
     Counter,
     Delay,
+    Gate,
     Noop,
     PWM,
     Scaler,
@@ -221,6 +222,58 @@ class TestSequence:
 
         for _ in range(tick_call_count):
             bpm.update(now, sequence)
+
+        assert test_output.on == expected_on
+        assert test_output.call_count == expected_call_count
+
+
+class TestGate:
+    @pytest.mark.parametrize(
+        "resolution, scale, pwm, tick_call_count, expected_call_count, expected_on",
+        [
+            (640, 1, 0.5, 0, 0, False),
+            (640, 1, 0.5, 1, 1, True),
+            (640, 1, 0.5, 319, 1, True),
+            (640, 1, 0.5, 320, 1, True),
+            (640, 1, 0.5, 321, 2, False),
+            (640, 1, 0.5, 640, 2, False),
+            (640, 1, 0.5, 641, 3, True),
+            (640, 1, 0.1, 0, 0, False),
+            (640, 1, 0.1, 1, 1, True),
+            (640, 1, 0.1, 63, 1, True),
+            (640, 1, 0.1, 64, 1, True),
+            (640, 1, 0.1, 65, 2, False),
+            (640, 1, 0.1, 640, 2, False),
+            (640, 1, 0.1, 641, 3, True),
+            (640, 2, 0.5, 0, 0, False),
+            (640, 2, 0.5, 1, 1, True),
+            (640, 2, 0.5, 159, 1, True),
+            (640, 2, 0.5, 160, 1, True),
+            (640, 2, 0.5, 161, 2, False),
+            (640, 2, 0.5, 319, 2, False),
+            (640, 2, 0.5, 320, 2, False),
+            (640, 2, 0.5, 321, 3, True),
+            (640, 2, 0.5, 479, 3, True),
+            (640, 2, 0.5, 480, 3, True),
+            (640, 2, 0.5, 481, 4, False),
+        ],
+    )
+    def test_gate(
+        self,
+        test_output,
+        resolution,
+        scale,
+        pwm,
+        tick_call_count,
+        expected_call_count,
+        expected_on,
+    ):
+        now = None
+        bpm = ImmediateBPM(resolution)
+        gate = Gate(test_output, bpm.resolution, scale, pwm)
+
+        for _ in range(tick_call_count):
+            bpm.update(now, gate)
 
         assert test_output.on == expected_on
         assert test_output.call_count == expected_call_count
