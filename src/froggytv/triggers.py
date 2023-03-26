@@ -116,22 +116,6 @@ class Delay:
             self._callable(tick)
         self._last_tick = tick
 
-    def _debug(self, tick, scaled_tick):
-        print(
-            "tick:",
-            tick,
-            "cycle_count:",
-            self._cycle_count,
-            "scaled_tick:",
-            scaled_tick,
-            "last_tick:",
-            self._last_tick,
-            "scale:",
-            self._scale,
-            "resolution:",
-            self._resolution,
-        )
-
 
 class Counter:
     def __init__(self, trigger_count, callable=Noop()):
