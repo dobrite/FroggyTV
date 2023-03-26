@@ -22,24 +22,6 @@ class FanOut:
             elem.tick(ticks)
 
 
-class Division:
-    def __init__(self, tickable, div=1):
-        self._tickable = tickable
-        self._div = div
-        self._count = 0
-
-    def tick(self, tick):
-        if self._count == 0:
-            self._tickable.tick(tick)  # TODO
-
-        self._count += 1
-
-        if not self._count == self._div:
-            return
-
-        self._count = 0
-
-
 class Scaler:
     def __init__(self, resolution, tickable, scale=1):
         self._resolution = resolution
@@ -127,39 +109,6 @@ class Counter:
         if self._count == self._trigger_count:
             self._count = 0
             self._final_callable(tick)
-
-
-class Periodic:
-    def __init__(self, resolution, callable, mult=1, pwm=0.5):
-        self._resolution = resolution
-        self._callable = callable
-        self._mult = mult
-        self._next_mult = None
-        self._pwm = pwm
-        self._count = 0
-
-    def tick(self, tick):
-        if self._count == 0:
-            self._callable(tick)
-
-        self._count += 1
-
-        if not self._count == self._call_count():
-            return
-
-        self._count = 0
-
-        if not (self._next_mult and tick == 0):
-            return
-
-        self._mult = self._next_mult
-        self._next_mult = None
-
-    def set_mult(self, mult):
-        self._next_mult = mult
-
-    def _call_count(self):
-        return self._resolution / self._mult / (1 / self._pwm)
 
 
 class Sequence:
