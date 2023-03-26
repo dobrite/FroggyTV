@@ -72,9 +72,6 @@ class Delay:
         self._last_tick = 1_000_000
         self._callable_called = False
 
-    def __call__(self, tick):
-        self._callable(tick)
-
     def tick(self, tick):
         if tick < self._last_tick:
             self._callable_called = False
