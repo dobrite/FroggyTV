@@ -128,15 +128,10 @@ class PWM:
         self._resolution = resolution
         self._pwm = pwm
 
-        counter1 = Counter(round(resolution * pwm), callable)
-        counter2 = Counter(round(resolution * (1 - pwm)), callable)
-        sequence = Sequence()
-        sequence.append(counter1)
-        sequence.append(counter2)
-        counter1.set_final_callable(sequence)
-        counter2.set_final_callable(sequence)
+        delay1 = Delay(1, callable)
+        delay2 = Delay(round(resolution * pwm), callable)
 
-        self._callable = sequence
+        self._callable = FanOut([delay1, delay2])
 
     def __call__(self, __tick__):
         pass

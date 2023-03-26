@@ -143,29 +143,40 @@ class TestCounter:
 
 class TestPWM:
     @pytest.mark.parametrize(
-        "resolution, pwm, tick_call_count, expected_on",
+        "resolution, pwm, tick_call_count, expected_call_count, expected_on",
         [
-            (640, 0.5, 0, False),
-            (640, 0.5, 1, True),
-            (640, 0.5, 320, True),
-            (640, 0.5, 321, False),
-            (640, 0.5, 640, False),
-            (640, 0.5, 641, True),
-            (640, 0.1, 0, False),
-            (640, 0.1, 1, True),
-            (640, 0.1, 64, True),
-            (640, 0.1, 65, False),
-            (640, 0.1, 640, False),
-            (640, 0.1, 641, True),
-            (640, 0.9, 0, False),
-            (640, 0.9, 1, True),
-            (640, 0.9, 576, True),
-            (640, 0.9, 577, False),
-            (640, 0.9, 640, False),
-            (640, 0.9, 641, True),
+            (640, 0.5, 0, 0, False),
+            (640, 0.5, 1, 1, True),
+            (640, 0.5, 319, 1, True),
+            (640, 0.5, 320, 2, False),
+            (640, 0.5, 321, 2, False),
+            (640, 0.5, 640, 2, False),
+            (640, 0.5, 641, 3, True),
+            (640, 0.1, 0, 0, False),
+            (640, 0.1, 1, 1, True),
+            (640, 0.1, 63, 1, True),
+            (640, 0.1, 64, 2, False),
+            (640, 0.1, 65, 2, False),
+            (640, 0.1, 640, 2, False),
+            (640, 0.1, 641, 3, True),
+            (640, 0.9, 0, 0, False),
+            (640, 0.9, 1, 1, True),
+            (640, 0.9, 575, 1, True),
+            (640, 0.9, 576, 2, False),
+            (640, 0.9, 577, 2, False),
+            (640, 0.9, 640, 2, False),
+            (640, 0.9, 641, 3, True),
         ],
     )
-    def test_pwm(self, test_output, resolution, pwm, tick_call_count, expected_on):
+    def test_pwm(
+        self,
+        test_output,
+        resolution,
+        pwm,
+        tick_call_count,
+        expected_call_count,
+        expected_on,
+    ):
         now = None
         bpm = ImmediateBPM(resolution)
         pwm = PWM(resolution, pwm, test_output)
@@ -174,6 +185,7 @@ class TestPWM:
             bpm.update(now, pwm)
 
         assert test_output.on == expected_on
+        assert test_output.call_count == expected_call_count
 
 
 class TestSequence:
