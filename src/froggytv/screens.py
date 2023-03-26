@@ -55,6 +55,8 @@ CLOCK = displayio.OnDiskBitmap("/Icons/Clock.bmp")
 # FRAME_A = displayio.OnDiskBitmap("/Icons/Frame1.bmp")
 
 
+# origin is top left (0, 0)
+# screen is 128x64
 class Coordinates:
     def __init__(self, x, y):
         self.x = x
