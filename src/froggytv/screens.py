@@ -110,7 +110,7 @@ class Element(displayio.Group):
 
 
 class SpriteElement(displayio.Group):
-    def __init__(self, name, state, coordinates, sprite_bitmap, size, scale=1):
+    def __init__(self, name, state, coordinates, sprite_bitmap, tile_size, scale=1):
         super().__init__()
         self.name = name
         self.state = state
@@ -121,8 +121,8 @@ class SpriteElement(displayio.Group):
             pixel_shader=sprite_bitmap.pixel_shader,
             width=1,
             height=1,
-            tile_width=size[0],
-            tile_height=size[1],
+            tile_width=tile_size[0],
+            tile_height=tile_size[1],
         )
         sprite_group = displayio.Group(scale=scale, x=coordinates.x, y=coordinates.y)
         sprite_group.append(self.sprite)
@@ -137,7 +137,7 @@ class SpriteElement(displayio.Group):
         self.index = index
 
     def update(self):
-        pass  # index the tilegroup
+        self.sprite[0] = int(self.state.value * 10)
 
     def screen_type(self):
         return self.screen.screen_type()
