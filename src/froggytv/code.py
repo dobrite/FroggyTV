@@ -48,7 +48,7 @@ debug = Debug(False)
 now = time.monotonic_ns()
 bpm.start(now)
 ct = 0
-UPDATE_RATE = 100
+UPDATE_RATE = 25
 while True:
     bpm.update(now, fan_out)
     debug.update(now)
