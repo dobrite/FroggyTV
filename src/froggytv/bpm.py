@@ -36,7 +36,8 @@ class Bpm:
 
     def set_bpm(self, bpm):
         self._bpm = bpm
-        self._next_beat_at = self._calc_next_beat_at()
+        self._npb = None
+        self._next_beat_at = self._prev_beat_at + self._nanos_per_beat()
 
     def _step(self):
         self._tick += 1
@@ -44,13 +45,11 @@ class Bpm:
             self._tick = 1
 
         self._prev_beat_at = self._next_beat_at
-        self._next_beat_at = self._calc_next_beat_at()
-
-    def _calc_next_beat_at(self):
-        return self._prev_beat_at + self._nanos_per_beat()
+        self._next_beat_at = self._prev_beat_at + self._npb
 
     def _nanos_per_beat(self):
-        return math.floor(self._seconds_per_beat() * Bpm.NANOS_PER_SECOND)
+        self._npb = math.floor(self._seconds_per_beat() * Bpm.NANOS_PER_SECOND)
+        return self._npb
 
     def _seconds_per_beat(self):
         return Bpm.SECONDS_PER_MINUTE / self._bpm / self.resolution
