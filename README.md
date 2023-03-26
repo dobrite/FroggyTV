@@ -5,15 +5,12 @@ hehe froggy
 # TODO:
 
 - Rename bpm to clock, ticks, pulses or similar
-- Add trigger tests
 - Bpm.RESOLUTION = 640 (32x10x2)
   - 32 MAX_MULT
   - 10 PERCENT_INCREMENTS
   - 2 pulses per bpm (one on one off)
-- Rename Periodic to Divison
-  - mult to div
-  - redefine DIVISIONS in terms of division of RESOLUTION
-- Pulse width adjustment (PWM Percent trigger)
+- Implement PWM in terms of Sequence
+  - Only one Delay gets ticked at a time, rather than all
 - Flesh out Gate screens
 - Implement Sync and Reset
   - Is stop/start a reset, or resume?
