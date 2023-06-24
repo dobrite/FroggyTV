@@ -46,6 +46,11 @@ ls /dev/tty.*
 screen /dev/tty.usbmodem14340 1115200
 ```
 
+```bash
+ls /dev/tty.*
+minicom -D /dev/tty.usbmodem3463394B31311
+```
+
 ### Running Tests and Linting with Nox
 
 First, ensure `nox` is installed and in your `$PATH`.
